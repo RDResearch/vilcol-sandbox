@@ -704,7 +704,7 @@ elseif ($operation == 'print')
 		# Real example:
 		# /usr/bin/pdftk csvex/v1512559/letter_1512559_90868613_3696542_20161212_154816.pdf csvex/v1511930/letter_1511930_90867984_3696557_20161221_142231.pdf output csvex/pdftk_20161221_172351.pdf
 		$input_files = "$csv_dir/" . implode(" $csv_dir/", $pdf_files);
-		$output_file = "$csv_dir/pdftk_" . strftime('%Y%m%d_%H%M%S') . ".pdf";
+		$output_file = "$csv_dir/pdftk_" . strftime_rdr('%Y%m%d_%H%M%S') . ".pdf";
 		$pdftk = "/usr/bin/pdftk $input_files output $output_file";
 		#print "Calling exec($pdftk). ";
 		$exec_output = array();

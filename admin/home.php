@@ -88,7 +88,7 @@ function screen_content()
 
 //	$dates = array('2000-01-01', '2000-01-31', '2000-02-01', '2000-02-28', '2017-01-31');
 //	foreach ($dates as $dt)
-//		print "<p>$dt --- " . strftime("%Y-%m-%d", date_add_months_kdb(date_to_epoch($dt), 1)) . "</p>";
+//		print "<p>$dt --- " . strftime_rdr("%Y-%m-%d", date_add_months_kdb(date_to_epoch($dt), 1)) . "</p>";
 
 //	$em = post_val('test_box');
 //	if ($em)

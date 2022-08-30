@@ -764,7 +764,7 @@ function amounts_billed()
 	{
 		$title = '';
 		$title_short = "Amounts Billed";
-		$xfile = "SUM" . strftime("%Y%m%d_%H%M%S") . "_{$USER['USER_ID']}_AmountsBilled";
+		$xfile = "SUM" . strftime_rdr("%Y%m%d_%H%M%S") . "_{$USER['USER_ID']}_AmountsBilled";
 	}
 	else
 	{
@@ -1290,7 +1290,7 @@ function bills_by_customer()
 	{
 		$title = '';
 		$title_short = "Billing by Customer";
-		$xfile = "SUM" . strftime("%Y%m%d_%H%M%S") . "_{$USER['USER_ID']}_BillByCust";
+		$xfile = "SUM" . strftime_rdr("%Y%m%d_%H%M%S") . "_{$USER['USER_ID']}_BillByCust";
 	}
 	else
 	{
@@ -1646,7 +1646,7 @@ function bills_by_salesperson()
 	#dprint("Clients/2 = " . print_r($clients_2,1));#
 
 	# Partition the clients according to how long they have been with the salesperson
-	$this_month = date_to_epoch(strftime('%Y-%m-01'));
+	$this_month = date_to_epoch(strftime_rdr('%Y-%m-01'));
 	#dprint("This month = " . print_r($this_month,1));#
 
 	$clients_12 = array();
@@ -1696,7 +1696,7 @@ function bills_by_salesperson()
 		$title_short_12 = "12 Months";
 		$title_short_24 = "24 Months";
 		$title_short_36 = "36 Months";
-		$xfile = "SUM" . strftime("%Y%m%d_%H%M%S") . "_{$USER['USER_ID']}_BillBySalesP";
+		$xfile = "SUM" . strftime_rdr("%Y%m%d_%H%M%S") . "_{$USER['USER_ID']}_BillBySalesP";
 	}
 	else
 	{
@@ -2092,18 +2092,18 @@ function view_aged_debtors()
 	#dprint("Under-paid/over-paid invoice count: " . count($invoices));#
 	#dprint("Under-paid/over-paid invoices: " . print_r($invoices,1));#
 
-	$today = date_to_epoch(strftime("%Y-%m-%d"), false); # today without the time
+	$today = date_to_epoch(strftime_rdr("%Y-%m-%d"), false); # today without the time
 	#$today = date_to_epoch('2015-01-10', false);#
-	$now_0 = date_to_epoch(strftime("%Y-%m-01"), false); # first day of today's month
+	$now_0 = date_to_epoch(strftime_rdr("%Y-%m-01"), false); # first day of today's month
 	#$now_0 = date_to_epoch('2015-01-01', false);#
 	$now_1 = date_add_months_kdb($now_0, -1); # first day of last month
 	$now_2 = date_add_months_kdb($now_0, -2); # first day of two months ago
 	$now_3 = date_add_months_kdb($now_0, -3); # first day of three months ago
 
 	$txt_0 = "Current";
-	$txt_1 = strftime("%B", $now_1);
-	$txt_2 = strftime("%B", $now_2);
-	$txt_3 = strftime("%B", $now_3);
+	$txt_1 = strftime_rdr("%B", $now_1);
+	$txt_2 = strftime_rdr("%B", $now_2);
+	$txt_3 = strftime_rdr("%B", $now_3);
 	$txt_4 = "Prior";
 
 	# Get amount owed for each client, in due-date bands.
@@ -2280,7 +2280,7 @@ function view_aged_debtors()
 	{
 		$title = str_replace('&mdash;', '-', $title);
 		$title_short = "Aged Debtors";
-		$xfile = "SUM" . strftime("%Y%m%d_%H%M%S") . "_{$USER['USER_ID']}_AgedDebt";
+		$xfile = "SUM" . strftime_rdr("%Y%m%d_%H%M%S") . "_{$USER['USER_ID']}_AgedDebt";
 	}
 	else
 	{
@@ -2615,7 +2615,7 @@ function view_statements()
 	{
 		$formats = array('A' => $excel_date_format, 'C' => $excel_integer_format_no_comma,
 						'D' => $excel_currency_format, 'E' => $excel_currency_format, 'F' => $excel_currency_format);
-		$xfile = "SUM" . strftime("%Y%m%d_%H%M%S") . "_{$USER['USER_ID']}_ViewStmts";
+		$xfile = "SUM" . strftime_rdr("%Y%m%d_%H%M%S") . "_{$USER['USER_ID']}_ViewStmts";
 	}
 	else
 	{
@@ -2778,10 +2778,10 @@ function view_statements_client($client2_id, $c_code, $headings, $formats, $expo
 	$now_3 = date_add_months_kdb($now_0, -3); # first day of three months ago (relative to cut-off date)
 
 	$txt_0 = "During Current Month";
-	$txt_1 = "During " . strftime("%B %Y", $now_1);
-	$txt_2 = "During " . strftime("%B %Y", $now_2);
-	$txt_3 = "During " . strftime("%B %Y", $now_3);
-	$txt_4 = "Before " . strftime("%B %Y", $now_3);
+	$txt_1 = "During " . strftime_rdr("%B %Y", $now_1);
+	$txt_2 = "During " . strftime_rdr("%B %Y", $now_2);
+	$txt_3 = "During " . strftime_rdr("%B %Y", $now_3);
+	$txt_4 = "Before " . strftime_rdr("%B %Y", $now_3);
 
 	$summary = array('DUE_0' => 0.0, 'DUE_1' => 0.0, 'DUE_2' => 0.0, 'DUE_3' => 0.0, 'DUE_4' => 0.0, 'TOTAL' => 0.0);
 

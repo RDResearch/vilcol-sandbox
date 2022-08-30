@@ -586,7 +586,7 @@ function sql_insert()
 	global $f_nature;
 	global $USER;
 
-	$time_added = date_for_sql(strftime("%d/%m/%y %H:%M:%S"));
+	$time_added = date_for_sql(strftime_rdr("%d/%m/%y %H:%M:%S"));
 
 	$sql = "INSERT INTO FEEDBACK (F_ADDED_ID, F_ADDED_DT, F_TEXT, F_NATURE) VALUES (" .
 			$USER['USER_ID'] . ", $time_added, " . quote_smart($f_text) . ", " . quote_smart($f_nature) . ")";
@@ -604,7 +604,7 @@ function sql_update()
 	global $f_response;
 	global $USER;
 
-	$time_str = strftime("%d/%m/%y %H:%M:%S");
+	$time_str = strftime_rdr("%d/%m/%y %H:%M:%S");
 	
 	$new_response = '';
 	if ($f_response)

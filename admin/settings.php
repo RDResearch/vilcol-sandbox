@@ -14,17 +14,20 @@ $screen_html = ''; # used if $screen_delay is true
 $script_debug = false;#
 global $script_check; # a cronjob script may set this to true to bypass the tests
 #$script_check = true; # enable this line to bypass the tests - NOTE: also need to rename .htaccess
-if (!$script_check)
+if (!$script_check) {
 	include_once('script_check.php');
+}
 if ($script_check)
 {
-	if ($script_debug)
+	if ($script_debug) {
 		print '<p>Check OK</p>';
+	}
 }
 else
 {
-	if (!$script_debug)
+	if (!$script_debug) {
 		print '<meta http-equiv="refresh" content="0; url=https://www.google.co.uk/search?q=no+entry+sign&tbm=isch" />';
+	}
 	exit;
 }
 
@@ -442,7 +445,7 @@ $ynfrns_list = array(0 => 'No', 1 => 'Yes', -1 => 'FOC', $success_return => 'Ret
 $ynfrxns_list = array(0 => 'No', 1 => 'Yes', -1 => 'FOC', $success_return => 'Returned', -2 => 'N/Y/F/R', 'NULL' => 'Not set');
 $ynpend_list = array(0 => 'No', 1 => 'Yes', -1 => 'Review', -9 => 'No/Review');
 
-$today = strftime("%Y-%m-%d");
+$today = strftime_rdr("%Y-%m-%d"); # removed for PHP 8.1
 $mktime_year_limit = 2037; # mktime() fails with a year bigger than this (KDB 09/08/16)
 
 $months_long = array(

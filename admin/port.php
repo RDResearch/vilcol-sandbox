@@ -97,7 +97,7 @@ $time_threshold = 110 * 60; # 110 minutes (note the server will time-out after 1
 #$incremental_run = true; #($cronjob ? false : true); # add to tables already there
 
 $log_root = ''; #($cronjob ? "{$unix_path}/" : '');
-log_open("{$log_root}import-vilcol/port_" . strftime('%Y_%m_%d_%H%M') . ".log");
+log_open("{$log_root}import-vilcol/port_" . strftime_rdr('%Y_%m_%d_%H%M') . ".log");
 log_write(post_values() . chr(13) . chr(10) . "GET=" . print_r($_GET,1));
 dlog("time_start=$time_start(" . date_from_epoch(false,$time_start) . ")");
 #log_write("memory_limit=" . ini_get('memory_limit'));
