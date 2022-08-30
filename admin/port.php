@@ -402,7 +402,7 @@ function data_processing()
 		dlog("Porting the following tables: " . print_r($do_list,1));
 		foreach ($do_list as $table)
 		{
-			$total_rows_to_do += $row_counts[$table];#[0]; # MS SQL table's row count
+			$total_rows_to_do += $row_counts[$table];# [0]; # MS SQL table's row count
 			#if (!$incremental_run)
 			#	mysqli_query($my_sql_local_conn, "DROP TABLE $table"); # Drop MySQL table
 		}

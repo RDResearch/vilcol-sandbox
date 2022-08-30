@@ -245,7 +245,7 @@ function auto_main()
 	$jobs = array();
 	while (($newArray = sql_fetch()) != false)
 		$jobs[$newArray[0]] = array($newArray[1], $newArray[2], intval($newArray[3]));
-	if ($log_verbose) dlog("Found " . number_with_commas(count($jobs), false) . " open \"ACT\" collection jobs that: " . #[limit=$jobs_limit]
+	if ($log_verbose) dlog("Found " . number_with_commas(count($jobs), false) . " open \"ACT\" collection jobs that: " . # [limit=$jobs_limit]
 			"(i) were received within last two years, or " .
 			"(ii) were updated within the last two years, or " .
 			"(iii) have activity recorded within the last two years<br>" .

@@ -8,7 +8,7 @@ include_once("lib_portal.php");
 
 error_reporting(E_ALL);
 
-$debug = true; #[REVIEW]
+$debug = true; # [REVIEW]
 $output = '';
 $error = '';
 $operation = stripcslashes($_GET['op']);
@@ -488,7 +488,7 @@ function process_job_status($task_req)
 	$output .= "<p>process_job_status(" . print_r($task_req,1) . ")</p>";
 } # process_job_status()
 
-function process_csv($task_req)#[REVIEW]
+function process_csv($task_req)# [REVIEW]
 {
 	global $output;
 

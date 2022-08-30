@@ -950,7 +950,7 @@ function auto_create()
 			sql_create_portal_user($client2_id, $c_code);
 			$new_user_count++;
 		}
-		if (8 <= $new_user_count)#[REVIEW]
+		if (8 <= $new_user_count)# [REVIEW]
 			break;
 	} # foreach ($codes)
 	
