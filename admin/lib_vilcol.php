@@ -3309,8 +3309,8 @@ function sql_get_one_job($job_id, $for_display)
 	sql_execute($sql);
 	while (($newArray = sql_fetch_assoc()) != false)
 	{
-		$newArray['JL_TEXT'] = trim($newArray['JL_TEXT']);
-		$newArray['JL_TEXT_2'] = trim($newArray['JL_TEXT_2']);
+		$newArray['JL_TEXT'] = trim((string)$newArray['JL_TEXT']);
+		$newArray['JL_TEXT_2'] = trim((string)$newArray['JL_TEXT_2']);
 		$content = ((0 < strlen($newArray['JL_TEXT'] . $newArray['JL_TEXT_2'])) ? true : false);
 		$approved = $newArray['JL_APPROVED_DT'] ? true : false;
 		$sent = ($newArray['EM_DT'] || $newArray['JL_POSTED_DT']) ? true : false;
