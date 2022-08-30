@@ -1331,7 +1331,7 @@ function print_clients()
 				$contact .= $temp;
 			}
 			
-			$phone = trim($one['CP_PHONE']);
+			$phone = trim((string)$one['CP_PHONE']);
 			if ($phone && (strpos($phone, ' ') === false))
 				$phone = " $phone"; # prevent Excel from removing leading zero
 			
