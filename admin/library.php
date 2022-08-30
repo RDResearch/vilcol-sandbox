@@ -269,7 +269,7 @@ function admin_login()
 		# Login Security - USER_KEY and session_id
 		$session_id = 1; #[REVIEW]session_id();
 		#[REVIEW]$_SESSION['USER_ID'] = $admin_id;
-		$today = strftime("%Y-%m-%d");
+		$today = strftime_rdr("%Y-%m-%d");
 		if ($login_debug)
 			log_write("admin_login(): today=\"$today\", ukey_dt=\"$ukey_dt\", user_key(DB)=\"$user_key\", session_id=$session_id");
 		if ($ukey_dt != $today)
@@ -347,7 +347,7 @@ function admin_verify($must_login=true)
 		{
 			$user_key_cookie = cookie_val('tash_t');
 			$user_key_db = 0;
-			$today = strftime("%Y-%m-%d");
+			$today = strftime_rdr("%Y-%m-%d");
 			$ukey_dt = '';
 			$sql = "SELECT USER_KEY, UKEY_DT FROM USERV WHERE (CLIENT2_ID IS NULL) AND USER_ID = $user_id_sql";
 			sql_execute($sql);
@@ -3369,6 +3369,11 @@ function phpversion_kdb()
 	$bits = explode('.', phpversion());
 	$num = floatval($bits[0]) + (floatval($bits[1]) / 10.0); # e.g. 7.2 from "7.2.33" or 7.4 from "7.4.11"
 	return $num;
+}
+
+function strftime_rdr($format)
+{
+	return (new DateTime)->format(str_replace('%', '', $format));
 }
 
 ?>

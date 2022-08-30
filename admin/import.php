@@ -28,7 +28,7 @@ $laravel_do_subject = false;
 #$laravel_do_subject = true;
 # ==================================
 
-log_open("import-vilcol/import_" . strftime('%Y_%m_%d_%H%M') . ".log");
+log_open("import-vilcol/import_" . strftime_rdr('%Y_%m_%d_%H%M') . ".log");
 log_write(post_values());#
 
 sql_connect();
