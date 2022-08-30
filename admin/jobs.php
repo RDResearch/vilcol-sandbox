@@ -4848,10 +4848,13 @@ function print_one_job($editing)
 		<table class=\"basic_table\" border=\"1\">
 			<tr><th>Field</th><th>Value</th></tr>
 			";
-			foreach ($job['JOB_Z'] as $zf => $zv)
-				# Don't display first four characters "Z_" of field name (e.g. "Z_T_" or "Z_X_")
-				print "<tr><td>" . substr($zf, 4) . "</td><td>$zv</td></tr>
-						";
+			if (is_array($job['JOB_Z']))
+			{
+				foreach ($job['JOB_Z'] as $zf => $zv)
+					# Don't display first four characters "Z_" of field name (e.g. "Z_T_" or "Z_X_")
+					print "<tr><td>" . substr($zf, 4) . "</td><td>$zv</td></tr>
+							";
+			}
 			print "
 		$jump_to_top
 		</table>
