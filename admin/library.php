@@ -268,7 +268,7 @@ function admin_login()
 
 		# Login Security - USER_KEY and session_id
 		$session_id = 1; # [REVIEW]session_id();
-		#[REVIEW]$_SESSION['USER_ID'] = $admin_id;
+		# [REVIEW]$_SESSION['USER_ID'] = $admin_id;
 		$today = strftime_rdr("%Y-%m-%d");
 		if ($login_debug)
 			log_write("admin_login(): today=\"$today\", ukey_dt=\"$ukey_dt\", user_key(DB)=\"$user_key\", session_id=$session_id");
