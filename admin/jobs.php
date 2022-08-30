@@ -6202,40 +6202,40 @@ function print_one_job_trace_letter($job, $editing, $open, $numcols, $div_h_x2)
 			else
 				$sub_name .= ", $temp_name";
 		}
-		$temp = trim($sub['JS_ADDR_1']);
+		$temp = trim((string)$sub['JS_ADDR_1']);
 		if ($temp)
 			$sub_addr[] = $temp;
-		$temp = trim($sub['JS_ADDR_2']);
+		$temp = trim((string)$sub['JS_ADDR_2']);
 		if ($temp)
 			$sub_addr[] = $temp;
-		$temp = trim($sub['JS_ADDR_3']);
+		$temp = trim((string)$sub['JS_ADDR_3']);
 		if ($temp)
 			$sub_addr[] = $temp;
-		$temp = trim($sub['JS_ADDR_4']);
+		$temp = trim((string)$sub['JS_ADDR_4']);
 		if ($temp)
 			$sub_addr[] = $temp;
-		$temp = trim($sub['JS_ADDR_5']);
+		$temp = trim((string)$sub['JS_ADDR_5']);
 		if ($temp)
 			$sub_addr[] = $temp;
-		$temp = trim($sub['JS_ADDR_PC']);
+		$temp = trim((string)$sub['JS_ADDR_PC']);
 		if ($temp)
 			$sub_addr[] = $temp;
-		$temp = trim($sub['NEW_ADDR_1']);
+		$temp = trim((string)$sub['NEW_ADDR_1']);
 		if ($temp)
 			$new_addr[] = $temp;
-		$temp = trim($sub['NEW_ADDR_2']);
+		$temp = trim((string)$sub['NEW_ADDR_2']);
 		if ($temp)
 			$new_addr[] = $temp;
-		$temp = trim($sub['NEW_ADDR_3']);
+		$temp = trim((string)$sub['NEW_ADDR_3']);
 		if ($temp)
 			$new_addr[] = $temp;
-		$temp = trim($sub['NEW_ADDR_4']);
+		$temp = trim((string)$sub['NEW_ADDR_4']);
 		if ($temp)
 			$new_addr[] = $temp;
-		$temp = trim($sub['NEW_ADDR_5']);
+		$temp = trim((string)$sub['NEW_ADDR_5']);
 		if ($temp)
 			$new_addr[] = $temp;
-		$temp = trim($sub['NEW_ADDR_PC']);
+		$temp = trim((string)$sub['NEW_ADDR_PC']);
 		if ($temp)
 			$new_addr[] = $temp;
 	}
