@@ -267,7 +267,7 @@ function admin_login()
 		audit_add_record(0);
 
 		# Login Security - USER_KEY and session_id
-		$session_id = 1; #[REVIEW]session_id();
+		$session_id = 1; # [REVIEW]session_id();
 		#[REVIEW]$_SESSION['USER_ID'] = $admin_id;
 		$today = strftime_rdr("%Y-%m-%d");
 		if ($login_debug)
@@ -495,7 +495,7 @@ function log_open($log_file, $overwrite=false)
 	if ($log_handle)
 	{
 		#log_write("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-		#log_write($_SERVER['PHP_SELF'] . " opening log file at " . strftime('%Y-%m-%d %H:%M:%S'));
+		#log_write($_SERVER['PHP_SELF'] . " opening log file at " . strftime_rdr('%Y-%m-%d %H:%M:%S'));
 //		log_write("log_open " . server_php_self(true) . (global_debug() ? ("{$crlf}POST=" . print_r($_POST,1) . "{$crlf}GET=" . print_r($_GET,1)) : ''));
 	}
 	else
@@ -516,7 +516,7 @@ function log_close()
 	if ($log_handle)
 	{
 //		log_write("log_close " . server_php_self(true));
-		#log_write($_SERVER['PHP_SELF'] . " closing log file at " . strftime('%Y-%m-%d %H:%M:%S'));
+		#log_write($_SERVER['PHP_SELF'] . " closing log file at " . strftime_rdr('%Y-%m-%d %H:%M:%S'));
 		#log_write("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv");
 //		log_write(""); // blank line
 		fclose($log_handle);
@@ -555,7 +555,7 @@ function log_write($line, $quiet=false, $only_if_open=false)
 	{
 	#if ($log_handle)
 	#{
-		$timestamp = ($line ? (strftime('%Y-%m-%d %H:%M:%S') . ($user_id ? "/{$user_id}" : '')) : '');
+		$timestamp = ($line ? (strftime_rdr('%Y-%m-%d %H:%M:%S') . ($user_id ? "/{$user_id}" : '')) : '');
 		$ret_check = 0;
 		settype($ret_check, 'boolean');
 		$line = sql_dekey($line);
@@ -1668,7 +1668,7 @@ function date_valid($date)
 	{
 		$bits = explode($sep, $date);
 		if (count($bits) == 2)
-			$bits[2] = strftime('%Y'); # this year
+			$bits[2] = strftime_rdr('%Y'); # this year
 		if (count($bits) == 3)
 		{
 			$day = intval($bits[0]);
@@ -1944,7 +1944,7 @@ function date_from_epoch($date_only=false, $then_ep='', $twodigityear=true, $fir
 	{
 		# Convert epoch date into sql date
 		$tim = ($date_only ? '' : " %H:%M:%S");
-		return strftime("%Y-%m-" . ($first_day ? '01' : '%d') . $tim, $then_ep);
+		return strftime_rdr("%Y-%m-" . ($first_day ? '01' : '%d') . $tim, $then_ep);
 	}
 	else
 		# Convert epoch date into readable date
@@ -1953,7 +1953,7 @@ function date_from_epoch($date_only=false, $then_ep='', $twodigityear=true, $fir
 
 function date_to_filename()
 {
-	return strftime("%Y_%m_%d_%H_%M_%S");
+	return strftime_rdr("%Y_%m_%d_%H_%M_%S");
 }
 
 function date_plus_days($days, $dmy='')
@@ -1979,7 +1979,7 @@ function date_now_sql($just_date=false, $plus_days=0)
 	$start = time();
 	if ($plus_days)
 		$start += ($plus_days * 24 * 60 * 60);
-	return strftime("%Y-%m-%d" . ($just_date ? '' : " %H:%M:%S"), $start); # YYYY-MM-DD hh:mm:ss
+	return strftime_rdr("%Y-%m-%d" . ($just_date ? '' : " %H:%M:%S"), $start); # YYYY-MM-DD hh:mm:ss
 }
 
 function date_last_month($day_shift=0, $first=false, $last=false, $month_count=1)
@@ -1988,7 +1988,7 @@ function date_last_month($day_shift=0, $first=false, $last=false, $month_count=1
 	# But if $first==true then return the first day of last month.
 	# Or if $last == true then return the last day of last month.
 
-	$now = explode('-', strftime("%d-%m-%Y"));
+	$now = explode('-', strftime_rdr("%d-%m-%Y"));
 	$day = intval($now[0]);
 	$mon = intval($now[1]);
 	$yer = intval($now[2]);
@@ -2063,7 +2063,7 @@ function date_now($date_only=false, $then_ep='', $twodigityear=true, $first_day=
 
 	if ($pretty)
 	{
-		$d = ($then_ep ? strftime('%d', $then_ep) : strftime('%d')); # 01 to 31
+		$d = ($then_ep ? strftime_rdr('%d', $then_ep) : strftime_rdr('%d')); # 01 to 31
 		$d = first_etc(intval($d)); # 1st 2nd 3rd etc to 31st
 		$m = 'B';
 		$y = 'Y';
@@ -2079,7 +2079,7 @@ function date_now($date_only=false, $then_ep='', $twodigityear=true, $first_day=
 	$date_part = "{$d}{$sep}%$m{$sep}%$y";
 	$time_part = ($date_only ? '' : " %H:%M:%S");
 	$datetime = $date_part . $time_part;
-	$rc = ($then_ep ? strftime($datetime, $then_ep) : strftime($datetime));
+	$rc = ($then_ep ? strftime_rdr($datetime, $then_ep) : strftime_rdr($datetime));
 	if ($first_day)
 	{
 		$rc = substr($rc, strpos($rc, $sep)); # change dd/mm/yy to /mm/yy
@@ -2431,7 +2431,7 @@ function date_add_months_kdb($ep, $mons)
 	$add_y = floor(floatval($mons) / 12.0); # number of years to add
 	$add_m = intval($mons) - (12 * $add_y); # number of months to add
 
-	$yyyymmdd = strftime("%Y %m %d", $ep);
+	$yyyymmdd = strftime_rdr("%Y %m %d", $ep);
 	list($yy, $mm, $dd) = explode(' ', $yyyymmdd);
 	$yy = intval($yy);
 	$mm = intval($mm);
@@ -2475,7 +2475,7 @@ function date_pretty_last_day($sql_dt)
 	#dprint("$yyyy, $mm");
 	$ep = mktime(0, 0, 0, $mm, 1, $yyyy); # 1st day of the following month
 	$ep -= (12 * 3600); # go back 12 hours to get to the previous day
-	$pretty = strftime("%d-%b-%y", $ep); # e.g. "30-Apr-13"
+	$pretty = strftime_rdr("%d-%b-%y", $ep); # e.g. "30-Apr-13"
 	return $pretty;
 }
 
@@ -2486,9 +2486,9 @@ function date_pretty_day($sql_dt, $shift=0, $just_month=false, $long_year=false,
 	$dd = intval(substr($sql_dt, 8, 2));
 	$ep = mktime(0, 0, 0, $mm, $dd, $yyyy) + $shift;
 	if ($month_and_year)
-		$pretty = strftime("%b " . ($long_year ? "%Y" : "%y"), $ep); # e.g. "Apr 13"
+		$pretty = strftime_rdr("%b " . ($long_year ? "%Y" : "%y"), $ep); # e.g. "Apr 13"
 	else
-		$pretty = strftime($just_month ? "%b" : ("%d-%b-" . ($long_year ? "%Y" : "%y")), $ep); # e.g. "10-Apr-13"
+		$pretty = strftime_rdr($just_month ? "%b" : ("%d-%b-" . ($long_year ? "%Y" : "%y")), $ep); # e.g. "10-Apr-13"
 	return $pretty;
 }
 
@@ -3228,9 +3228,9 @@ function date_from_mmyy($mmyy)
 
 function date_n_years_ago($years_ago)
 {
-	$dd = strftime("%d");
-	$mm = strftime("%m");
-	$yyyy = strftime("%Y") - $years_ago;
+	$dd = strftime_rdr("%d");
+	$mm = strftime_rdr("%m");
+	$yyyy = strftime_rdr("%Y") - $years_ago;
 	$dt = "{$yyyy}-{$mm}-{$dd}";
 	return $dt;
 } # date_n_years_ago()

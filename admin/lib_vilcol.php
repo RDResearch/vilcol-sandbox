@@ -7081,7 +7081,7 @@ function pdf_create_letter($doc_id, $timestamp)
 	#dprint("pdf_create_letter($doc_id)");#
 	$job_letter_id = $doc_id;
 	if (!$timestamp)
-		$timestamp = strftime("%Y%m%d_%H%M%S");
+		$timestamp = strftime_rdr("%Y%m%d_%H%M%S");
 	$job_pdf = sql_get_one_job($job_id, false);
 	$pdf_filename = "letter_{$job_pdf['J_VILNO']}_{$job_pdf['J_SEQUENCE']}_{$job_letter_id}_{$timestamp}.pdf";
 	$html_body = '';

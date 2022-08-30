@@ -252,15 +252,17 @@ function print_audit($audit)
 					{
 						$old_val = $one['OLD_VAL'];
 						$new_val = $one['NEW_VAL'];
-						if (($one['FIELD_NAME'] == 'LETTER_TEMPLATE') || ($one['FIELD_NAME'] == 'JL_TEXT'))
+						if (($one['FIELD_NAME'] === 'LETTER_TEMPLATE') || ($one['FIELD_NAME'] === 'JL_TEXT'))
 						{
 							$temp = '';
-							for ($ii = 0; $ii < strlen($old_val); $ii += 50)
+							for ($ii = 0, $iiMax = strlen($old_val); $ii < $iiMax; $ii += 50) {
 								$temp .= (substr($old_val, $ii, 50) . "<br>");
+							}
 							$old_val = $temp;
 							$temp = '';
-							for ($ii = 0; $ii < strlen($new_val); $ii += 50)
+							for ($ii = 0, $iiMax = strlen($new_val); $ii < $iiMax; $ii += 50) {
 								$temp .= (substr($new_val, $ii, 50) . "<br>");
+							}
 							$new_val = $temp;
 						}
 					}

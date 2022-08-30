@@ -7381,7 +7381,7 @@ function rep_cf_sigma_trans($dest, $sc_date_fr, $sc_date_to, $sc_client, $sc_gro
 	#dprint("datalines=" . print_r($datalines,1));#
 
 	$top_lines = array(
-		array(strftime("%Y%m%d") . "_Vilcol_Transactions.csv|{$sigma_code_trans}|" . date_now(true, '', false) . "|" . $count_pay)
+		array(strftime_rdr("%Y%m%d") . "_Vilcol_Transactions.csv|{$sigma_code_trans}|" . date_now(true, '', false) . "|" . $count_pay)
 		);
 
 	$headings = array();
@@ -7666,7 +7666,7 @@ function rep_cf_sigma_dial($dest, $sc_date_fr, $sc_date_to, $sc_client, $sc_grou
 	#dprint("datalines=" . print_r($datalines,1));#
 
 	$top_lines = array(
-		array(strftime("%Y%m%d") . "_Vilcol_Transactions.csv|{$sigma_code_dial}|" . date_now(true, '', false) . "|" . $count_bal)
+		array(strftime_rdr("%Y%m%d") . "_Vilcol_Transactions.csv|{$sigma_code_dial}|" . date_now(true, '', false) . "|" . $count_bal)
 		);
 
 	$headings = array();
@@ -7926,7 +7926,7 @@ function rep_cf_sigma_arr($dest, $sc_date_fr, $sc_date_to, $sc_client, $sc_group
 	#dprint("datalines=" . print_r($datalines,1));#
 
 	$top_lines = array(
-		array(strftime("%Y%m%d") . "_Vilcol_Arrangements.csv|{$sigma_code_arr}|" . date_now(true, '', false) . "|" . $count_pay)
+		array(strftime_rdr("%Y%m%d") . "_Vilcol_Arrangements.csv|{$sigma_code_arr}|" . date_now(true, '', false) . "|" . $count_pay)
 		);
 
 	$headings = array();
@@ -8195,7 +8195,7 @@ function rep_cf_sigma_close($dest, $sc_date_fr, $sc_date_to, $sc_client, $sc_gro
 	#dprint("datalines=" . print_r($datalines,1));#
 
 	$top_lines = array(
-		array(strftime("%Y%m%d") . "_Vilcol_Closures.csv|{$sigma_code_arr}|" . date_now(true, '', false) . "|" . $count_pay)
+		array(strftime_rdr("%Y%m%d") . "_Vilcol_Closures.csv|{$sigma_code_arr}|" . date_now(true, '', false) . "|" . $count_pay)
 		);
 
 	$headings = array();
@@ -8706,7 +8706,7 @@ function rep_cf_noncol($dest, $sc_date_fr, $sc_date_to, $xfile='')
 
 	# 1d. Find all open jobs that were either received within the last two years or have been updated within the last two years
 	#		or have had activity within the last two years.
-	$two_years_ago = "'" . (intval(strftime('%Y')) - 2) . strftime("-%m-%d") . "'";
+	$two_years_ago = "'" . (intval(strftime_rdr('%Y')) - 2) . strftime_rdr("-%m-%d") . "'";
 	$sql = "
 		SELECT J.CLIENT2_ID, J.JOB_ID, COUNT(*)
 		FROM JOB AS J LEFT JOIN JOB_ACT AS A ON A.JOB_ID=J.JOB_ID
@@ -10410,7 +10410,7 @@ function rep_cf_data_8($dest, $sc_date_fr, $sc_date_to, $xfile='')
 	#		that were either received within the last two years or have been updated within the last two years
 	#		or have had activity within the last two years.
 	$date_from = date_for_sql($sc_date_fr);
-	$two_years_ago = "'" . (intval(strftime('%Y')) - 2) . strftime("-%m-%d") . "'";
+	$two_years_ago = "'" . (intval(strftime_rdr('%Y')) - 2) . strftime_rdr("-%m-%d") . "'";
 	#dprint("date_from=\"$date_from\", twoyo=\"$two_years_ago\", sc=\"$sc_date_fr\"");#
 	if ($date_from < $two_years_ago)
 		$date_from = $two_years_ago;

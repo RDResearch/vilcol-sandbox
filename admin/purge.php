@@ -27,7 +27,7 @@ $time_start = time();
 $time_threshold = 110 * 60; # 110 minutes
 
 $log_root = '';
-#log_open("{$log_root}purge_" . strftime('%Y_%m_%d_%H%M') . ".log");
+#log_open("{$log_root}purge_" . strftime_rdr('%Y_%m_%d_%H%M') . ".log");
 #log_write(post_values() . chr(13) . chr(10) . "GET=" . print_r($_GET,1));
 dlog("time_start=$time_start(" . date_from_epoch(false,$time_start) . ")");
 #log_write("memory_limit=" . ini_get('memory_limit'));
@@ -77,7 +77,7 @@ function screen_content()
 	$grand_total_count = 0;
 	$grand_total_size = 0;
 	$first_loop = true;
-	$this_year = intval(strftime("%Y")); # e.g.2021
+	$this_year = intval(strftime_rdr("%Y")); # e.g.2021
 	#$just_creations = "AND ((OLD_VAL IS NULL) OR (" . sql_decrypt('OLD_VAL') . " = '')) AND (NEW_VAL IS NOT NULL)";
 	
 	for ($year = 2016; $year <= ($this_year - 2); $year++)

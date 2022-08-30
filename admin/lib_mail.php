@@ -262,7 +262,7 @@ function email_job_letter()
 //	$resends = sql_select_single("SELECT JL_EMAIL_RESENDS FROM JOB_LETTER WHERE JOB_LETTER_ID=$letter_id");
 //	if ($resends)
 //		$resends .= "|";
-//	$resends .= strftime('%d/%m/%y %H:%M') . ($new_to ? "($em_to)" : '');
+//	$resends .= strftime_rdr('%d/%m/%y %H:%M') . ($new_to ? "($em_to)" : '');
 //	$sql = "UPDATE JOB_LETTER SET JL_EMAIL_RESENDS='$resends' WHERE JOB_LETTER_ID=$letter_id";
 //	audit_setup_job($job_id, 'JOB_LETTER', 'JOB_LETTER_ID', $letter_id, 'JL_EMAIL_RESENDS', $resends);
 //	sql_execute($sql, true); # audited

@@ -143,9 +143,9 @@ function my_sql_execute($sql, $audit_it)
 			$problem = '?';
 		$problem = "sql_execute($sql): $problem";
 		if (log_write($problem, true))
-			print("SQL ERROR (" . strftime('%Y-%m-%d %H:%M:%S') . "/{$USER['USER_ID']}) - check log file");
+			print("SQL ERROR (" . strftime_rdr('%Y-%m-%d %H:%M:%S') . "/{$USER['USER_ID']}) - check log file");
 		else
-			print("SQL ERROR (" . strftime('%Y-%m-%d %H:%M:%S') . "/{$USER['USER_ID']}) - $problem");
+			print("SQL ERROR (" . strftime_rdr('%Y-%m-%d %H:%M:%S') . "/{$USER['USER_ID']}) - $problem");
 		log_close();
 		exit();
 	}
@@ -415,7 +415,7 @@ function ms_sql_execute($sql, $audit_it)
 		$problem = '?';
 	log_write("ms_sql_execute($sql): $problem", true); # only if open
 	log_close();
-	print("MS-SQL ERROR (" . strftime('%Y-%m-%d %H:%M:%S') . "/{$USER['USER_ID']}) - check log file");
+	print("MS-SQL ERROR (" . strftime_rdr('%Y-%m-%d %H:%M:%S') . "/{$USER['USER_ID']}) - check log file");
 	exit();
 }
 

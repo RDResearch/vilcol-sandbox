@@ -103,7 +103,7 @@ function auto_main()
 	if ($log_verbose) dlog("init_data()...", true);
 	init_data(); # sets $id_JOB_STATUS_act
 
-	$two_years_ago = "'" . (intval(strftime('%Y')) - 2) . strftime("-%m-%d") . "'";
+	$two_years_ago = "'" . (intval(strftime_rdr('%Y')) - 2) . strftime_rdr("-%m-%d") . "'";
 	$where_one_job = ($only_one_job ? " AND (J.JOB_ID=$only_one_job) " : ''); # Always: ''
 	$where_imported = ($only_imported ? " AND (J.IMPORTED=1) " : ''); # Always: ''
 

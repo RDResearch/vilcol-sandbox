@@ -95,7 +95,7 @@ function por_sql_execute($sql, $audit_it=false)
 	if (log_write($problem, true))
 		print("SQL ERROR (" . strftime_rdr('%Y-%m-%d %H:%M:%S') . "/{$USER['USER_ID']}) - check log file");
 	else
-		print("SQL ERROR (" . strftime('%Y-%m-%d %H:%M:%S') . "/{$USER['USER_ID']}) - $problem");
+		print("SQL ERROR (" . strftime_rdr('%Y-%m-%d %H:%M:%S') . "/{$USER['USER_ID']}) - $problem");
 	log_close();
 	return -1;
 	
