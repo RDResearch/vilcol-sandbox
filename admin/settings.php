@@ -445,7 +445,7 @@ $ynfrns_list = array(0 => 'No', 1 => 'Yes', -1 => 'FOC', $success_return => 'Ret
 $ynfrxns_list = array(0 => 'No', 1 => 'Yes', -1 => 'FOC', $success_return => 'Returned', -2 => 'N/Y/F/R', 'NULL' => 'Not set');
 $ynpend_list = array(0 => 'No', 1 => 'Yes', -1 => 'Review', -9 => 'No/Review');
 
-$today = strftime_rdr("%Y-%m-%d"); # removed for PHP 8.1
+$today = (new DateTime)->format("Y-m-d"); # removed for PHP 8.1
 $mktime_year_limit = 2037; # mktime() fails with a year bigger than this (KDB 09/08/16)
 
 $months_long = array(

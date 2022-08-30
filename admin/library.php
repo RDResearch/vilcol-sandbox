@@ -268,7 +268,7 @@ function admin_login()
 
 		# Login Security - USER_KEY and session_id
 		$session_id = 1; # [REVIEW]session_id();
-		#[REVIEW]$_SESSION['USER_ID'] = $admin_id;
+		# [REVIEW]$_SESSION['USER_ID'] = $admin_id;
 		$today = strftime_rdr("%Y-%m-%d");
 		if ($login_debug)
 			log_write("admin_login(): today=\"$today\", ukey_dt=\"$ukey_dt\", user_key(DB)=\"$user_key\", session_id=$session_id");
@@ -285,7 +285,7 @@ function admin_login()
 		else
 			setcookie("tash_t", $user_key, cookie_options(time() + 60*60*24*60));
 		$_COOKIE['tash_t'] = $user_key;
-		#[REVIEW]$_SESSION['USER_KEY'] = $user_key;
+		# [REVIEW]$_SESSION['USER_KEY'] = $user_key;
 		if (phpversion_kdb() < 7.3)
 			setcookie("bella_t", $session_id, time() + 60*60*24*60, '/; samesite=strict', "", $cookie_secure, true);
 		else
@@ -334,7 +334,7 @@ function admin_verify($must_login=true)
 	if ($checks_ok)
 	{
 		$checks_ok = false;
-		if (true) #[REVIEW]array_key_exists('USER_ID', $_SESSION) && ($user_id_sql == $_SESSION['USER_ID']))
+		if (true) # [REVIEW]array_key_exists('USER_ID', $_SESSION) && ($user_id_sql == $_SESSION['USER_ID']))
 			$checks_ok = true;
 		#else
 		#	log_write("admin_verify(): user_id checks/2 failed");
@@ -342,8 +342,8 @@ function admin_verify($must_login=true)
 	if ($checks_ok)
 	{
 		$checks_ok = false;
-		$session_id = 1; #[REVIEW]$_COOKIE['bella_t'];
-		if (true) #[REVIEW]$session_id == session_id())
+		$session_id = 1; # [REVIEW]$_COOKIE['bella_t'];
+		if (true) # [REVIEW]$session_id == session_id())
 		{
 			$user_key_cookie = cookie_val('tash_t');
 			$user_key_db = 0;
@@ -360,8 +360,8 @@ function admin_verify($must_login=true)
 			}
 			if ($user_key_db == $user_key_cookie)
 			{
-				$user_key_session = 1; #[REVIEW]$_SESSION['USER_KEY'];
-				if (true) #[REVIEW]$user_key_db == $user_key_session)
+				$user_key_session = 1; # [REVIEW]$_SESSION['USER_KEY'];
+				if (true) # [REVIEW]$user_key_db == $user_key_session)
 				{
 					if ($ukey_dt == $today)
 						$checks_ok = true;
@@ -375,7 +375,7 @@ function admin_verify($must_login=true)
 				log_write("admin_verify(): user_key check/1 failed ($user_key_db)($user_key_cookie)");
 		}
 		else
-			log_write("admin_verify(): session_id check failed ($session_id)("); #[REVIEW] . session_id() . ")");
+			log_write("admin_verify(): session_id check failed ($session_id)("); # [REVIEW] . session_id() . ")");
 	}
 	if ($checks_ok)
 	{
