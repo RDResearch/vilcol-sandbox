@@ -37,6 +37,7 @@ include_once('site.php');
 global $mysql_server; # site.php
 global $site_live; # site.php
 global $site_local; # site.php
+global $site_forge; # site.php
 global $sql_ignore_error; # 29/06/22
 global $visual_studio; # site.php
 
@@ -97,6 +98,20 @@ elseif ($site_live)
 //	$admin_domain = $site_domain;
 //	$csv_dir = "csvex"; # folder name containing csv files that are exported from some screen
 //	$slash = "\\";
+	$cookie_secure = true;
+}
+elseif ($site_forge)
+{
+	# Live site on RDR Forge server
+	$protocol = "http";
+	$root_domain = 'vilcoldbl.com';
+	$admin_dir = 'admin';
+	$site_domain = "www.{$root_domain}";
+	$unix_subdomain = "/home/forge/$root_domain";
+	$unix_path = "$unix_subdomain/{$admin_dir}";
+	$admin_domain = "{$site_domain}/{$admin_dir}";
+	$csv_dir = "csvex"; # folder name containing csv files that are exported from some screen
+	$slash = "/";
 	$cookie_secure = true;
 }
 
@@ -165,6 +180,13 @@ elseif ($site_live)
 		$ms_sql_username = 'vilcoldb_user';
 		$ms_sql_password = 'i38DYqB2T3st';
 	}
+}
+elseif ($site_forge)
+{
+	$sql_host = 'vilcol-rds.cjszchdkthyc.eu-west-2.rds.amazonaws.com';
+	$sql_username = 'aws_admin';
+	$sql_password = 'yllJHiYHS7HGkqeirUTR';
+	$sql_database = 'vilcoldb';
 }
 
 $sql_key = "R3p0mAn";
