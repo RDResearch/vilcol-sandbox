@@ -93,6 +93,9 @@ $vil_server = '...'; # Internal IP address of Vilcol server for local and remote
 $vil_client_kdb = $rdr_client_kdb; # External IP address of KDB's LAN, dd/mm/yy
 #$vil_client_andy = $rdr_client_andy; # External IP address of Andy Fisher's LAN, dd/mm/yy
 $vil_client_lan = '...*'; # Internal IP address of PC on Vilcol's LAN, dd/mm/yy
+$rdr_server_forge = '10.0.1.53'; # Forge server, internal IP address, from 30/08/22
+$vil_client_oak = '195.224.171.194'; # Oak Lodge from 30/08/22
+
 $allowed_ips = array(	# $_SERVER['SERVER_ADDR'], $_SERVER['REMOTE_ADDR']
 						array($localhost, $localhost),
 						#array($localhost_server, $localhost_lan),
@@ -121,6 +124,9 @@ $allowed_ips = array(	# $_SERVER['SERVER_ADDR'], $_SERVER['REMOTE_ADDR']
 						#array($vil_server, $vil_client_kdb),
 						#array($vil_server, $vil_client_andy),
 						#array($vil_server, $vil_client_lan),
+						
+						array($rdr_server_forge, $rdr_client_kdb),
+						array($rdr_server_forge, $vil_client_oak),
 					);
 
 function script_name_2($a) # this is a copy of library.php/script_name()
