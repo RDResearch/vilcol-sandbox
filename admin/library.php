@@ -1039,7 +1039,7 @@ function input_add_colour($extra, $label="")
 
 function input_textbox($name, $value, $size=0, $maxlength=0, $extra='', $idsuffix='')
 {
-	$value = str_replace('"', '&quot;', $value);
+	$value = $value ? str_replace('"', '&quot;', $value): '' ;
 	$extra = input_add_colour($extra);
 	return "<input type=\"textbox\" name=\"$name\" id=\"$name{$idsuffix}\" value=\"" . xprint($value,false,1) . "\" " .
 			($size ? " size=\"$size\"" : '') . " maxlength=\"" . ($maxlength ? $maxlength : 255) . "\"" . " $extra>";
@@ -1054,7 +1054,7 @@ function input_password($name, $value, $size=0, $maxlength=0, $extra='')
 
 function input_textarea($name, $rows, $cols, $value, $extra='')
 {
-	$value = str_replace('"', '&quot;', $value);
+	$value = $value ? str_replace('"', '&quot;', $value) : '';
 	$extra = input_add_colour($extra);
 	return "<textarea name=\"$name\" id=\"$name\" rows=\"$rows\" cols=\"$cols\" $extra>" . xprint($value,false,1) . "</textarea>";
 }
