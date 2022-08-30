@@ -1322,8 +1322,8 @@ function print_clients()
 			$address .= (($address && $one['C_ADDR_5']) ? ", " : '') . $one['C_ADDR_5'];
 			$address .= (($address && $one['C_ADDR_PC']) ? ", " : '') . $one['C_ADDR_PC'];
 			
-			$contact = trim($one['CC_FIRSTNAME']);
-			$temp = trim($one['CC_LASTNAME']);
+			$contact = trim((string)$one['CC_FIRSTNAME']);
+			$temp = trim((string)$one['CC_LASTNAME']);
 			if ($temp)
 			{
 				if ($contact)
