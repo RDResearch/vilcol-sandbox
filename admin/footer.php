@@ -1,0 +1,6 @@
+<?php
+printD("
+</body>
+</html>
+");
+?>

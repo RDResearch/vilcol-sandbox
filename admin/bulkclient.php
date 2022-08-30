@@ -1,0 +1,388 @@
+<?php
+
+include_once("settings.php");
+include_once("library.php");
+global $denial_message;
+global $navi_1_jobs;
+global $role_man;
+global $USER; # set by admin_verify()
+
+log_open("vilcol.log");
+
+sql_connect();
+
+admin_verify(); # writes to $USER
+
+if ($USER['IS_ENABLED'])
+{
+	$navi_1_jobs = true; # settings.php; used by navi_1_heading()
+	$onload = "onload=\"set_scroll();\"";
+	$page_title_2 = 'Bulk Client Change - Vilcol';
+	screen_layout();
+}
+else
+	print "<p>" . server_php_self() . ": login is not enabled</p>";
+
+sql_disconnect();
+log_close();
+
+function screen_content()
+{
+	global $errors;
+	global $jobs;
+	global $page_title_2;
+
+	print "<h3>Bulk Import of Job Client-Changes from CSV</h3>";
+
+	dprint(post_values());
+	dprint("FILES=" . xprint(print_r($_FILES,1), false, 1));
+	set_time_limit(60 * 60 * 1); # 1 hour
+
+	if (isset($_POST['upload_marker']))
+	{
+		$file = get_uploaded_file();
+		if ($file)
+		{
+			$jobs = array();
+			$errors = array();
+			import_csv($file);
+			if ($errors)
+				print_errors();
+			print_jobs();
+		}
+	}
+
+	javascript();
+
+	print_form();
+
+	print "
+	<script type=\"text/javascript\">
+	document.getElementById('page_title').innerHTML = '$page_title_2';
+	</script>
+	";
+}
+
+function screen_content_2()
+{
+	# This is required by screen_layout()
+} # screen_content_2()
+
+function print_errors()
+{
+	global $ar;
+	global $col3;
+	global $errors;
+
+	print "
+	<h3 style=\"color:red;\">The following errors were encountered upon import of the file:</h3>
+	<table class=\"spaced_table\">
+	<tr>
+		<th>CSV Line</th><th>Contents of CSV Line</th><th>Error</th>
+	</tr>
+	";
+	foreach ($errors as $one)
+	{
+		if ($one['LNO'] == -1)
+			print "
+			<tr><td $col3>{$one['ERROR']}</td></tr>
+			";
+		else
+			print "
+			<tr>
+				<td $ar>{$one['LNO']}</td><td>" . print_r($one['LINE'],1) . "</td><td>{$one['ERROR']}</td>
+			</tr>
+			";
+	}
+	print "
+	</table>
+	<hr>
+	<br>
+	<br>
+	";
+} # print_errors()
+
+function javascript()
+{
+	print "
+	<script type=\"text/javascript\">
+
+	function start_upload()
+	{
+		bits = document.csvupload.uploaded.value.split('.');
+		if (bits[bits.length-1].toLowerCase() == 'csv')
+		{
+			if (document.csvupload.uploaded.value.length > 0)
+			{
+				document.getElementById('span_result').innerHTML = '';
+				please_wait_on_submit();
+				document.csvupload.submit();
+			}
+			else
+				alert('Please browse to a file and select it before clicking the Upload button');
+		}
+		else
+			alert('Please select a file with a \".csv\" filename extension');
+	}
+
+	</script>
+	";
+}
+
+function print_form()
+{
+	global $upload_result;
+
+	print "
+	<div id=\"div_guide\" style=\"width:600px;\">
+	You can upload a CSV file of job client-changes (for Collection jobs only).<br>
+	The respective jobs will then have their client changed.<br>
+	Optionally an activity code can be added to the job too.<br>
+	The columns of the CSV file should be:
+	<ul style=\"margin-top:0px;\">
+		<li>VIL Number</li>
+		<li>Client Code</li>
+		<li>Optional Activity Code (or leave blank)</li>
+	</ul>
+	</div><!--div_guide-->
+	";
+
+	print "
+	<div id=\"div_upload\" style=\"width:600px; border:1px solid black; padding-left:10px;\">
+	<span id=\"span_result\">$upload_result</span>
+	<p>Please browse your system to choose a \".csv\" document to upload.</p>
+	<form id=\"csvupload\" method=\"post\" name=\"csvupload\" class=\"upload\" action=\"\" enctype=\"multipart/form-data\">
+		<input name=\"uploaded\" type=\"file\" size=\"50\" />
+		<input type=\"button\" value=\"Upload\" onclick=\"start_upload();\"/>
+		<br>
+		<p>The file must be comma-delimited, have a \".csv\" extension and its size is limited to 614,400 MB.<br>
+				<span style=\"color:red;\">...and it should NOT have a header line in it containing column/field names</span></p>
+		<input type=\"hidden\" name=\"upload_marker\" value=\"uploading\" />
+	</form>
+	</div><!--div_upload-->
+	";
+
+} # print_form()
+
+function get_uploaded_file()
+{
+	global $csv_dir; # csvex in settings.php
+	global $upload_max_size;
+	global $upload_result;
+	global $uploaded_file;
+
+	$input_dir = check_dir("$csv_dir/bulk");
+	$ts = date("Y_m_d" . "\\" . "_H_i_s"); // To timestamp the file name
+	$rc = '';
+	$uploaded_file = '';
+	$upload_ok = false;
+
+	if (isset($_FILES['uploaded']))
+	{
+		if ($_FILES['uploaded']['error'] == UPLOAD_ERR_OK)
+		{
+			if (0 < strlen(basename($_FILES['uploaded']['name'])))
+			{
+				if (strtolower(substr(basename($_FILES['uploaded']['name']), -4, 4)) == '.csv')
+				{
+					if ($_FILES['uploaded']['size'] < $upload_max_size)
+					{
+						$uploaded_file = xprint($_FILES['uploaded']['name'], false, 1);
+						if (!$uploaded_file)
+							dprint("Upload failed: basename(FILES[uploaded][name]) is empty");
+					}
+					else
+						dprint("get_uploaded_file(): Upload failed: files size of " . xprint($_FILES['uploaded']['size'], false, 1) . " exceeds max of $upload_max_size");
+				}
+				else
+					dprint("get_uploaded_file(): Upload failed: file name '" . basename(xprint($_FILES['uploaded']['name'], false, 1)) . "' does not end in '.csv'");
+			}
+			else
+				dprint("get_uploaded_file(): Upload failed: strlen(basename(FILES[uploaded][name]))=" . strlen(basename(xprint($_FILES['uploaded']['name'], false, 1))));
+		}
+		else
+			dprint("get_uploaded_file(): Upload failed: FILES[uploaded][error]=" . xprint($_FILES['uploaded']['error'], false, 1));
+	}
+
+	if ($uploaded_file)
+	{
+		dprint("get_uploaded_file(): uploaded_file=$uploaded_file");
+		$dest = "$input_dir";
+		if (is_dir($dest))
+		{
+			$ts_name = "/{$ts}_{$uploaded_file}";
+			$src = xprint($_FILES['uploaded']['tmp_name'], false, 1);
+			if (is_uploaded_file($src))
+			{
+				$dest .= $ts_name;
+				# NOTE WELL: move_uploaded_file() requires domain's 'safe mode' to be turned off in
+				# Plesk / setup / services / php support
+				dprint("get_uploaded_file(): calling move_uploaded_file($src, $dest)");
+				$rc = move_uploaded_file($src,$dest);
+				if ($rc)
+					$upload_ok = true;
+				else
+					dprint("get_uploaded_file(): Upload aborted: move_uploaded_file($src, $dest) returned ($rc)");
+			}
+			else
+				dprint("get_uploaded_file(): Upload aborted: '$src' is NOT an uploaded file");
+
+		}
+		else
+			dprint("get_uploaded_file(): Upload aborted: cannot find dir '$dest'");
+	}
+
+	if ($upload_ok)
+		$upload_result = "File Uploaded OK";
+	else
+		$upload_result = "*** Error *** File failed to upload ***";
+	$upload_result = "<h3><span style=\"color:blue;\">$upload_result</span></h3>";
+
+	return ($rc ? $dest : '');
+
+} # get_uploaded_file()
+
+function import_csv($file)
+{
+	global $errors;
+
+	dprint("import_csv($file)");
+
+	$fhan = fopen($file, 'r');
+	if (!$fhan)
+	{
+		$txt = "import_csv($file): fopen('r') failed";
+		dprint($txt, true);
+		$errors[] = array('LNO' => -1, 'LINE' => array(), 'ERROR' => $txt);
+		return;
+	}
+
+	$lix = 1;
+	while (($line = fgetcsv($fhan)) !== false)
+	{
+		dprint("line=" . print_r($line,1));
+		$rc = client_change($line, $lix);
+		if ($rc)
+			$errors[] = array('LNO' => $lix, 'LINE' => $line, 'ERROR' => $rc);
+		$lix++;
+	}
+	dprint("EOF");
+
+	dprint("Errors=" . print_r($errors,1));
+
+	fclose($fhan);
+
+} # import_csv()
+
+function client_change($line, $lix)
+{
+	global $jobs;
+	global $job_id;
+	global $sqlFalse;
+	#global $sqlTrue;
+
+	$field_A = $line[0];
+	$field_B = ((1 < count($line)) ? $line[1] : '');
+	$field_C = ((2 < count($line)) ? $line[2] : '');
+
+	$vilno = intval(trim($field_A));
+	$new_c_code = intval(trim($field_B));
+	$act_code = trim($field_C);
+	if ((!$vilno) && (!$new_c_code) && ($act_code == ''))
+		return ""; # ignore empty line
+
+	# Get newest job that has the given VILNo. Then test to ensure it is a collection job.
+	list($ms_top, $my_limit) = sql_top_limit(1);
+	$sql = "SELECT $ms_top JOB_ID, JC_JOB, CLIENT2_ID FROM JOB WHERE (J_VILNO=$vilno) AND (OBSOLETE=$sqlFalse) ORDER BY JOB_ID DESC $my_limit";
+	sql_execute($sql);
+	$job_id = 0;
+	$jc_job = 0;
+	$old_client_id = 0;
+	while (($newArray = sql_fetch()) != false)
+	{
+		$job_id = $newArray[0];
+		$jc_job = intval($newArray[1]);
+		$old_client_id = intval($newArray[2]);
+	}
+	if (!$job_id)
+		return "No job with VILNo \"$field_A\" was found in the database";
+	if (!$jc_job)
+		return "The job with VILNo \"$field_A\" is not a Collection job";
+
+	if (!$new_c_code)
+		return "No client code found \"$field_B\"";
+	$new_client_id = intval(sql_select_single("SELECT CLIENT2_ID FROM CLIENT2 WHERE C_CODE=$new_c_code"));
+	if (!$new_client_id)
+		return "No CLIENT2 record found from client code $new_c_code (from \"$field_B\")";
+	$old_c_code = intval(sql_select_single("SELECT C_CODE FROM CLIENT2 WHERE CLIENT2_ID=$old_client_id"));
+
+	$activity_id = 0;
+	if ($act_code)
+	{
+		$activity_id = sql_select_single("SELECT ACTIVITY_ID FROM ACTIVITY_SD WHERE ACT_TDX=" . quote_smart($act_code, true));
+		if (!$activity_id)
+			return "No ACTIVITY_SD record found from activity code $act_code (from \"$field_C\")";
+	}
+
+	if (($old_client_id == $new_client_id) || ($old_c_code == $new_c_code))
+		return "The new client is the same as the old one ($old_c_code)";
+
+	$comm_percent = sql_select_single("SELECT COMM_PERCENT FROM CLIENT2 WHERE CLIENT2_ID=$new_client_id");
+
+	dprint("Found JOB_ID $job_id, client code $new_c_code, " .
+				($activity_id ? "activity $act_code" : "no activity") .
+				" (Old client code $old_c_code, old client ID $old_client_id, new client ID $new_client_id, activity ID $activity_id, new compc=$comm_percent)");
+
+	$sql = "UPDATE JOB SET JC_PERCENT=$comm_percent WHERE JOB_ID=$job_id";
+	dprint($sql);
+	audit_setup_job($job_id, 'JOB', 'JOB_ID', $job_id, 'JC_PERCENT', $comm_percent);
+	sql_execute($sql, true); # audited
+
+	job_change_client($job_id, $new_client_id, $old_c_code, $new_c_code, $activity_id);
+
+	$jobs[] = array('LNO' => $lix, 'VILNO' => $vilno, 'JOB_ID' => $job_id, 'OLD_CLIENT_CODE' => $old_c_code, 'OLD_CLIENT_ID' => $old_client_id,
+					'NEW_CLIENT_CODE' => $new_c_code, 'NEW_CLIENT_ID' => $new_client_id,
+					'ACTIVITY_CODE' => strtoupper($act_code), 'ACTIVITY_ID' => $activity_id);
+
+	return ''; # success
+
+} # client_change()
+
+function print_jobs()
+{
+	global $ar;
+	global $jobs;
+
+	print "
+	<h3 style=\"color:blue;\">The following have had their client changed:</h3>
+	<table class=\"spaced_table\">
+	<tr>
+		<th>CSV Line</th><th>VILNo</th><th>Old Client</th><th>New Client</th><th>Activity Added</th>
+		<th>Job ID</th><th>Old Client ID</th><th>New Client ID</th><th>Activity ID</th>
+	</tr>
+	";
+	foreach ($jobs as $one)
+	{
+		print "
+		<tr>
+			<td $ar>{$one['LNO']}</td>
+			<td $ar>{$one['VILNO']}</td>
+			<td>{$one['OLD_CLIENT_CODE']}</td>
+			<td>{$one['NEW_CLIENT_CODE']}</td>
+			<td>{$one['ACTIVITY_CODE']}</td>
+			<td $ar>{$one['JOB_ID']}</td>
+			<td $ar>{$one['OLD_CLIENT_ID']}</td>
+			<td $ar>{$one['NEW_CLIENT_ID']}</td>
+			<td $ar>{$one['ACTIVITY_ID']}</td>
+		</tr>
+		";
+	}
+	print "
+	</table>
+	<hr>
+	<br>
+	<br>
+	";
+} # print_jobs()
+
+?>
