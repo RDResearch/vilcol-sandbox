@@ -546,6 +546,7 @@ function screen_content()
 			$u_subject = "(no subject)";
 			if (0 < count($last_job['SUBJECTS']))
 			{
+				$last_fn = '';
 				$last_fn = trim((string) $last_fn ? substr($last_job['SUBJECTS'][0]['JS_FIRSTNAME'],0,1) : '');
 				$last_ln = trim((string)$last_job['SUBJECTS'][0]['JS_LASTNAME']);
 				$last_co = trim((string)$last_job['SUBJECTS'][0]['JS_COMPANY']);
