@@ -3,6 +3,7 @@
 #require_once("dompdf_060/dompdf/dompdf_config.inc.php");
 require_once("dompdf2/autoload.inc.php");
 echo ("required dompdf2");
+use Dompdf\Dompdf;
 $dompdf = new DOMPDF();
 echo ("DOMPDF created");
 
