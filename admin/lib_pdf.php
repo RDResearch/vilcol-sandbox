@@ -219,7 +219,7 @@ function pdf_create($pdf_dir, $pdf_filename, $html_body)
 	#$dompdf->set_paper($customPaper);
 
 	$html_pdf = preg_replace('/>\s+</', "><", $html_pdf);
-	$dompdf->load_html($html_pdf);
+	$dompdf->loadHtml($html_pdf);
 	$dompdf->render();
 
 	echo(htmlspecialchars($html_pdf));
