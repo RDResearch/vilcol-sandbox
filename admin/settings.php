@@ -5,7 +5,7 @@
 include_once('ip_address.php');
 
 $ip_local = "127.0.0.1";
-$ip_rdr_kdb = "80.195.207.143"; # IP address of KDB at RDR from 13/10/20
+$ip_rdr_kdb = '195.224.171.194'; #"80.195.207.143"; # IP address of KDB at RDR from 13/10/20
 
 $screen_delay = false; # delay printing of HTML til all processing done
 $screen_html = ''; # used if $screen_delay is true
@@ -54,8 +54,8 @@ if ($site_local)
 	# My Windows PC
 	$protocol = "http";
 	$port = ($visual_studio ? ':1234' : '');
-	$root_domain = 'vilcol';
-	$admin_dir = 'web';
+	$root_domain = 'vilcol-php';
+	$admin_dir = 'admin';
 	#$site_domain = "localhost:8080/vilcol/web"; # Win 7 Phoe PC
 	#$site_domain = "localhost/vilcol2/web"; # Win 10 Toshiba Laptop
 	$site_domain = "localhost{$port}/" . ($visual_studio ? '' : "{$root_domain}/") . "{$admin_dir}"; # Win 10 Phoe PC
