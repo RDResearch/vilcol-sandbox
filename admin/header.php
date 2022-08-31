@@ -6,6 +6,18 @@ printD("
 <html lang=\"en\">
 <head>
 <meta charset=\"utf-8\" />
+
+<!-- Google tag (gtag.js) -->
+<script async src=\"https://www.googletagmanager.com/gtag/js?id=G-67Q7QMKMSK\"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-67Q7QMKMSK');
+</script>
+
+
 ");
 #<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 global $customer_url;
