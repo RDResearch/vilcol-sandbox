@@ -1470,11 +1470,13 @@ function stripslashes_kdb($a)
 {
 	global $mysql_server; # settings.php
 
-	return ($mysql_server ?
-			stripslashes($a)
-			:
-    		str_replace("''", "'", $a)
-    		);
+	return str_replace("''", "'", $a);
+
+//	return ($mysql_server ?
+//			stripslashes($a)
+//			:
+//    		str_replace("''", "'", $a)
+//    		);
 }
 
 function date_for_sql_nqnt($date, $add_day=false)
