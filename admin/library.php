@@ -186,7 +186,7 @@ function admin_login()
 			$role_a = $newArray[4];
 			$user_key = $newArray[5];
 			$temp = $newArray[6];
-			$bits = explode(' ', $temp);
+			$bits = $temp ? explode(' ', $temp) : '';
 			$ukey_dt = $bits[0];
 		}
 		if ($login_debug)
