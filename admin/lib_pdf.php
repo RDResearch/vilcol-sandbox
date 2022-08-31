@@ -67,7 +67,7 @@ function pdf_create($pdf_dir, $pdf_filename, $html_body)
 		$fax = '020 8390 9902';
 		$email = $email_service;
 		$firstline = "Vilcol<br>Vilcol House";
-		$hd_image = "images/vilcol_logo_2.jpg"; # 221 x 142 pixels
+		$hd_image = "./images/vilcol_logo_2.jpg"; # 221 x 142 pixels
 		#$hd_h = 142; # height of header image in pixels
 		#$hd_h = 110; # height of header image in pixels
 		$hd_w = 0;
