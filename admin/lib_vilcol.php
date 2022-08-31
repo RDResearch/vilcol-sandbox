@@ -1234,6 +1234,7 @@ function sql_get_clients($sc_system, $sc_text='', $sc_alpha='', $sc_addr='', $sc
 		#dprint("sql_get_clients()/2: $sql");#
 	}
 	$clients = array();
+	log_write($sql);
 	sql_execute($sql);
 	if ($time_tests)
 		$t_start = time();# Takes 10 seconds to fetch data! 19/01/17
