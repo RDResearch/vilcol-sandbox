@@ -88,7 +88,7 @@ if (!$no_header)
 	<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"{$screen_width}px\" height=\"100px\">
 		<tr>
 			<td style=\"text-align:left; vertical-align:bottom;\">
-				<table>
+				<table height=\"70px\">
 					<tr>
 						<td style='vertical-align: top;'>Vilcol</td>
 					</tr>
