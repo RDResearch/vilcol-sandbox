@@ -2,6 +2,9 @@
 
 #require_once("dompdf_060/dompdf/dompdf_config.inc.php");
 require_once("dompdf2/autoload.inc.php");
+echo ("required dompdf2");
+$dompdf = new DOMPDF();
+echo ("DOMPDF created");
 
 function pdf_create($pdf_dir, $pdf_filename, $html_body)
 {
