@@ -206,7 +206,7 @@ function pdf_create($pdf_dir, $pdf_filename, $html_body)
 //		return "pdf_create($pdf_dir, $pdf_filename): fopen(\"$pdf_dir/$html_filename\", a) failed... ";
 	
 	$dompdf = new DOMPDF();
-	$options = new Options();
+	$options = $dompdf->getOptions();
 	$options->set('isRemoteEnabled', true);
 	$dompdf->setOptions($options);
 	$dompdf->set_paper('A4', 'portrait');
