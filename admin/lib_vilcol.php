@@ -1242,7 +1242,7 @@ function sql_get_clients($sc_system, $sc_text='', $sc_alpha='', $sc_addr='', $sc
 	$redis = new Redis();
 	$redis->connect('localhost');
 
-	$key = 'ALL_CLIENTS';
+	//$key = 'ALL_CLIENTS';
 	if(!$redis->exists($key))
 	{
 		sql_execute($sql);
@@ -1260,7 +1260,7 @@ function sql_get_clients($sc_system, $sc_text='', $sc_alpha='', $sc_addr='', $sc
 			}
 		}
 		$redis->set($key, serialize($clients));
-		$redis->expire($key, 60);
+		$redis->expire($key, 10);
 	}
 	else
 	{
