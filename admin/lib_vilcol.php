@@ -1239,38 +1239,50 @@ function sql_get_clients($sc_system, $sc_text='', $sc_alpha='', $sc_addr='', $sc
 
 
 
-	$redis = new Redis();
-	$redis->connect('localhost');
-
-	//$key = 'ALL_CLIENTS';
-	if(!$redis->exists($key))
-	{
-		sql_execute($sql);
-		$found_ids = array();
-		while (($newArray = sql_fetch_assoc()) != false)
-		{
-			$this_id = $newArray['CLIENT2_ID'];
-			if (!in_array($this_id, $found_ids))
-			{
-				if ($for_select)
-					$clients[$this_id] = "{$newArray['C_CODE']} - {$newArray['C_CO_NAME']}";
-				else
-					$clients[] = $newArray;
-				$found_ids[] = $this_id;
-			}
-		}
-		$redis->set($key, serialize($clients));
-		$redis->expire($key, 10);
-	}
-	else
-	{
-		$clients = unserialize($redis->get($key));
-	}
+//	$redis = new Redis();
+//	$redis->connect('localhost');
+//
+//	$key = 'ALL_CLIENTS';
+//	if(!$redis->exists($key))
+//	{
+//		sql_execute($sql);
+//		$found_ids = array();
+//		while (($newArray = sql_fetch_assoc()) != false)
+//		{
+//			$this_id = $newArray['CLIENT2_ID'];
+//			if (!in_array($this_id, $found_ids))
+//			{
+//				if ($for_select)
+//					$clients[$this_id] = "{$newArray['C_CODE']} - {$newArray['C_CO_NAME']}";
+//				else
+//					$clients[] = $newArray;
+//				$found_ids[] = $this_id;
+//			}
+//		}
+//		$redis->set($key, serialize($clients));
+//		$redis->expire($key, 60);
+//	}
+//	else
+//	{
+//		$clients = unserialize($redis->get($key));
+//	}
 
 	log_close();
 	if ($time_tests)
 		$t_start = time();# Takes 10 seconds to fetch data! 19/01/17
-
+	$found_ids = array();
+	while (($newArray = sql_fetch_assoc()) != false)
+	{
+		$this_id = $newArray['CLIENT2_ID'];
+		if (!in_array($this_id, $found_ids))
+		{
+			if ($for_select)
+				$clients[$this_id] = "{$newArray['C_CODE']} - {$newArray['C_CO_NAME']}";
+			else
+				$clients[] = $newArray;
+			$found_ids[] = $this_id;
+		}
+	}
 
 	if ($time_tests)
 	{
