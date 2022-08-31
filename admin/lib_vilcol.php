@@ -1246,6 +1246,7 @@ function sql_get_clients($sc_system, $sc_text='', $sc_alpha='', $sc_addr='', $sc
 	if(!$redis->exists($key))
 	{
 		sql_execute($sql);
+		$found_ids = array();
 		while (($newArray = sql_fetch_assoc()) != false)
 		{
 			$this_id = $newArray['CLIENT2_ID'];
@@ -1269,7 +1270,7 @@ function sql_get_clients($sc_system, $sc_text='', $sc_alpha='', $sc_addr='', $sc
 	log_close();
 	if ($time_tests)
 		$t_start = time();# Takes 10 seconds to fetch data! 19/01/17
-	$found_ids = array();
+
 
 	if ($time_tests)
 	{
