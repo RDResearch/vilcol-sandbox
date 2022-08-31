@@ -75,7 +75,7 @@ function screen_layout()
 		");
 
 			printD("
-			<div id=\"main_screen_div\" style=\"width:{$screen_width}px; border-right:solid $grey_colour 1px; display:none;\">
+			<div id=\"main_screen_div\" style=\"border-right:solid $grey_colour 1px; display:none;\">
 			");
 				screen_content(); # This function is defined by the script that called screen_layout()
 			printD("

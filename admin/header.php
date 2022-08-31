@@ -104,7 +104,7 @@ color: $button_colour;'>Vilcol Database ");
 					navi_1_heading();
 				printD("
 			<td style=\"width:175px; text-align:right; vertical-align:middle;\">
-				<img style=\"text-align:right; vertical-align:bottom; border: $button_colour 2px solid;\" 
+				<img style=\"text-align:right; vertical-align:bottom;\" 
 					width=\"335\"
 					height=\"88\"
 					alt=\"Vilcol Logo\"
