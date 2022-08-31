@@ -187,25 +187,25 @@ function pdf_create($pdf_dir, $pdf_filename, $html_body)
 //		return "pdf_create($pdf_dir, $pdf_filename): fopen(\"$pdf_dir/$html_filename\", a) failed... ";
 
 
-//	$html_filename = $pdf_filename;
-//	if (strtolower(substr($html_filename,-4)) == ".pdf")
-//	{
-//		$html_filename = substr($html_filename, 0, strlen($html_filename)-4) . ".html";
-//		#dprint("HTML/1 \"$html_filename\"");#
-//	}
-//	else
-//	{
-//		$html_filename = str_replace(".pdf", ".html", strtolower($html_filename));
-//		#dprint("HTML/2 \"$html_filename\"");#
-//	}
-//	$fp = fopen("$pdf_dir/$html_filename", "a");
-//	if ($fp)
-//	{
-//		fwrite($fp, $html_pdf);
-//		fclose($fp);
-//	}
-//	else
-//		return "pdf_create($pdf_dir, $pdf_filename): fopen(\"$pdf_dir/$html_filename\", a) failed... ";
+	$html_filename = $pdf_filename;
+	if (strtolower(substr($html_filename,-4)) == ".pdf")
+	{
+		$html_filename = substr($html_filename, 0, strlen($html_filename)-4) . ".html";
+		#dprint("HTML/1 \"$html_filename\"");#
+	}
+	else
+	{
+		$html_filename = str_replace(".pdf", ".html", strtolower($html_filename));
+		#dprint("HTML/2 \"$html_filename\"");#
+	}
+	$fp = fopen("$pdf_dir/$html_filename", "a");
+	if ($fp)
+	{
+		fwrite($fp, $html_pdf);
+		fclose($fp);
+	}
+	else
+		return "pdf_create($pdf_dir, $pdf_filename): fopen(\"$pdf_dir/$html_filename\", a) failed... ";
 
 	$dompdf = new DOMPDF();
 	$options = $dompdf->getOptions();
