@@ -70,6 +70,7 @@ printD("
 
 global $site_local; # settings.php
 global $site_forge; # settings.php
+global $button_colour;
 if ($site_local)
 	printD("
 		<div style=\"background-color:pink;\"><div style=\"width:50%; margin:auto; font-weight:bold;\">* * * LOCAL SYSTEM * * *</div></div>
@@ -89,7 +90,7 @@ if (!$no_header)
 						<td style='vertical-align: top;'> <span style='font-family: Arial,Helvetica,sans-serif;
 font-weight: bold;
 font-size: 16px;
-color: #a61d3b;'>Vilcol Database ");
+color: $button_colour;'>Vilcol Database ");
 						if ($site_forge) {
 							printD("FORGE EDITION!");
 							}
