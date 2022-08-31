@@ -69,7 +69,13 @@ printD("
 ");
 
 global $site_local; # settings.php
+global $site_forge; # settings.php
 if ($site_local)
+	printD("
+		<div style=\"background-color:pink;\"><div style=\"width:50%; margin:auto; font-weight:bold;\">* * * LOCAL SYSTEM * * *</div></div>
+		<br>
+		");
+if ($site_forge)
 	printD("
 		<div style=\"background-color:pink;\"><div style=\"width:50%; margin:auto; font-weight:bold;\">* * * LOCAL SYSTEM * * *</div></div>
 		<br>
@@ -82,6 +88,12 @@ if (!$no_header)
 	<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"{$screen_width}px\" height=\"100px\">
 		<tr>
 			<td style=\"text-align:left; vertical-align:bottom;\">
+				<table>
+					<tr>
+						<td>Vilcol</td>
+					</tr>
+				</table>
+			
 				");
 				if ($logged_in)
 					navi_1_heading();
