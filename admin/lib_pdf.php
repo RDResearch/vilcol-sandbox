@@ -208,7 +208,6 @@ function pdf_create($pdf_dir, $pdf_filename, $html_body)
 	$dompdf = new DOMPDF();
 	$options = new Options();
 	$options->set('isRemoteEnabled', true);
-	$options->set('isHtml5ParserEnabled', true);
 	$dompdf->setOptions($options);
 	$dompdf->set_paper('A4', 'portrait');
 	#$customPaper = array(0, 0, 595, 841); # units are points
