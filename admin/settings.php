@@ -106,7 +106,7 @@ elseif ($site_live)
 elseif ($site_forge)
 {
 	# Live site on RDR Forge server
-	$protocol = "http";
+	$protocol = "https";
 	$root_domain = 'vilcoldbl.com';
 	$admin_dir = 'admin';
 	$site_domain = "www.{$root_domain}";
