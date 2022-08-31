@@ -14,7 +14,7 @@ function pdf_create($pdf_dir, $pdf_filename, $html_body)
 	global $email_service; # settings.php
 	global $letter_system; # settings.php
 	global $vat_number; # settings.php
-	global $admin_url; # settings.php
+	global $unix_path; # settings.php
 
 	$debug = false;#
 	
@@ -36,8 +36,7 @@ function pdf_create($pdf_dir, $pdf_filename, $html_body)
 		#$hd_image = "images/coll_hdr.jpg"; # from coll_hdr_2.jpg: 742 x 111 pixels
 		#$hd_h = 111; # height of header image in pixels
 		#$hd_m = 20; # margin above and below header in pixels
-		$hd_image = "images/coll_hdr.jpg"; # from coll_hdr_3.jpg: 737 x 122 pixels
-//		$hd_image = "https://colourlex.com/wp-content/uploads/2021/02/Chrome-red-painted-swatch-N-300x300.jpg"; # 1739 x 250 (but resize to 737 x 106) and 600dpi and 104KB
+		$hd_image = "./images/coll_hdr.jpg"; # from coll_hdr_3.jpg: 737 x 122 pixels
 		$hd_w = 737;
 		$hd_h = 122; # height of header image in pixels
 		$scaling = "width=\"{$hd_w}\" height=\"{$hd_h}\"";
@@ -51,7 +50,6 @@ function pdf_create($pdf_dir, $pdf_filename, $html_body)
 		$email = $email_service;
 		$firstline = "Vilcol<br>Vilcol House";
 		$hd_image = "./images/vilcol_logo_2.jpg"; # 221 x 142 pixels
-		# $hd_image = "https://colourlex.com/wp-content/uploads/2021/02/Chrome-red-painted-swatch-N-300x300.jpg";
 		#$hd_h = 142; # height of header image in pixels
 		#$hd_h = 110; # height of header image in pixels
 		$hd_w = 0;
@@ -189,30 +187,30 @@ function pdf_create($pdf_dir, $pdf_filename, $html_body)
 //		return "pdf_create($pdf_dir, $pdf_filename): fopen(\"$pdf_dir/$html_filename\", a) failed... ";
 
 
-	$html_filename = $pdf_filename;
-	if (strtolower(substr($html_filename,-4)) == ".pdf")
-	{
-		$html_filename = substr($html_filename, 0, strlen($html_filename)-4) . ".html";
-		#dprint("HTML/1 \"$html_filename\"");#
-	}
-	else
-	{
-		$html_filename = str_replace(".pdf", ".html", strtolower($html_filename));
-		#dprint("HTML/2 \"$html_filename\"");#
-	}
-	$fp = fopen("$pdf_dir/$html_filename", "a");
-	if ($fp)
-	{
-		fwrite($fp, $html_pdf);
-		fclose($fp);
-	}
-	else
-		return "pdf_create($pdf_dir, $pdf_filename): fopen(\"$pdf_dir/$html_filename\", a) failed... ";
+//	$html_filename = $pdf_filename;
+//	if (strtolower(substr($html_filename,-4)) == ".pdf")
+//	{
+//		$html_filename = substr($html_filename, 0, strlen($html_filename)-4) . ".html";
+//		#dprint("HTML/1 \"$html_filename\"");#
+//	}
+//	else
+//	{
+//		$html_filename = str_replace(".pdf", ".html", strtolower($html_filename));
+//		#dprint("HTML/2 \"$html_filename\"");#
+//	}
+//	$fp = fopen("$pdf_dir/$html_filename", "a");
+//	if ($fp)
+//	{
+//		fwrite($fp, $html_pdf);
+//		fclose($fp);
+//	}
+//	else
+//		return "pdf_create($pdf_dir, $pdf_filename): fopen(\"$pdf_dir/$html_filename\", a) failed... ";
 
 	$dompdf = new DOMPDF();
 	$options = $dompdf->getOptions();
 	$options->set('isRemoteEnabled', true);
-	$options->setChroot('/home/forge/vilcoldbl.com/admin/');
+	$options->setChroot($unix_path);
 	$dompdf->setOptions($options);
 	$dompdf->set_paper('A4', 'portrait');
 	#$customPaper = array(0, 0, 595, 841); # units are points
@@ -220,11 +218,8 @@ function pdf_create($pdf_dir, $pdf_filename, $html_body)
 	#$dompdf->set_paper($customPaper);
 
 	$html_pdf = preg_replace('/>\s+</', "><", $html_pdf);
-	log_write($html_pdf);
 	$dompdf->loadHtml($html_pdf);
 	$dompdf->render();
-
-	echo(htmlspecialchars($html_pdf));
 
 	$pdfoutput = $dompdf->output();
 	$fp = fopen("$pdf_dir/$pdf_filename", "a"); 
