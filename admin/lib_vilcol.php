@@ -1234,8 +1234,10 @@ function sql_get_clients($sc_system, $sc_text='', $sc_alpha='', $sc_addr='', $sc
 		#dprint("sql_get_clients()/2: $sql");#
 	}
 	$clients = array();
+	log_open('vilcol.log');
 	log_write($sql);
 	sql_execute($sql);
+	log_close();
 	if ($time_tests)
 		$t_start = time();# Takes 10 seconds to fetch data! 19/01/17
 	$found_ids = array();
