@@ -33,7 +33,7 @@ function pdf_create($pdf_dir, $pdf_filename, $html_body)
 		#$hd_image = "images/coll_hdr.jpg"; # from coll_hdr_2.jpg: 742 x 111 pixels
 		#$hd_h = 111; # height of header image in pixels
 		#$hd_m = 20; # margin above and below header in pixels
-		$hd_image = "./images/coll_hdr.jpg"; # from coll_hdr_3.jpg: 737 x 122 pixels
+		$hd_image = "./images/coll_hdr_hires.jpg"; # from coll_hdr_3.jpg: 737 x 122 pixels
 		$hd_w = 737;
 		$hd_h = 122; # height of header image in pixels
 		$scaling = "width=\"{$hd_w}\" height=\"{$hd_h}\"";
