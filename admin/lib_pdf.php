@@ -37,7 +37,7 @@ function pdf_create($pdf_dir, $pdf_filename, $html_body)
 		#$hd_h = 111; # height of header image in pixels
 		#$hd_m = 20; # margin above and below header in pixels
 		#$hd_image = "images/coll_hdr.jpg"; # from coll_hdr_3.jpg: 737 x 122 pixels
-		$hd_image = $admin_url . "/images/coll_hdr_hires.jpg"; # 1739 x 250 (but resize to 737 x 106) and 600dpi and 104KB
+		$hd_image = "https://colourlex.com/wp-content/uploads/2021/02/Chrome-red-painted-swatch-N-300x300.jpg"; # 1739 x 250 (but resize to 737 x 106) and 600dpi and 104KB
 		$hd_w = 737;
 		$hd_h = 122; # height of header image in pixels
 		$scaling = "width=\"{$hd_w}\" height=\"{$hd_h}\"";
@@ -51,7 +51,7 @@ function pdf_create($pdf_dir, $pdf_filename, $html_body)
 		$email = $email_service;
 		$firstline = "Vilcol<br>Vilcol House";
 		#$hd_image = $admin_url . "/images/vilcol_logo_2.jpg"; # 221 x 142 pixels
-		$hd_image = "https://images.unsplash.com/photo-1493612276216-ee3925520721?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80";
+		$hd_image = "https://colourlex.com/wp-content/uploads/2021/02/Chrome-red-painted-swatch-N-300x300.jpg";
 		#$hd_h = 142; # height of header image in pixels
 		#$hd_h = 110; # height of header image in pixels
 		$hd_w = 0;
@@ -166,7 +166,7 @@ function pdf_create($pdf_dir, $pdf_filename, $html_body)
 	</html>
 	";
 	#log_write($html_body);#
-	log_write($html_pdf);#
+	#log_write($html_pdf);#
 	
 //	$html_filename = $pdf_filename;
 //	if (strtolower(substr($html_filename,-4)) == ".pdf")
@@ -219,6 +219,7 @@ function pdf_create($pdf_dir, $pdf_filename, $html_body)
 	#$dompdf->set_paper($customPaper);
 
 	$html_pdf = preg_replace('/>\s+</', "><", $html_pdf);
+	log_write($html_pdf);
 	$dompdf->loadHtml($html_pdf);
 	$dompdf->render();
 
