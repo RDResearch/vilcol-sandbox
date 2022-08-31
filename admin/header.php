@@ -77,7 +77,7 @@ if ($site_local)
 		");
 if ($site_forge)
 	printD("
-		<div style=\"background-color:pink;\"><div style=\"width:50%; margin:auto; font-weight:bold;\">* * * LOCAL SYSTEM * * *</div></div>
+		<div style=\"background-color:pink;\"><div style=\"width:50%; margin:auto; font-weight:bold;\">* * * FORGE SYSTEM * * *</div></div>
 		<br>
 		");
 
@@ -90,7 +90,7 @@ if (!$no_header)
 			<td style=\"text-align:left; vertical-align:bottom;\">
 				<table>
 					<tr>
-						<td>Vilcol</td>
+						<td style='vertical-align: top;'>Vilcol</td>
 					</tr>
 				</table>
 			
