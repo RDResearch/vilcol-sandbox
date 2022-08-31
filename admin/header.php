@@ -1,11 +1,6 @@
 <?php
 # Not using old style DOCTYPE because we want to use HTML 5
 
-
-$redis = new Redis();
-$redis->connect('localhost', '6379');
-echo "Server is running: ".$redis->ping();
-
 printD("
 <!DOCTYPE html>
 <html lang=\"en\">
