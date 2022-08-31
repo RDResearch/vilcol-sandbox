@@ -1236,7 +1236,7 @@ function sql_get_clients($sc_system, $sc_text='', $sc_alpha='', $sc_addr='', $sc
 	$clients = array();
 	log_open('vilcol.log');
 	log_write($sql);
-
+	sql_execute($sql);
 
 
 //	$redis = new Redis();
