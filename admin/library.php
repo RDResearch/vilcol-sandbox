@@ -1470,7 +1470,7 @@ function stripslashes_kdb($a)
 {
 	global $mysql_server; # settings.php
 
-	return str_replace("''", "'", $a);
+	return $a ? str_replace("''", "'", $a) : '';
 
 //	return ($mysql_server ?
 //			stripslashes($a)
