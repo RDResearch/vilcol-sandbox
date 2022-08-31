@@ -203,7 +203,7 @@ function pdf_create($pdf_dir, $pdf_filename, $html_body)
 	$fp = fopen("$pdf_dir/$html_filename", "a");
 	if ($fp)
 	{
-		fwrite($fp, $html_body);
+		fwrite($fp, $html_pdf);
 		fclose($fp);
 	}
 	else
