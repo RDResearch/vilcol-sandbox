@@ -165,8 +165,8 @@ function pdf_create($pdf_dir, $pdf_filename, $html_body)
 	</body>
 	</html>
 	";
-	#log_write($html_body);#
-	#log_write($html_pdf);#
+	log_write($html_body);#
+	log_write($html_pdf);#
 	
 //	$html_filename = $pdf_filename;
 //	if (strtolower(substr($html_filename,-4)) == ".pdf")
