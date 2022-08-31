@@ -215,6 +215,7 @@ function pdf_create($pdf_dir, $pdf_filename, $html_body)
 	$dompdf->load_html($html_pdf);
 	$dompdf->render();
 
+	$dompdf->stream();
 	$pdfoutput = $dompdf->output();
 	$fp = fopen("$pdf_dir/$pdf_filename", "a"); 
 	if ($fp)
