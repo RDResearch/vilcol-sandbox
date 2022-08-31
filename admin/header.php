@@ -86,11 +86,14 @@ if (!$no_header)
 			<td style=\"text-align:left; vertical-align:bottom;\">
 				<table height=\"70px\">
 					<tr>
-						<td style='vertical-align: top;'>Vilcol ");
+						<td style='vertical-align: top;'> <span style='font-family: Arial,Helvetica,sans-serif;
+font-weight: bold;
+font-size: 16px;
+color: #a61d3b;'>Vilcol Database ");
 						if ($site_forge) {
 							printD("FORGE EDITION!");
 							}
-						printD("
+						printD("</span>
 							</td>
 					</tr>
 				</table>
