@@ -209,7 +209,7 @@ function pdf_create($pdf_dir, $pdf_filename, $html_body)
 	else
 		return "pdf_create($pdf_dir, $pdf_filename): fopen(\"$pdf_dir/$html_filename\", a) failed... ";
 
-	$dompdf = new DOMPDF();
+	$dompdf = new DOMPDF(['chroot' => $admin_url]);
 	$options = $dompdf->getOptions();
 	$options->set('isRemoteEnabled', true);
 	$dompdf->setOptions($options);
