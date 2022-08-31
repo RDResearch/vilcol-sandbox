@@ -36,8 +36,8 @@ function pdf_create($pdf_dir, $pdf_filename, $html_body)
 		#$hd_image = "images/coll_hdr.jpg"; # from coll_hdr_2.jpg: 742 x 111 pixels
 		#$hd_h = 111; # height of header image in pixels
 		#$hd_m = 20; # margin above and below header in pixels
-		#$hd_image = "images/coll_hdr.jpg"; # from coll_hdr_3.jpg: 737 x 122 pixels
-		$hd_image = "https://colourlex.com/wp-content/uploads/2021/02/Chrome-red-painted-swatch-N-300x300.jpg"; # 1739 x 250 (but resize to 737 x 106) and 600dpi and 104KB
+		$hd_image = "images/coll_hdr.jpg"; # from coll_hdr_3.jpg: 737 x 122 pixels
+//		$hd_image = "https://colourlex.com/wp-content/uploads/2021/02/Chrome-red-painted-swatch-N-300x300.jpg"; # 1739 x 250 (but resize to 737 x 106) and 600dpi and 104KB
 		$hd_w = 737;
 		$hd_h = 122; # height of header image in pixels
 		$scaling = "width=\"{$hd_w}\" height=\"{$hd_h}\"";
@@ -50,8 +50,8 @@ function pdf_create($pdf_dir, $pdf_filename, $html_body)
 		$fax = '020 8390 9902';
 		$email = $email_service;
 		$firstline = "Vilcol<br>Vilcol House";
-		#$hd_image = $admin_url . "/images/vilcol_logo_2.jpg"; # 221 x 142 pixels
-		$hd_image = "https://colourlex.com/wp-content/uploads/2021/02/Chrome-red-painted-swatch-N-300x300.jpg";
+		$hd_image = $admin_url . "/images/vilcol_logo_2.jpg"; # 221 x 142 pixels
+		# $hd_image = "https://colourlex.com/wp-content/uploads/2021/02/Chrome-red-painted-swatch-N-300x300.jpg";
 		#$hd_h = 142; # height of header image in pixels
 		#$hd_h = 110; # height of header image in pixels
 		$hd_w = 0;
