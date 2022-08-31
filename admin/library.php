@@ -3374,7 +3374,7 @@ function phpversion_kdb()
 
 function strftime_rdr($format)
 {
-	$format = str_replace('%H:%M:%S', 'H:m:s', $format);
+	$format = str_replace('%H:%M:%S', 'H:i:s', $format);
 	return (new DateTime)->format(str_replace('%', '', $format));
 }
 
