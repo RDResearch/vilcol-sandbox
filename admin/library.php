@@ -37,7 +37,6 @@ function screen_layout()
 
 	if ( ! ($navi_1_home || $navi_1_clients || $navi_1_jobs || $navi_1_finance || $navi_1_reports || $navi_1_system) )
 		$no_header = true;
-
 	include("header.php"); # calls navi_1_heading() - primary navigation buttons; creates div with id "banner"
 
 	# Add a general-purpose "Please Wait" block to prevent user from clicking on something
@@ -535,10 +534,10 @@ function log_write($line, $quiet=false, $only_if_open=false)
 	$rc = false; # failure
 	$user_id = ((is_array($USER) && array_key_exists('USER_ID', $USER)) ? intval($USER['USER_ID']) : 0);
 
-	if (($user_id <= 0) || global_debug())
+	#if (($user_id <= 0) || global_debug()) #FIXME restore these comments
 		$log_write_disabled = false;
-	else
-		$log_write_disabled = true; # ***** IMPORTANT ****** If this is set to true then the log file is NOT written to and "success" is returned.
+	#else
+	#	$log_write_disabled = true; # ***** IMPORTANT ****** If this is set to true then the log file is NOT written to and "success" is returned.
 
 	$open_and_close = false;
 	if (!$log_handle)
