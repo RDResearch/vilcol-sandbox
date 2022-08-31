@@ -75,11 +75,7 @@ if ($site_local)
 		<div style=\"background-color:pink;\"><div style=\"width:50%; margin:auto; font-weight:bold;\">* * * LOCAL SYSTEM * * *</div></div>
 		<br>
 		");
-if ($site_forge)
-	printD("
-		<div style=\"background-color:pink;\"><div style=\"width:50%; margin:auto; font-weight:bold;\">* * * FORGE SYSTEM * * *</div></div>
-		<br>
-		");
+
 
 if (!$no_header)
 {
@@ -90,7 +86,12 @@ if (!$no_header)
 			<td style=\"text-align:left; vertical-align:bottom;\">
 				<table height=\"70px\">
 					<tr>
-						<td style='vertical-align: top;'>Vilcol</td>
+						<td style='vertical-align: top;'>Vilcol ");
+						if ($site_forge) {
+							printD("FORGE EDITION!");
+							}
+						printD("
+							</td>
 					</tr>
 				</table>
 			
