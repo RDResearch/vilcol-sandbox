@@ -14,6 +14,7 @@ textarea
 #banner
 	{
 	background-color: #cccccc;
+	border: #a61d3b 2px solid;
 	min-width: 1190px;
 	overflow: hidden;
 	}

@@ -87,12 +87,12 @@ if (!$no_header)
 			<td style=\"text-align:left; vertical-align:bottom;\">
 				<table height=\"70px\">
 					<tr>
-						<td style='vertical-align: top;'> <span style='font-family: Arial,Helvetica,sans-serif;
+						<td style='vertical-align: top;'> <span style='padding:2px; font-family: Arial,Helvetica,sans-serif;
 font-weight: bold;
 font-size: 16px;
 color: $button_colour;'>Vilcol Database ");
 						if ($site_forge) {
-							printD("FORGE EDITION!");
+							printD("FORGE EDITION");
 							}
 						printD("</span>
 							</td>
@@ -104,7 +104,7 @@ color: $button_colour;'>Vilcol Database ");
 					navi_1_heading();
 				printD("
 			<td style=\"width:175px; text-align:right; vertical-align:middle;\">
-				<img style=\"text-align:right; vertical-align:bottom;\" 
+				<img style=\"text-align:right; vertical-align:bottom; border: $button_colour 2px solid;\" 
 					width=\"335\"
 					height=\"88\"
 					alt=\"Vilcol Logo\"
