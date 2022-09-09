@@ -543,7 +543,7 @@ function screen_content()
 		$time_start = microtime(true);
 		$last_job = sql_get_one_job($USER['U_JOB_ID'], ($last_job_id == $job_id) ? true : false);
 		$execution_time = (microtime(true) - $time_start)/60;
-		var_dump($execution_time);
+		var_dump(number_format((float) $execution_time, 10) . ' minutes');
 		if ($time_tests) log_write("jobs.php/screen_conent(): got last job...");
 		if ($last_job)
 		{
