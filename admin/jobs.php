@@ -539,7 +539,7 @@ function screen_content()
 	if (0 < $last_job_id)
 	{
 		if ($time_tests) log_write("jobs.php/screen_conent(): getting last job...");
-		$last_job = sql_get_one_job($USER['U_JOB_ID'], ($last_job_id == $job_id) ? true : false);
+		//$last_job = sql_get_one_job($USER['U_JOB_ID'], ($last_job_id == $job_id) ? true : false);
 		if ($time_tests) log_write("jobs.php/screen_conent(): got last job...");
 		if ($last_job)
 		{
@@ -3859,7 +3859,7 @@ function print_one_job($editing)
 	if ($job_id == $last_job_id)
 		$job = $last_job;
 	else
-		//$job = sql_get_one_job($job_id, true); FIXME - removed for testing
+		$job = sql_get_one_job($job_id, true);
 	$page_title_2 = "Job {$job['J_VILNO']} - Vilcol";
 	#dprint("Job User=" . $job['J_USER_ID']);
 	#dprint("Job Success = \"{$job['TRACE_DETAILS']['JT_SUCCESS']}\"");#
