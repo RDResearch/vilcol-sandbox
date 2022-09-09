@@ -123,6 +123,8 @@ function screen_content()
 
 	dprint(post_values());
 
+	var_dump(post_values());
+
 	#if (post_val('sc_complete') == -1) # "Review"
 	#	$time_tests = true;#
 
