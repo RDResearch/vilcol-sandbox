@@ -1234,7 +1234,40 @@ function sql_get_clients($sc_system, $sc_text='', $sc_alpha='', $sc_addr='', $sc
 		#dprint("sql_get_clients()/2: $sql");#
 	}
 	$clients = array();
+	log_open('vilcol.log');
+	log_write($sql);
 	sql_execute($sql);
+
+
+//	$redis = new Redis();
+//	$redis->connect('localhost');
+//
+//	$key = 'ALL_CLIENTS';
+//	if(!$redis->exists($key))
+//	{
+//		sql_execute($sql);
+//		$found_ids = array();
+//		while (($newArray = sql_fetch_assoc()) != false)
+//		{
+//			$this_id = $newArray['CLIENT2_ID'];
+//			if (!in_array($this_id, $found_ids))
+//			{
+//				if ($for_select)
+//					$clients[$this_id] = "{$newArray['C_CODE']} - {$newArray['C_CO_NAME']}";
+//				else
+//					$clients[] = $newArray;
+//				$found_ids[] = $this_id;
+//			}
+//		}
+//		$redis->set($key, serialize($clients));
+//		$redis->expire($key, 60);
+//	}
+//	else
+//	{
+//		$clients = unserialize($redis->get($key));
+//	}
+
+	log_close();
 	if ($time_tests)
 		$t_start = time();# Takes 10 seconds to fetch data! 19/01/17
 	$found_ids = array();
@@ -1250,6 +1283,7 @@ function sql_get_clients($sc_system, $sc_text='', $sc_alpha='', $sc_addr='', $sc
 			$found_ids[] = $this_id;
 		}
 	}
+
 	if ($time_tests)
 	{
 		$t_length = time() - $t_start;
@@ -3309,8 +3343,8 @@ function sql_get_one_job($job_id, $for_display)
 	sql_execute($sql);
 	while (($newArray = sql_fetch_assoc()) != false)
 	{
-		$newArray['JL_TEXT'] = trim($newArray['JL_TEXT']);
-		$newArray['JL_TEXT_2'] = trim($newArray['JL_TEXT_2']);
+		$newArray['JL_TEXT'] = trim((string)$newArray['JL_TEXT']);
+		$newArray['JL_TEXT_2'] = trim((string)$newArray['JL_TEXT_2']);
 		$content = ((0 < strlen($newArray['JL_TEXT'] . $newArray['JL_TEXT_2'])) ? true : false);
 		$approved = $newArray['JL_APPROVED_DT'] ? true : false;
 		$sent = ($newArray['EM_DT'] || $newArray['JL_POSTED_DT']) ? true : false;
@@ -7081,7 +7115,7 @@ function pdf_create_letter($doc_id, $timestamp)
 	#dprint("pdf_create_letter($doc_id)");#
 	$job_letter_id = $doc_id;
 	if (!$timestamp)
-		$timestamp = strftime("%Y%m%d_%H%M%S");
+		$timestamp = strftime_rdr("%Y%m%d_%H%M%S");
 	$job_pdf = sql_get_one_job($job_id, false);
 	$pdf_filename = "letter_{$job_pdf['J_VILNO']}_{$job_pdf['J_SEQUENCE']}_{$job_letter_id}_{$timestamp}.pdf";
 	$html_body = '';
