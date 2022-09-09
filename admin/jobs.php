@@ -123,8 +123,6 @@ function screen_content()
 
 	dprint(post_values());
 
-	var_dump(post_values());
-
 	#if (post_val('sc_complete') == -1) # "Review"
 	#	$time_tests = true;#
 
@@ -953,6 +951,8 @@ function screen_content()
 		<input type=\"hidden\" name=\"full_fname\" value=\"\" />
 	</form><!--form_csv_download-->
 	";
+
+	return;
 
 	if ($time_tests) log_write("jobs.php/screen_conent(): done form_main...");
 
