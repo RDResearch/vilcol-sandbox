@@ -3859,7 +3859,7 @@ function print_one_job($editing)
 	if ($job_id == $last_job_id)
 		$job = $last_job;
 	else
-		$job = sql_get_one_job($job_id, true);
+		//$job = sql_get_one_job($job_id, true); FIXME - removed for testing
 	$page_title_2 = "Job {$job['J_VILNO']} - Vilcol";
 	#dprint("Job User=" . $job['J_USER_ID']);
 	#dprint("Job Success = \"{$job['TRACE_DETAILS']['JT_SUCCESS']}\"");#
