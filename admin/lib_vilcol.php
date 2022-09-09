@@ -3231,16 +3231,18 @@ function sql_get_one_job($job_id, $for_display)
 				sql_execute($sql);
 				while (($newArray = sql_fetch()) != false)
 				{
-					try{
-						if (0 < strlen($newArray[0]))
-							$job['NOTES'][] = array('JOB_NOTE_ID' => 0, 'J_NOTE' => $newArray[0], 'IMPORTED' => 1,
-								'JN_ADDED_DT' => '2017-01-01 01:00:00', 'USER_ID' => $super_user_id, 'U_ADDED' => 'Kevin',
-								'JN_UPDATED_DT' => '', 'USER_ID_U' => 0, 'U_UPDATED' => '');
-						else
+						if($newArray[0] === null){
 							$end_of_imp_note = true;
-					}catch (Exception $e){
-						$end_of_imp_note = true;
-					}
+						}else{
+							if (0 < strlen($newArray[0]))
+								$job['NOTES'][] = array('JOB_NOTE_ID' => 0, 'J_NOTE' => $newArray[0], 'IMPORTED' => 1,
+									'JN_ADDED_DT' => '2017-01-01 01:00:00', 'USER_ID' => $super_user_id, 'U_ADDED' => 'Kevin',
+									'JN_UPDATED_DT' => '', 'USER_ID_U' => 0, 'U_UPDATED' => '');
+							else
+								$end_of_imp_note = true;
+						}
+
+
 
 				}
 			}
