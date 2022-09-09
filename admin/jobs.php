@@ -535,6 +535,7 @@ function screen_content()
 
 	$u_subject = '';
 	$last_job_id = $USER['U_JOB_ID'];
+	var_dump($last_job_id);
 	$last_job = array();
 	if (0 < $last_job_id)
 	{
