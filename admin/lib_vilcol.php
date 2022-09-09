@@ -3102,6 +3102,7 @@ function sql_get_jobs($sc_sys='', $sc_text='', $sc_addr='', $sc_date_fr='', $sc_
 
 function sql_get_one_job($job_id, $for_display)
 {
+	var_dump("I execute and ruin everything in lib_vilcol.php");
 	global $crlf;
 	global $id_LETTER_TYPE_contact;
 	global $id_LETTER_TYPE_demand;
