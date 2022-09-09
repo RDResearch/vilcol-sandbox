@@ -546,9 +546,10 @@ function screen_content()
 			$u_subject = "(no subject)";
 			if (0 < count($last_job['SUBJECTS']))
 			{
-				$last_fn = trim(substr($last_job['SUBJECTS'][0]['JS_FIRSTNAME'],0,1));
-				$last_ln = trim($last_job['SUBJECTS'][0]['JS_LASTNAME']);
-				$last_co = trim($last_job['SUBJECTS'][0]['JS_COMPANY']);
+				$last_fn = '';
+				$last_fn = trim((string) $last_fn ? substr($last_job['SUBJECTS'][0]['JS_FIRSTNAME'],0,1) : '');
+				$last_ln = trim((string)$last_job['SUBJECTS'][0]['JS_LASTNAME']);
+				$last_co = trim((string)$last_job['SUBJECTS'][0]['JS_COMPANY']);
 				#dprint("fn=$last_fn, ln=$last_ln, co=$last_co, job=" . print_r($last_job,1));#
 				if ($last_fn)
 				{
@@ -4848,10 +4849,13 @@ function print_one_job($editing)
 		<table class=\"basic_table\" border=\"1\">
 			<tr><th>Field</th><th>Value</th></tr>
 			";
-			foreach ($job['JOB_Z'] as $zf => $zv)
-				# Don't display first four characters "Z_" of field name (e.g. "Z_T_" or "Z_X_")
-				print "<tr><td>" . substr($zf, 4) . "</td><td>$zv</td></tr>
-						";
+			if (is_array($job['JOB_Z']))
+			{
+				foreach ($job['JOB_Z'] as $zf => $zv)
+					# Don't display first four characters "Z_" of field name (e.g. "Z_T_" or "Z_X_")
+					print "<tr><td>" . substr($zf, 4) . "</td><td>$zv</td></tr>
+							";
+			}
 			print "
 		$jump_to_top
 		</table>
@@ -6199,40 +6203,40 @@ function print_one_job_trace_letter($job, $editing, $open, $numcols, $div_h_x2)
 			else
 				$sub_name .= ", $temp_name";
 		}
-		$temp = trim($sub['JS_ADDR_1']);
+		$temp = trim((string)$sub['JS_ADDR_1']);
 		if ($temp)
 			$sub_addr[] = $temp;
-		$temp = trim($sub['JS_ADDR_2']);
+		$temp = trim((string)$sub['JS_ADDR_2']);
 		if ($temp)
 			$sub_addr[] = $temp;
-		$temp = trim($sub['JS_ADDR_3']);
+		$temp = trim((string)$sub['JS_ADDR_3']);
 		if ($temp)
 			$sub_addr[] = $temp;
-		$temp = trim($sub['JS_ADDR_4']);
+		$temp = trim((string)$sub['JS_ADDR_4']);
 		if ($temp)
 			$sub_addr[] = $temp;
-		$temp = trim($sub['JS_ADDR_5']);
+		$temp = trim((string)$sub['JS_ADDR_5']);
 		if ($temp)
 			$sub_addr[] = $temp;
-		$temp = trim($sub['JS_ADDR_PC']);
+		$temp = trim((string)$sub['JS_ADDR_PC']);
 		if ($temp)
 			$sub_addr[] = $temp;
-		$temp = trim($sub['NEW_ADDR_1']);
+		$temp = trim((string)$sub['NEW_ADDR_1']);
 		if ($temp)
 			$new_addr[] = $temp;
-		$temp = trim($sub['NEW_ADDR_2']);
+		$temp = trim((string)$sub['NEW_ADDR_2']);
 		if ($temp)
 			$new_addr[] = $temp;
-		$temp = trim($sub['NEW_ADDR_3']);
+		$temp = trim((string)$sub['NEW_ADDR_3']);
 		if ($temp)
 			$new_addr[] = $temp;
-		$temp = trim($sub['NEW_ADDR_4']);
+		$temp = trim((string)$sub['NEW_ADDR_4']);
 		if ($temp)
 			$new_addr[] = $temp;
-		$temp = trim($sub['NEW_ADDR_5']);
+		$temp = trim((string)$sub['NEW_ADDR_5']);
 		if ($temp)
 			$new_addr[] = $temp;
-		$temp = trim($sub['NEW_ADDR_PC']);
+		$temp = trim((string)$sub['NEW_ADDR_PC']);
 		if ($temp)
 			$new_addr[] = $temp;
 	}
@@ -7712,6 +7716,8 @@ function mass_print_letters($ticked_jobs, $upload_app=false)
 		$letters[] = $newArray;
 		$pdfs[] = $newArray['FILENAME'];
 	}
+
+	//TODO Combine all letters here using $letters array, then send to users pc as a download
 
 	$dprint = "Letters:<br>";
 	$letter_ix = 0;
