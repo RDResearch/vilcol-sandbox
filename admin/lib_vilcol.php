@@ -188,7 +188,7 @@ function vlf_convert_decimal($d0,$d1,$d2,$d3,$d4,$d5)
 	{
 		$output = "{$d0},{$d1},{$d2},{$d3},{$d4},{$d5}";
 		$output .= " = " . dechex($d0) . "," . dechex($d1) . "," . dechex($d2) . "," .
-							dechex($d3) . "," . dechex($d4) . "," . dechex($d5);
+			dechex($d3) . "," . dechex($d4) . "," . dechex($d5);
 		$output .= " = $offset";
 		return $output;
 	}
@@ -222,7 +222,7 @@ function sql_get_payment_methods($indexed, $item_id=0)
 	if ($item_id == -1)
 	{
 		$pay_meths = array(array('PAYMENT_METHOD_ID' => 0, 'PAYMENT_METHOD' => '', 'TDX_CODE' => '', 'SORT_ORDER' => 0,
-									'OBSOLETE' => 0));
+			'OBSOLETE' => 0));
 		return $pay_meths;
 	}
 
@@ -275,7 +275,7 @@ function sql_get_job_targets($item_id=0)
 	if ($item_id == -1)
 	{
 		$job_targets = array(array('JOB_TARGET_ID' => 0, 'JOB_TYPE_ID' => 0, 'JTA_NAME' => '', 'JTA_TIME' => 0, 'JTA_FEE' => 0.0,
-									'OBSOLETE' => 0));
+			'OBSOLETE' => 0));
 		return $job_targets;
 	}
 
@@ -304,7 +304,7 @@ function sql_get_job_types($for_select_list=false, $include_obsolete=true, $item
 	if ($item_id == -1)
 	{
 		$job_types = array(array('JOB_TYPE_ID' => 0, 'JT_TYPE' => '', 'JT_CODE' => '', 'JT_FEE' => 0.0, 'JT_DAYS' => 0,
-									'OBSOLETE' => 0));
+			'OBSOLETE' => 0));
 		return $job_types;
 	}
 
@@ -364,7 +364,7 @@ function sql_get_letter_sequences($for_select_list=false, $include_obsolete=true
 	if ($item_id == -1)
 	{
 		$letter_sequences = array(array('LETTER_SEQ_ID' => 0, 'CLIENT2_ID' => '', 'SEQ_NUM' => '', 'LETTER_TYPE_ID' => '', 'SEQ_DAYS' => '', 'OBSOLETE' => '',
-										'LETTER_NAME' => '', 'C_CODE' => '', 'C_CO_NAME' => ''));
+			'LETTER_NAME' => '', 'C_CODE' => '', 'C_CO_NAME' => ''));
 		return $letter_sequences;
 	}
 
@@ -413,7 +413,7 @@ function sql_get_job_statuses($item_id=0, $for_select=false)
 	if ($item_id == -1)
 	{
 		$job_statuses = array(array('JOB_STATUS_ID' => 0, 'J_STATUS' => '', 'J_STTS_DESCR' => '', 'J_STTS_CLOSED' => 0,
-									'OBSOLETE' => 0));
+			'OBSOLETE' => 0));
 		return $job_statuses;
 	}
 
@@ -488,9 +488,9 @@ function sql_get_letter_open_close()
 		if (!array_key_exists($newArray['JT_T_JOB_TYPE_ID'], $letters_open_close))
 			$letters_open_close[$newArray['JT_T_JOB_TYPE_ID']] =
 				array(	 0 => array('OPEN' => '', 'CLOSE' => ''),
-						 1 => array('OPEN' => '', 'CLOSE' => ''),
-						-1 => array('OPEN' => '', 'CLOSE' => '')
-						);
+					1 => array('OPEN' => '', 'CLOSE' => ''),
+					-1 => array('OPEN' => '', 'CLOSE' => '')
+				);
 		$success = intval($newArray['JT_T_SUCC']); # 0, 1 or -1
 		$letters_open_close[$newArray['JT_T_JOB_TYPE_ID']][$success] =
 			array('OPEN' => $newArray['JT_T_OPEN'], 'CLOSE' => $newArray['JT_T_CLOSE']);
@@ -597,13 +597,13 @@ function sql_get_one_user($user_id)
 	}
 	else
 		$user = array('USERNAME' => '', 'ORIG_USERNAME_C' => '', 'ORIG_USERNAME_T' => '',
-						'U_EMAIL' => '', 'IS_ENABLED' => '1', 'IS_LOCKED_OUT' => '0', 'U_IMPORTED' => '', 'U_HISTORIC' => '',
-						'CREATED_DT' => '', 'U_FIRST_DT' => '', 'U_LAST_DT' => '', 'U_NOTES' => '',
-						'USER_ROLE_ID_C' => $id_USER_ROLE_none, 'USER_ROLE_ID_T' => $id_USER_ROLE_none, 'USER_ROLE_ID_A' => $id_USER_ROLE_none,
-						'U_SALES' => '', 'U_SALES_ISH' => '',
-						'U_FIRSTNAME' => '', 'U_LASTNAME' => '', 'U_INITIALS' => '', 'U_IMPORTED' => '', 'U_DEBUG' => '', 'U_JOB_ID' => '',
-						'PERMS' => array()
-						);
+			'U_EMAIL' => '', 'IS_ENABLED' => '1', 'IS_LOCKED_OUT' => '0', 'U_IMPORTED' => '', 'U_HISTORIC' => '',
+			'CREATED_DT' => '', 'U_FIRST_DT' => '', 'U_LAST_DT' => '', 'U_NOTES' => '',
+			'USER_ROLE_ID_C' => $id_USER_ROLE_none, 'USER_ROLE_ID_T' => $id_USER_ROLE_none, 'USER_ROLE_ID_A' => $id_USER_ROLE_none,
+			'U_SALES' => '', 'U_SALES_ISH' => '',
+			'U_FIRSTNAME' => '', 'U_LASTNAME' => '', 'U_INITIALS' => '', 'U_IMPORTED' => '', 'U_DEBUG' => '', 'U_JOB_ID' => '',
+			'PERMS' => array()
+		);
 	return $user;
 
 } # sql_get_one_user()
@@ -637,7 +637,7 @@ function sql_get_salespersons($real_names=false, $include_disabled=false, $sales
 		$system = '*';
 		$role = '';
 		return sql_get_users($detailed, $for_select_list, $include_disabled, $debug2, $real_names,
-								$sc_text, $just_salespersons, $system, $role);
+			$sc_text, $just_salespersons, $system, $role);
 	}
 } # sql_get_salespersons()
 
@@ -677,12 +677,12 @@ function sql_get_agents($system='*', $real_names=false, $include_disabled=false,
 	$just_salespersons = false;
 	$just_managers = false;
 	return sql_get_users($detailed, $for_select_list, $include_disabled, $debug2, $real_names,
-							$sc_text, $just_salespersons, $system, $role_agt, $include_ids, $just_managers);
+		$sc_text, $just_salespersons, $system, $role_agt, $include_ids, $just_managers);
 } # sql_get_agents()
 
 function sql_get_users($detailed=false, $for_select_list=true, $include_disabled=false, $debug2=false, $real_names=false,
-						$sc_text='', $just_salespersons=false, $system='*', $role='', $include_ids='', $just_managers=false,
-						$include_historic=true, $sort_time=false)
+					   $sc_text='', $just_salespersons=false, $system='*', $role='', $include_ids='', $just_managers=false,
+					   $include_historic=true, $sort_time=false)
 {
 	# Not Portal Users
 	# $system is *, c, t or a
@@ -796,7 +796,7 @@ function sql_get_users($detailed=false, $for_select_list=true, $include_disabled
 				LEFT JOIN $t_role AS RT ON U.USER_ROLE_ID_T=RT.USER_ROLE_ID
 				LEFT JOIN $t_role AS RA ON U.USER_ROLE_ID_A=RA.USER_ROLE_ID
 				$where ORDER BY " . ($sort_time ? 'U.U_LAST_DT DESC' : sql_decrypt("U.USERNAME")) . "";
-				#U.U_FIRSTNAME, " . sql_decrypt("U.U_LASTNAME") . ", " . sql_decrypt("U.USERNAME") . ""
+	#U.U_FIRSTNAME, " . sql_decrypt("U.U_LASTNAME") . ", " . sql_decrypt("U.USERNAME") . ""
 	elseif ($real_names)
 		$sql = "SELECT U.USER_ID, U.U_FIRSTNAME, " . sql_decrypt("U.U_LASTNAME", '', true) . ", " . sql_decrypt("U.USERNAME", '', true) . "
 				FROM $t_user AS U
@@ -911,10 +911,10 @@ function sql_get_clients($sc_system, $sc_text='', $sc_alpha='', $sc_addr='', $sc
 //						"
 //						(CONCAT(" . sql_decrypt('CC.CC_FIRSTNAME') . ", ' ', " . sql_decrypt('CC.CC_LASTNAME') . ")
 //						" .
-						"
+			"
 						((" . sql_decrypt('CC.CC_FIRSTNAME') . " + ' ' + " . sql_decrypt('CC.CC_LASTNAME') . ")
 						" .
-						"
+			"
 															LIKE '%" . addslashes_kdb($sc_contact) . "%') OR
 						(" . sql_decrypt('PH.CP_PHONE') . " LIKE '%" . addslashes_kdb($sc_contact) . "%') OR
 						(" . sql_decrypt('CC.CC_EMAIL_1') . " LIKE '%" . addslashes_kdb($sc_contact) . "%') OR
@@ -969,7 +969,7 @@ function sql_get_clients($sc_system, $sc_text='', $sc_alpha='', $sc_addr='', $sc
 						(J.J_S_INVS=$sqlTrue) AND (B.INVOICE_ID IS NULL) AND (B.OBSOLETE=$sqlFalse) AND (0 < B.BL_COST) AND (COALESCE(B.BL_LPOS,1) < 2)
 						 AND J.J_ARCHIVED=$sqlFalse
 				";
-				#		AND ( (C.INV_NEXT_STMT_DT IS NULL) OR (C.INV_NEXT_STMT_DT='') OR (C.INV_NEXT_STMT_DT <= GETDATE()) )
+		#		AND ( (C.INV_NEXT_STMT_DT IS NULL) OR (C.INV_NEXT_STMT_DT='') OR (C.INV_NEXT_STMT_DT <= GETDATE()) )
 		#dprint("sql_get_clients(): $sql");#
 		sql_execute($sql);
 		while (($newArray = sql_fetch_assoc()) != false)
@@ -1227,14 +1227,17 @@ function sql_get_clients($sc_system, $sc_text='', $sc_alpha='', $sc_addr='', $sc
 						" . sql_decrypt('CC.CC_EMAIL_1') . ", " . sql_decrypt('CC.CC_EMAIL_2') . ",
 						" . sql_decrypt('PH.CP_PHONE') . (($sc_fstmt || $sc_uninvpay) ? ", CL.INV_NEXT_STMT_DT" : '') . ", CL.C_ARCHIVED
 				ORDER BY ";
-				if ($sort_column)
-					$sql .= $sort_column;
-				else
-					$sql .= (($sort_by_code ? 'C_CODE, ' : '') . (($sc_fstmt || $sc_uninvpay) ? "CL.INV_NEXT_STMT_DT, " : '') . "C_CODE, " . sql_decrypt('CL.C_CO_NAME'));
+		if ($sort_column)
+			$sql .= $sort_column;
+		else
+			$sql .= (($sort_by_code ? 'C_CODE, ' : '') . (($sc_fstmt || $sc_uninvpay) ? "CL.INV_NEXT_STMT_DT, " : '') . "C_CODE, " . sql_decrypt('CL.C_CO_NAME'));
 		#dprint("sql_get_clients()/2: $sql");#
 	}
 	$clients = array();
+	log_open('vilcol.log');
+	log_write($sql);
 	sql_execute($sql);
+	log_close();
 	if ($time_tests)
 		$t_start = time();# Takes 10 seconds to fetch data! 19/01/17
 	$found_ids = array();
@@ -1488,7 +1491,7 @@ function sql_get_one_client($client2_id)
 			$sys = 'Trace';
 		$client['LETTER_TYPES'][$newArray['LETTER_TYPE_ID']] =
 			array('NAME' => "$sys: {$newArray['LETTER_NAME']}", 'SEL' => ($newArray['CLIENT_LETTER_LINK_ID'] ? 1 : 0),
-					'SYSTEM' => ((0 < $newArray['JT_T_JOB_TYPE_ID']) ? 'T' : 'C'));
+				'SYSTEM' => ((0 < $newArray['JT_T_JOB_TYPE_ID']) ? 'T' : 'C'));
 	}
 
 	$client['LETTER_SEQ'] = array(-1 => false); # this first element says whether the sequence is client-specific
@@ -1713,7 +1716,7 @@ function sql_get_invoices($sc_sys, $sc_type, $sc_client, $sc_text, $sc_amt='', $
 				sql_encryption_preparation('CLIENT2');
 				$sc_client = addslashes_kdb($sc_client);
 				$sql = "SELECT CLIENT2_ID FROM CLIENT2 WHERE (" . sql_decrypt('C_CO_NAME') . " LIKE '%{$sc_client}%') OR " .
-						"(ALPHA_CODE='" . addslashes_kdb($sc_client) . "') AND C_ARCHIVED=$sqlFalse";
+					"(ALPHA_CODE='" . addslashes_kdb($sc_client) . "') AND C_ARCHIVED=$sqlFalse";
 				#dprint($sql);#
 				sql_execute($sql);
 				$cids = array();
@@ -1741,7 +1744,7 @@ function sql_get_invoices($sc_sys, $sc_type, $sc_client, $sc_text, $sc_amt='', $
 			if ($inc_t)
 			{
 				if ($inc_c)
-					{ } # No need to add criteria to SQL
+				{ } # No need to add criteria to SQL
 				else
 					$where[] = "( (I.INV_SYS='G') OR (I.INV_SYS='T') )";
 			}
@@ -1799,7 +1802,7 @@ function sql_get_invoices($sc_sys, $sc_type, $sc_client, $sc_text, $sc_amt='', $
 					I.INV_DT, I.INV_PAID, I.IMPORTED, I.INV_SYS_IMP, I.INV_STMT, I.LINKED_ID, NULL AS LINKED_NUM,
 					E.EM_DT, I.INV_POSTED_DT,
 					C.C_CODE, " . sql_decrypt('C.C_CO_NAME', '', true) .
-					(($sc_emailed == -1) ? (", " . sql_decrypt('C.INV_EMAIL_ADDR', '', true)) : '') . ", C.INV_EMAILED
+			(($sc_emailed == -1) ? (", " . sql_decrypt('C.INV_EMAIL_ADDR', '', true)) : '') . ", C.INV_EMAILED
 					";
 
 		$tables = "
@@ -1807,7 +1810,7 @@ function sql_get_invoices($sc_sys, $sc_type, $sc_client, $sc_text, $sc_amt='', $
 				LEFT JOIN CLIENT2 AS C ON C.CLIENT2_ID=I.CLIENT2_ID
 				LEFT JOIN EMAIL AS E ON E.EMAIL_ID=I.INV_EMAIL_ID
 				";
-				#LEFT JOIN EMAIL AS E ON I.INV_EMAIL_ID=E.EMAIL_ID
+		#LEFT JOIN EMAIL AS E ON I.INV_EMAIL_ID=E.EMAIL_ID
 		$where = ($where ? ("WHERE (" . implode(') AND (', $where) . ")") : '');
 		$order = "ORDER BY I.INV_DT DESC, I.INV_NUM DESC";
 
@@ -1912,7 +1915,7 @@ function sql_get_receipts($sc_type, $sc_client, $sc_text, $sc_amt, $sc_exact, $s
 				sql_encryption_preparation('CLIENT2');
 				$sc_client = addslashes_kdb($sc_client);
 				$sql = "SELECT CLIENT2_ID FROM CLIENT2 WHERE (" . sql_decrypt('C_CO_NAME') . " LIKE '%{$sc_client}%') OR " .
-						"(ALPHA_CODE='" . addslashes_kdb($sc_client) . "') AND C_ARCHIVED=$sqlFalse";
+					"(ALPHA_CODE='" . addslashes_kdb($sc_client) . "') AND C_ARCHIVED=$sqlFalse";
 				#dprint($sql);#
 				sql_execute($sql);
 				$cids = array();
@@ -2633,7 +2636,7 @@ function sql_get_jobs($sc_sys='', $sc_text='', $sc_addr='', $sc_date_fr='', $sc_
 		elseif ($mp_age == 1)
 			$where[] = "JL.JL_APPROVED_DT IS NOT NULL AND $mp_threshold < JL.JL_APPROVED_DT AND JL.JL_EMAIL_ID IS NULL AND JL.JL_POSTED_DT IS NULL AND JL.IMPORTED=$sqlFalse";
 		else
-		$where[] = "JL.JL_APPROVED_DT IS NOT NULL AND JL.JL_EMAIL_ID IS NULL AND JL.JL_POSTED_DT IS NULL AND JL.IMPORTED=$sqlFalse";
+			$where[] = "JL.JL_APPROVED_DT IS NOT NULL AND JL.JL_EMAIL_ID IS NULL AND JL.JL_POSTED_DT IS NULL AND JL.IMPORTED=$sqlFalse";
 		$ltr_used = true;
 	}
 	elseif ($sc_letters == 2) # Not approved
@@ -2749,7 +2752,7 @@ function sql_get_jobs($sc_sys='', $sc_text='', $sc_addr='', $sc_date_fr='', $sc_
 					sql_encryption_preparation('CLIENT2');
 					$sc_client = addslashes_kdb($sc_client);
 					$sql = "SELECT CLIENT2_ID FROM CLIENT2 WHERE (" . sql_decrypt('C_CO_NAME') . " LIKE '%{$sc_client}%') OR " .
-							"(ALPHA_CODE='" . addslashes_kdb($sc_client) . "') AND C_ARCHIVED=$sqlFalse";
+						"(ALPHA_CODE='" . addslashes_kdb($sc_client) . "') AND C_ARCHIVED=$sqlFalse";
 					#dprint($sql);#
 					sql_execute($sql);
 					$cids = array();
@@ -2774,7 +2777,7 @@ function sql_get_jobs($sc_sys='', $sc_text='', $sc_addr='', $sc_date_fr='', $sc_
 			#if (count($where) == 0)
 			#	$where[] = "((J.JT_JOB=1) AND ($sub_where)) OR ((J.JC_JOB=1) AND ($sub_where))";
 			#else
-				$where[] = "({$sub_where}) OR (J.JC_TRANS_ID=" . quote_smart($sc_clref, true) . ")";
+			$where[] = "({$sub_where}) OR (J.JC_TRANS_ID=" . quote_smart($sc_clref, true) . ")";
 		}
 
 		if ($sc_group)
@@ -2813,14 +2816,14 @@ function sql_get_jobs($sc_sys='', $sc_text='', $sc_addr='', $sc_date_fr='', $sc_
 		if ($time_tests) log_write("lib_vilcol.php/sql_get_jobs(): ...done keys");
 
 		$fields_with_alias =
-					"J.JOB_ID, J.JT_JOB, J.J_VILNO, J.J_SEQUENCE, J.IMPORTED, J.JC_INSTAL_AMT, J.J_OPENED_DT, J.JT_JOB_TYPE_ID,
+			"J.JOB_ID, J.JT_JOB, J.J_VILNO, J.J_SEQUENCE, J.IMPORTED, J.JC_INSTAL_AMT, J.J_OPENED_DT, J.JT_JOB_TYPE_ID,
 					C.CLIENT2_ID, " . sql_decrypt('C.C_CO_NAME', '', true) . ", C.C_CODE, J.JOB_CLOSED, J.JC_JOB_STATUS_ID,
 					SUB.JOB_SUBJECT_ID, SUB.JS_TITLE, " . sql_decrypt('SUB.JS_FIRSTNAME', '', true) . ",  J.JT_REPORT_APPR,
 					" . sql_decrypt('SUB.JS_LASTNAME', '', true) . ", " . sql_decrypt('SUB.JS_COMPANY', '', true) . ",
 					AG.U_INITIALS, AG.U_FIRSTNAME, " . sql_decrypt('AG.U_LASTNAME', '', true) . ", J.OBSOLETE, J.J_ARCHIVED
 					";
 		$fields_without_alias =
-					"J.JOB_ID, J.JT_JOB, J.J_VILNO, J.J_SEQUENCE, J.IMPORTED, J.JC_INSTAL_AMT, J.J_OPENED_DT, J.JT_JOB_TYPE_ID,
+			"J.JOB_ID, J.JT_JOB, J.J_VILNO, J.J_SEQUENCE, J.IMPORTED, J.JC_INSTAL_AMT, J.J_OPENED_DT, J.JT_JOB_TYPE_ID,
 					C.CLIENT2_ID, " . sql_decrypt('C.C_CO_NAME', '', false) . ", C.C_CODE, J.JOB_CLOSED, J.JC_JOB_STATUS_ID,
 					SUB.JOB_SUBJECT_ID, SUB.JS_TITLE, " . sql_decrypt('SUB.JS_FIRSTNAME', '', false) . ",  J.JT_REPORT_APPR,
 					" . sql_decrypt('SUB.JS_LASTNAME', '', false) . ", " . sql_decrypt('SUB.JS_COMPANY', '', false) . ",
@@ -2939,8 +2942,8 @@ function sql_get_jobs($sc_sys='', $sc_text='', $sc_addr='', $sc_date_fr='', $sc_
 	for ($ii = 0; $ii < $ii_max; $ii++)
 	{
 		if (	($jobs[$ii]['JS_COMPANY'] == '') &&
-				($jobs[$ii]['JS_TITLE'] == '') && ($jobs[$ii]['JS_FIRSTNAME'] == '') && ($jobs[$ii]['JS_LASTNAME'] == '')
-			)
+			($jobs[$ii]['JS_TITLE'] == '') && ($jobs[$ii]['JS_FIRSTNAME'] == '') && ($jobs[$ii]['JS_LASTNAME'] == '')
+		)
 		{
 			list($ms_top, $my_limit) = sql_top_limit(1);
 			$sql = "SELECT $ms_top JOB_SUBJECT_ID, JS_TITLE, " . sql_decrypt('JS_FIRSTNAME', '', true) . ",
@@ -3137,7 +3140,7 @@ function sql_get_one_job($job_id, $for_display)
 			LEFT JOIN USERV AS AG ON AG.USER_ID=J.J_USER_ID
 			LEFT JOIN USERV AS CU ON CU.USER_ID=J.J_CLOSED_ID
 			WHERE J.JOB_ID=$job_id";
-			#, " . sql_decrypt('J.J_REFERRER', '', true) . "
+	#, " . sql_decrypt('J.J_REFERRER', '', true) . "
 	sql_execute($sql);
 	while (($newArray = sql_fetch_assoc()) != false)
 		$job = $newArray;
@@ -3197,8 +3200,8 @@ function sql_get_one_job($job_id, $for_display)
 			FROM JOB_NOTE AS N
 				LEFT JOIN USERV AS UA ON UA.USER_ID=N.JN_ADDED_ID
 				LEFT JOIN USERV AS UU ON UU.USER_ID=N.JN_UPDATED_ID
-			WHERE N.JOB_ID=$job_id " . #(($job['JC_JOB'] == 1) ? "AND N.IMPORTED=$sqlFalse" : '') . 
-			"
+			WHERE N.JOB_ID=$job_id " . #(($job['JC_JOB'] == 1) ? "AND N.IMPORTED=$sqlFalse" : '') .
+		"
 			ORDER BY N.JN_ADDED_DT DESC
 			";
 	sql_execute($sql);
@@ -3208,8 +3211,8 @@ function sql_get_one_job($job_id, $for_display)
 
 	if ($job['J_FRONT_DETAILS'])
 		$job['NOTES'][] = array('JOB_NOTE_ID' => 0, 'J_NOTE' => "Old \"Details\":{$crlf}{$job['J_FRONT_DETAILS']}", 'IMPORTED' => 1,
-								'JN_ADDED_DT' => '2017-01-01 01:00:00', 'USER_ID' => $super_user_id, 'U_ADDED' => 'Kevin',
-								'JN_UPDATED_DT' => '', 'USER_ID_U' => 0, 'U_UPDATED' => '');
+			'JN_ADDED_DT' => '2017-01-01 01:00:00', 'USER_ID' => $super_user_id, 'U_ADDED' => 'Kevin',
+			'JN_UPDATED_DT' => '', 'USER_ID_U' => 0, 'U_UPDATED' => '');
 
 	if ($job['JC_JOB'] == 1)
 	{
@@ -3227,8 +3230,8 @@ function sql_get_one_job($job_id, $for_display)
 				{
 					if (0 < strlen($newArray[0]))
 						$job['NOTES'][] = array('JOB_NOTE_ID' => 0, 'J_NOTE' => $newArray[0], 'IMPORTED' => 1,
-												'JN_ADDED_DT' => '2017-01-01 01:00:00', 'USER_ID' => $super_user_id, 'U_ADDED' => 'Kevin',
-												'JN_UPDATED_DT' => '', 'USER_ID_U' => 0, 'U_UPDATED' => '');
+							'JN_ADDED_DT' => '2017-01-01 01:00:00', 'USER_ID' => $super_user_id, 'U_ADDED' => 'Kevin',
+							'JN_UPDATED_DT' => '', 'USER_ID_U' => 0, 'U_UPDATED' => '');
 					else
 						$end_of_imp_note = true;
 				}
@@ -3309,8 +3312,8 @@ function sql_get_one_job($job_id, $for_display)
 	sql_execute($sql);
 	while (($newArray = sql_fetch_assoc()) != false)
 	{
-		$newArray['JL_TEXT'] = trim($newArray['JL_TEXT']);
-		$newArray['JL_TEXT_2'] = trim($newArray['JL_TEXT_2']);
+		$newArray['JL_TEXT'] = trim((string)$newArray['JL_TEXT']);
+		$newArray['JL_TEXT_2'] = trim((string)$newArray['JL_TEXT_2']);
 		$content = ((0 < strlen($newArray['JL_TEXT'] . $newArray['JL_TEXT_2'])) ? true : false);
 		$approved = $newArray['JL_APPROVED_DT'] ? true : false;
 		$sent = ($newArray['EM_DT'] || $newArray['JL_POSTED_DT']) ? true : false;
@@ -3420,7 +3423,7 @@ function sql_get_one_job($job_id, $for_display)
 				LEFT JOIN JOB_TYPE_SD AS TY ON TY.JOB_TYPE_ID=J.JT_JOB_TYPE_ID
 				WHERE (J.JOB_ID=$job_id)
 				";
-				#, J.J_TURN_H
+		#, J.J_TURN_H
 		sql_execute($sql);
 		while (($newArray = sql_fetch_assoc()) != false)
 		{
@@ -3619,14 +3622,14 @@ function job_status_id_from_code($code)
 function instal_freq_list()
 {
 	return array(
-			'I' => instal_freq_from_code('I'),
-			'D' => instal_freq_from_code('D'),
-			'W' => instal_freq_from_code('W'),
-			'F' => instal_freq_from_code('F'),
-			'M' => instal_freq_from_code('M'),
-			'T' => instal_freq_from_code('T'),
-			'Q' => instal_freq_from_code('Q')
-		);
+		'I' => instal_freq_from_code('I'),
+		'D' => instal_freq_from_code('D'),
+		'W' => instal_freq_from_code('W'),
+		'F' => instal_freq_from_code('F'),
+		'M' => instal_freq_from_code('M'),
+		'T' => instal_freq_from_code('T'),
+		'Q' => instal_freq_from_code('Q')
+	);
 }
 
 function instal_freq_from_code($code, $just_period=false)
@@ -3654,13 +3657,13 @@ function instal_freq_from_code($code, $just_period=false)
 function stmt_freq_list()
 {
 	return array(
-			'D' => instal_freq_from_code('D'),
-			'W' => instal_freq_from_code('W'),
-			'F' => instal_freq_from_code('F'),
-			'M' => instal_freq_from_code('M'),
-			'T' => instal_freq_from_code('T'),
-			'Q' => instal_freq_from_code('Q')
-		);
+		'D' => instal_freq_from_code('D'),
+		'W' => instal_freq_from_code('W'),
+		'F' => instal_freq_from_code('F'),
+		'M' => instal_freq_from_code('M'),
+		'T' => instal_freq_from_code('T'),
+		'Q' => instal_freq_from_code('Q')
+	);
 }
 
 function stmt_freq_from_code($code)
@@ -3789,7 +3792,7 @@ function sql_get_activity($for_select_list=false, $include_obsolete=true, $item_
 	if ($item_id == -1)
 	{
 		$activities = array(array('ACTIVITY_ID' => 0, 'ACT_TDX' => '', 'ACT_DSHORT' => '', 'ACT_DLONG' => '',
-									'SHORT_LIST' => '', 'DIALLER_EV' => 0, 'ACT_NON_MAN' => 0, 'OBSOLETE' => 0));
+			'SHORT_LIST' => '', 'DIALLER_EV' => 0, 'ACT_NON_MAN' => 0, 'OBSOLETE' => 0));
 		return $activities;
 	}
 
@@ -3804,7 +3807,7 @@ function sql_get_activity($for_select_list=false, $include_obsolete=true, $item_
 			FROM ACTIVITY_SD
 			$where
 			ORDER BY ACT_TDX, ACTIVITY_ID";
-			#" . ($include_obsolete ? '' : "WHERE OBSOLETE=$sqlFalse") . "
+	#" . ($include_obsolete ? '' : "WHERE OBSOLETE=$sqlFalse") . "
 	#dprint($sql);#
 	#log_write($sql);#
 	sql_execute($sql);
@@ -3841,7 +3844,7 @@ function sql_get_adjust($for_select_list=false, $include_obsolete=true, $item_id
 			FROM ADJUSTMENT_SD
 			$where
 			ORDER BY OBSOLETE, SORT_ORDER, ADJUSTMENT, ADJUSTMENT_ID";
-			#" . ($include_obsolete ? '' : "WHERE OBSOLETE=$sqlFalse") . "
+	#" . ($include_obsolete ? '' : "WHERE OBSOLETE=$sqlFalse") . "
 	#dprint($sql);#
 	#log_write($sql);#
 	sql_execute($sql);
@@ -5447,7 +5450,7 @@ function letter_for_collect_job($job_id, $letter_type_id, $artificial_date='')
 	}
 
 	return array(letter_placeholder_resolution_coll($job_id, $letter_template, $artificial_date),
-					$lt_auto_app);
+		$lt_auto_app);
 } # letter_for_collect_job()
 
 function letter_for_trace_job($job_type_id, $success, $vilno, $client2_id, $client_ref, $letter_body, $sub_name, $sub_addr, $new_addr, $sub_phones)
@@ -5463,7 +5466,7 @@ function letter_for_trace_job($job_type_id, $success, $vilno, $client2_id, $clie
 
 	if (!(0 < $job_type_id))
 		return "(There is no letter text because there is no Job Type)";
-		#return "$this_txt: bad job type $job_type_id";
+	#return "$this_txt: bad job type $job_type_id";
 
 	if ($success == $success_return)
 		return "(There is no letter text because SUCCESS is set to RETURN)";
@@ -5546,23 +5549,23 @@ function letter_for_trace_job($job_type_id, $success, $vilno, $client2_id, $clie
 //	}
 
 	return	"Our Ref: $vilno" . $crlf . $crlf .
-			"Date: ##DATE##" . $crlf . $crlf .
-			$client_name . $crlf .
-			implode($crlf, $client_addr) . $crlf . $crlf .
-			"Your Ref: $client_ref" . $crlf . $crlf .
-			"Dear Sirs," . $crlf . $crlf .
-			"Re: " . $sub_name . $crlf .
-			$old_addr_line . $crlf .
-			($phone ? ($phone . $crlf) : '') .
-			$crlf .
-			$open . $crlf . $crlf .
-			(($success && $new_addr_lines) ? ($new_addr_lines . $crlf . $crlf) : '') .
-			$letter_body . $crlf . $crlf .
-			str_replace(".$crlf", ".$crlf$crlf", $close) . $crlf . $crlf .
-			"Assuring you of our best attention at all times." . $crlf . $crlf .
-			"Yours faithfully," . $crlf . $crlf . $crlf . $crlf . $crlf .
-			"VILCOL" . $crlf .
-			'';
+		"Date: ##DATE##" . $crlf . $crlf .
+		$client_name . $crlf .
+		implode($crlf, $client_addr) . $crlf . $crlf .
+		"Your Ref: $client_ref" . $crlf . $crlf .
+		"Dear Sirs," . $crlf . $crlf .
+		"Re: " . $sub_name . $crlf .
+		$old_addr_line . $crlf .
+		($phone ? ($phone . $crlf) : '') .
+		$crlf .
+		$open . $crlf . $crlf .
+		(($success && $new_addr_lines) ? ($new_addr_lines . $crlf . $crlf) : '') .
+		$letter_body . $crlf . $crlf .
+		str_replace(".$crlf", ".$crlf$crlf", $close) . $crlf . $crlf .
+		"Assuring you of our best attention at all times." . $crlf . $crlf .
+		"Yours faithfully," . $crlf . $crlf . $crlf . $crlf . $crlf .
+		"VILCOL" . $crlf .
+		'';
 
 } # letter_for_trace_job()
 
@@ -5713,13 +5716,13 @@ function sql_add_collect_job_to_trace_job($old_job_id)
 		}
 
 		$values = array($new_job_id, intval($one_sub['JS_PRIMARY']), quote_smart($one_sub['JS_TITLE']),
-						sql_encrypt($one_sub['JS_FIRSTNAME'], false, 'JOB_SUBJECT'), sql_encrypt($one_sub['JS_LASTNAME'], false, 'JOB_SUBJECT'),
-						sql_encrypt($one_sub['JS_COMPANY'], false, 'JOB_SUBJECT'), "'{$one_sub['JS_DOB']}'",
-						sql_encrypt($js_addr[0], false, 'JOB_SUBJECT'), sql_encrypt($js_addr[1], false, 'JOB_SUBJECT'),
-						sql_encrypt($js_addr[2], false, 'JOB_SUBJECT'), sql_encrypt($js_addr[3], false, 'JOB_SUBJECT'),
-						sql_encrypt($js_addr[4], false, 'JOB_SUBJECT'), sql_encrypt($js_pc, false, 'JOB_SUBJECT'),
-						($js_outcode ? "'$js_outcode'" : 'NULL')
-						);
+			sql_encrypt($one_sub['JS_FIRSTNAME'], false, 'JOB_SUBJECT'), sql_encrypt($one_sub['JS_LASTNAME'], false, 'JOB_SUBJECT'),
+			sql_encrypt($one_sub['JS_COMPANY'], false, 'JOB_SUBJECT'), "'{$one_sub['JS_DOB']}'",
+			sql_encrypt($js_addr[0], false, 'JOB_SUBJECT'), sql_encrypt($js_addr[1], false, 'JOB_SUBJECT'),
+			sql_encrypt($js_addr[2], false, 'JOB_SUBJECT'), sql_encrypt($js_addr[3], false, 'JOB_SUBJECT'),
+			sql_encrypt($js_addr[4], false, 'JOB_SUBJECT'), sql_encrypt($js_pc, false, 'JOB_SUBJECT'),
+			($js_outcode ? "'$js_outcode'" : 'NULL')
+		);
 		$values = implode(',', $values);
 		$sql = "INSERT INTO JOB_SUBJECT ($fields_ins, IMPORTED, OBSOLETE) VALUES ($values, $sqlFalse, $sqlFalse)";
 		audit_setup_job($new_job_id, 'JOB_SUBJECT', 'JOB_SUBJECT_ID', 0, '', '');
@@ -5756,7 +5759,7 @@ function sql_add_collect_job_to_trace_job($old_job_id)
 		else
 			$jp_email = sql_encrypt($jp_email, false, 'JOB_PHONE');
 		$values = array($new_job_id, $jp_phone, intval($one_ph['JP_PRIMARY_P']), $jp_email, intval($one_ph['JP_PRIMARY_E']),
-						sql_encrypt($one_ph['JP_DESCR'], false, 'JOB_PHONE'));
+			sql_encrypt($one_ph['JP_DESCR'], false, 'JOB_PHONE'));
 		$values = implode(',', $values);
 		$sql = "INSERT INTO JOB_PHONE ($fields_ins, IMPORTED, IMP_PH, OBSOLETE) VALUES ($values, $sqlFalse, $sqlFalse, $sqlFalse)";
 		audit_setup_job($new_job_id, 'JOB_PHONE', 'JOB_PHONE_ID', 0, '', '');
@@ -5784,7 +5787,7 @@ function sql_add_collect_job_to_trace_job($old_job_id)
 			$n_up_id = ($one_note['JN_UPDATED_ID'] ? $one_note['JN_UPDATED_ID'] : 'NULL');
 			$n_up_dt = ($one_note['JN_UPDATED_DT'] ? "'{$one_note['JN_UPDATED_DT']}'" : 'NULL');
 			$values = array($new_job_id, sql_encrypt($one_note['J_NOTE'], false, 'JOB_NOTE'), $n_imported, $n_imp_2,
-								$n_add_id, $n_add_dt, $n_up_id, $n_up_dt);
+				$n_add_id, $n_add_dt, $n_up_id, $n_up_dt);
 			$values = implode(',', $values);
 			$sql = "INSERT INTO JOB_NOTE ($fields_ins) VALUES ($values)";
 			audit_setup_job($new_job_id, 'JOB_NOTE', 'JOB_NOTE_ID', 0, '', '');
@@ -5934,17 +5937,17 @@ function sql_clone_trace_job($old_job_id)
 
 
 		$values = array($new_job_id, intval($one_sub['JS_PRIMARY']), quote_smart($one_sub['JS_TITLE']),
-						sql_encrypt($one_sub['JS_FIRSTNAME'], false, 'JOB_SUBJECT'), sql_encrypt($one_sub['JS_LASTNAME'], false, 'JOB_SUBJECT'),
-						sql_encrypt($one_sub['JS_COMPANY'], false, 'JOB_SUBJECT'), "'{$one_sub['JS_DOB']}'",
-						sql_encrypt($js_addr[0], false, 'JOB_SUBJECT'), sql_encrypt($js_addr[1], false, 'JOB_SUBJECT'),
-						sql_encrypt($js_addr[2], false, 'JOB_SUBJECT'), sql_encrypt($js_addr[3], false, 'JOB_SUBJECT'),
-						sql_encrypt($js_addr[4], false, 'JOB_SUBJECT'), sql_encrypt($js_pc, false, 'JOB_SUBJECT'),
-						($js_outcode ? "'$js_outcode'" : 'NULL'),
-						sql_encrypt($new_addr[0], false, 'JOB_SUBJECT'), sql_encrypt($new_addr[1], false, 'JOB_SUBJECT'),
-						sql_encrypt($new_addr[2], false, 'JOB_SUBJECT'), sql_encrypt($new_addr[3], false, 'JOB_SUBJECT'),
-						sql_encrypt($new_addr[4], false, 'JOB_SUBJECT'), sql_encrypt($new_pc, false, 'JOB_SUBJECT'),
-						($new_outcode ? "'$new_outcode'" : 'NULL')
-						);
+			sql_encrypt($one_sub['JS_FIRSTNAME'], false, 'JOB_SUBJECT'), sql_encrypt($one_sub['JS_LASTNAME'], false, 'JOB_SUBJECT'),
+			sql_encrypt($one_sub['JS_COMPANY'], false, 'JOB_SUBJECT'), "'{$one_sub['JS_DOB']}'",
+			sql_encrypt($js_addr[0], false, 'JOB_SUBJECT'), sql_encrypt($js_addr[1], false, 'JOB_SUBJECT'),
+			sql_encrypt($js_addr[2], false, 'JOB_SUBJECT'), sql_encrypt($js_addr[3], false, 'JOB_SUBJECT'),
+			sql_encrypt($js_addr[4], false, 'JOB_SUBJECT'), sql_encrypt($js_pc, false, 'JOB_SUBJECT'),
+			($js_outcode ? "'$js_outcode'" : 'NULL'),
+			sql_encrypt($new_addr[0], false, 'JOB_SUBJECT'), sql_encrypt($new_addr[1], false, 'JOB_SUBJECT'),
+			sql_encrypt($new_addr[2], false, 'JOB_SUBJECT'), sql_encrypt($new_addr[3], false, 'JOB_SUBJECT'),
+			sql_encrypt($new_addr[4], false, 'JOB_SUBJECT'), sql_encrypt($new_pc, false, 'JOB_SUBJECT'),
+			($new_outcode ? "'$new_outcode'" : 'NULL')
+		);
 		$values = implode(',', $values);
 
 		$sql = "INSERT INTO JOB_SUBJECT ($fields_ins, IMPORTED, OBSOLETE) VALUES ($values, $sqlFalse, $sqlFalse)";
@@ -5978,7 +5981,7 @@ function sql_clone_trace_job($old_job_id)
 		else
 			$jp_email = sql_encrypt($jp_email, false, 'JOB_PHONE');
 		$values = array($new_job_id, $jp_phone, intval($one_ph['JP_PRIMARY_P']), $jp_email, intval($one_ph['JP_PRIMARY_E']),
-						sql_encrypt($one_ph['JP_DESCR'], false, 'JOB_PHONE'));
+			sql_encrypt($one_ph['JP_DESCR'], false, 'JOB_PHONE'));
 		$values = implode(',', $values);
 		$sql = "INSERT INTO JOB_PHONE ($fields_ins, IMPORTED, IMP_PH, OBSOLETE) VALUES ($values, $sqlFalse, $sqlFalse, $sqlFalse)";
 		audit_setup_job($new_job_id, 'JOB_PHONE', 'JOB_PHONE_ID', 0, '', '');
@@ -6010,7 +6013,7 @@ function sql_clone_trace_job($old_job_id)
 			$n_up_id = ($one_note['JN_UPDATED_ID'] ? $one_note['JN_UPDATED_ID'] : 'NULL');
 			$n_up_dt = ($one_note['JN_UPDATED_DT'] ? "'{$one_note['JN_UPDATED_DT']}'" : 'NULL');
 			$values = array($new_job_id, sql_encrypt($one_note['J_NOTE'], false, 'JOB_NOTE'), $n_imported, $n_imp_2,
-								$n_add_id, $n_add_dt, $n_up_id, $n_up_dt);
+				$n_add_id, $n_add_dt, $n_up_id, $n_up_dt);
 			$values = implode(',', $values);
 			$sql = "INSERT INTO JOB_NOTE ($fields_ins) VALUES ($values)";
 			audit_setup_job($new_job_id, 'JOB_NOTE', 'JOB_NOTE_ID', 0, '', '');
@@ -6314,10 +6317,10 @@ function client_uninvoiced_payments($client2_id)
 				INNER JOIN CLIENT2 AS CL ON CL.CLIENT2_ID=JB.CLIENT2_ID
 				LEFT JOIN PAYMENT_ROUTE_SD AS PR ON PR.PAYMENT_ROUTE_ID=JP.COL_PAYMENT_ROUTE_ID
 			WHERE (JB.CLIENT2_ID=$client2_id) AND (JB.JC_JOB=$sqlTrue) AND " .#(JB.JOB_CLOSED=$sqlFalse) AND
-					"
+		"
 					(JP.INVOICE_ID IS NULL) AND ('$dt' <= JP.COL_DT_RX) AND (JP.OBSOLETE=$sqlFalse) AND
 					((JP.COL_PAYMENT_ROUTE_ID=$id_ROUTE_direct)" .
-						($include_to_us ? (" OR (JP.COL_PAYMENT_ROUTE_ID=$id_ROUTE_tous)") : '') . ")
+		($include_to_us ? (" OR (JP.COL_PAYMENT_ROUTE_ID=$id_ROUTE_tous)") : '') . ")
 			ORDER BY JP.COL_DT_RX, JB.J_VILNO
 		";
 	#dprint($sql);#
@@ -6339,7 +6342,7 @@ function client_uninvoiced_billings($client2_id)
 
 	$cutoff_dt = "2018-09-25";
 	$cost_test = "(B.BL_COST IS NOT NULL) AND ((0 < B.BL_COST) OR ((B.BL_COST < 0) AND ('$cutoff_dt' <= J.J_CLOSED_DT)))";
-				#"0 < B.BL_COST";
+	#"0 < B.BL_COST";
 
 	$dt = date_n_years_ago(2);
 	$sql = "SELECT B.INV_BILLING_ID, J.JOB_ID, J.J_VILNO, J.J_CLOSED_DT, B.BL_COST, T.JT_CODE
@@ -6541,7 +6544,7 @@ function invoice_info_collect($client2_id, $inv_dt)
 	$client_deduct_as = sql_select_single("SELECT DEDUCT_AS FROM CLIENT2 WHERE CLIENT2_ID=$client2_id");
 
 	return array($all_jobs_count, $all_jobs_value, $all_jobs_collected, $closed_jobs_count, $closed_jobs_value,
-					$paid_full_count, $paid_full_collected, $client_deduct_as);
+		$paid_full_count, $paid_full_collected, $client_deduct_as);
 
 } # invoice_info_collect()
 
@@ -6761,8 +6764,8 @@ function sql_save_letter($job_id, $job_letter_id, $letter_text, $letter_task)
 //
 //	if ($debug)
 //	{
-		# Feedback #197 - get rid of 194/160 characters
-		$letter_text = str_replace(chr(194) . chr(160), '&nbsp;', $letter_text);
+	# Feedback #197 - get rid of 194/160 characters
+	$letter_text = str_replace(chr(194) . chr(160), '&nbsp;', $letter_text);
 
 //		$html_codes = '';
 //		for ($ii=0; $ii < strlen($letter_text); $ii++)
@@ -6903,10 +6906,10 @@ function sql_agent_job_stats($user_id)
 	global $sqlTrue;
 
 	$job_stats = array(	'OPEN_TRACE_DAYS' => 10,	'OPEN_TRACE_COUNT' => 0,	'OPEN_TRACE_COUNT_COMP_NO' => 0,
-						'OPEN_RETRACE_DAYS' => 5,	'OPEN_RETRACE_COUNT' => 0,	'OPEN_RETRACE_COUNT_COMP_NO' => 0,
-						'OPEN_T_LIMIT' => 20,		'OPEN_T_COUNT' => 0,		'OPEN_T_COUNT_COMP_NO' => 0,
-						'OPEN_C_LIMIT' => 0,		'OPEN_C_COUNT' => 0
-						);
+		'OPEN_RETRACE_DAYS' => 5,	'OPEN_RETRACE_COUNT' => 0,	'OPEN_RETRACE_COUNT_COMP_NO' => 0,
+		'OPEN_T_LIMIT' => 20,		'OPEN_T_COUNT' => 0,		'OPEN_T_COUNT_COMP_NO' => 0,
+		'OPEN_C_LIMIT' => 0,		'OPEN_C_COUNT' => 0
+	);
 
 	$dt = date_from_epoch(true, time() - ($job_stats['OPEN_TRACE_DAYS'] * 24 * 60 * 60), false, false, true);
 	$sql = "SELECT COUNT(*) FROM JOB WHERE (J_USER_ID=$user_id) AND (JOB_CLOSED=$sqlFalse) AND (J_OPENED_DT < '$dt') AND
@@ -7081,7 +7084,7 @@ function pdf_create_letter($doc_id, $timestamp)
 	#dprint("pdf_create_letter($doc_id)");#
 	$job_letter_id = $doc_id;
 	if (!$timestamp)
-		$timestamp = strftime("%Y%m%d_%H%M%S");
+		$timestamp = strftime_rdr("%Y%m%d_%H%M%S");
 	$job_pdf = sql_get_one_job($job_id, false);
 	$pdf_filename = "letter_{$job_pdf['J_VILNO']}_{$job_pdf['J_SEQUENCE']}_{$job_letter_id}_{$timestamp}.pdf";
 	$html_body = '';
@@ -7165,14 +7168,14 @@ function pdf_create_letter($doc_id, $timestamp)
 		$jt_job_type = $job_pdf['TRACE_DETAILS']['JT_JOB_TYPE_ID'];
 		$jt_job_success = $job_pdf['TRACE_DETAILS']['JT_SUCCESS'];
 		$letter_body = letter_for_trace_job($jt_job_type, $jt_job_success, $job_pdf['J_VILNO'], $job_pdf['CLIENT2_ID'], $job_pdf['CLIENT_REF'],
-									$letter_body, $sub_name, $sub_addr, $new_addr, $job_pdf['PHONES']);
+			$letter_body, $sub_name, $sub_addr, $new_addr, $job_pdf['PHONES']);
 	}
 
 	#$html_body = str_replace($lf, '<br>', str_replace($cr, '<br>', str_replace($crlf, '<br>', str_replace(' ', '&nbsp;', $letter_body))));
 	## Only convert double spaces to non-breaking space
 	#$html_body = str_replace($lf, '<br>', str_replace($cr, '<br>', str_replace($crlf, '<br>', str_replace('  ', '&nbsp;&nbsp;', $letter_body))));
 	$html_body = str_replace($lf, '<br>', str_replace($cr, '<br>', str_replace($crlf, '<br>',
-					str_replace('£', '&pound;', $letter_body))));
+		str_replace('£', '&pound;', $letter_body))));
 
 	#$html_body = "<div style=\"border:solid 1px red;\">$html_body</div>";
 
@@ -7394,10 +7397,10 @@ function reset_jobs($ticked_jobs)
 			<table>
 			<tr><td>VILNo</td><td width=\"10\"></td><td $grey>DB ID</td></tr>
 			";
-			foreach ($vilnos as $job_id => $j_vilno)
-				print "<tr><td $ar>$j_vilno</td><td></td><td $ar $grey>$job_id</td></tr>
+	foreach ($vilnos as $job_id => $j_vilno)
+		print "<tr><td $ar>$j_vilno</td><td></td><td $ar $grey>$job_id</td></tr>
 					";
-			print "
+	print "
 			</table>
 			";
 
@@ -7555,10 +7558,10 @@ function sql_get_one_portal_user($user_id)
 	}
 	else
 		$user = array('CLIENT2_ID' => '', 'USERNAME' => '',
-						'U_EMAIL' => '', 'IS_ENABLED' => '1', 'IS_LOCKED_OUT' => '0',
-						'CREATED_DT' => '', 'U_FIRST_DT' => '', 'U_LAST_DT' => '', 'U_NOTES' => '',
-						'U_FIRSTNAME' => '', 'U_LASTNAME' => '', 'U_INITIALS' => '', 'U_DEBUG' => '', 'PORTAL_PUSH' => ''
-						);
+			'U_EMAIL' => '', 'IS_ENABLED' => '1', 'IS_LOCKED_OUT' => '0',
+			'CREATED_DT' => '', 'U_FIRST_DT' => '', 'U_LAST_DT' => '', 'U_NOTES' => '',
+			'U_FIRSTNAME' => '', 'U_LASTNAME' => '', 'U_INITIALS' => '', 'U_DEBUG' => '', 'PORTAL_PUSH' => ''
+		);
 	return $user;
 
 } # sql_get_one_portal_user()
