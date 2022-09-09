@@ -539,7 +539,7 @@ function screen_content()
 	if (0 < $last_job_id)
 	{
 		if ($time_tests) log_write("jobs.php/screen_conent(): getting last job...");
-		//$last_job = sql_get_one_job($USER['U_JOB_ID'], ($last_job_id == $job_id) ? true : false);
+		$last_job = sql_get_one_job($USER['U_JOB_ID'], ($last_job_id == $job_id) ? true : false);
 		if ($time_tests) log_write("jobs.php/screen_conent(): got last job...");
 		if ($last_job)
 		{
