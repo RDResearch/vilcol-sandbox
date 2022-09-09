@@ -3132,6 +3132,7 @@ function sql_get_one_job($job_id, $for_display)
 
 	$job = array();
 	$job_id = intval($job_id);
+	$start_time = microtime(true);
 	$sql = "SELECT J.JOB_ID, J.JT_JOB, J.JC_JOB, J.J_VILNO, J.J_SEQUENCE, J.IMPORTED, " . sql_decrypt('J.CLIENT_REF', '', true) . ",
 					C.CLIENT2_ID, " . sql_decrypt('C.C_CO_NAME', '', true) . ", C.C_CODE, J.JOB_CLOSED, C.C_CLOSEOUT, J.J_CLOSED_ID,
 					J.J_USER_ID, " . sql_decrypt('AG.USERNAME') . " AS AGENT_USER, AG.U_INITIALS AS AGENT_INITIALS, J.J_USER_DT,
@@ -3145,6 +3146,7 @@ function sql_get_one_job($job_id, $for_display)
 			WHERE J.JOB_ID=$job_id";
 	#, " . sql_decrypt('J.J_REFERRER', '', true) . "
 	sql_execute($sql);
+	var_dump('sql execution time 1 ', microtime(true) - $start_time);
 	while (($newArray = sql_fetch_assoc()) != false)
 		$job = $newArray;
 	#if ($for_display) dprint(print_r($job,1));#
@@ -3156,6 +3158,7 @@ function sql_get_one_job($job_id, $for_display)
 	}
 
 	$job['SUBJECTS'] = array();
+	$start_time = microtime(true);
 	$sql = "SELECT SUB.JOB_SUBJECT_ID, SUB.JS_PRIMARY, SUB.IMPORTED, SUB.OBSOLETE,
 					SUB.JS_TITLE, " . sql_decrypt('SUB.JS_FIRSTNAME', '', true) . ", " . sql_decrypt('SUB.JS_LASTNAME', '', true) . ",
 					" . sql_decrypt('SUB.JS_COMPANY', '', true) . ", SUB.JS_DOB,
@@ -3173,6 +3176,7 @@ function sql_get_one_job($job_id, $for_display)
 			ORDER BY SUB.OBSOLETE, SUB.JS_PRIMARY DESC, SUB.JOB_SUBJECT_ID
 			";
 	sql_execute($sql);
+	var_dump('sql execution time 2 ', microtime(true) - $start_time);
 	#if ($for_display) dprint($sql);#
 	while (($newArray = sql_fetch_assoc()) != false)
 	{
@@ -3180,6 +3184,7 @@ function sql_get_one_job($job_id, $for_display)
 		$job['SUBJECTS'][] = $newArray;
 	}
 
+	$start_time = microtime(true);
 	for ($ii = 0; $ii < count($job['SUBJECTS']); $ii++)
 	{
 		$sub = $job['SUBJECTS'][$ii];
@@ -3193,10 +3198,12 @@ function sql_get_one_job($job_id, $for_display)
 		while (($newArray = sql_fetch_assoc()) != false)
 			$job['SUBJECTS'][$ii]['ADDRESS_HISTORY'][] = $newArray;
 	}
+	var_dump('sql execution time 3 ', microtime(true) - $start_time);
 
 	# For collection jobs, don't display any imported notes
 	# 04/08/19: why don't we display imported collection notes?! -- we do now
 	$job['NOTES'] = array();
+	$start_time = microtime(true);
 	$sql = "SELECT N.JOB_NOTE_ID, " . sql_decrypt('N.J_NOTE', '', true) . ", N.IMPORTED,
 					N.JN_ADDED_DT, UA.USER_ID, " . sql_decrypt('UA.USERNAME') . " AS U_ADDED,
 					N.JN_UPDATED_DT, UU.USER_ID, " . sql_decrypt('UU.USERNAME') . " AS U_UPDATED
@@ -3208,6 +3215,7 @@ function sql_get_one_job($job_id, $for_display)
 			ORDER BY N.JN_ADDED_DT DESC
 			";
 	sql_execute($sql);
+	var_dump('sql execution time 4 ', microtime(true) - $start_time);
 	#if ($for_display) dprint($sql);#
 	while (($newArray = sql_fetch_assoc()) != false)
 		$job['NOTES'][] = $newArray;
