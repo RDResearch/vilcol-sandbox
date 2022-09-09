@@ -956,8 +956,6 @@ function screen_content()
 	</form><!--form_csv_download-->
 	";
 
-	return;
-
 	if ($time_tests) log_write("jobs.php/screen_conent(): done form_main...");
 
 	if ($task == 'search')
