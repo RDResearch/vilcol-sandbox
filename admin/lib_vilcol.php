@@ -3146,7 +3146,7 @@ function sql_get_one_job($job_id, $for_display)
 			WHERE J.JOB_ID=$job_id";
 	#, " . sql_decrypt('J.J_REFERRER', '', true) . "
 	sql_execute($sql);
-	var_dump('sql execution time 1 ', microtime(true) - $start_time);
+	var_dump('\nsql execution time 1 ', microtime(true) - $start_time);
 	while (($newArray = sql_fetch_assoc()) != false)
 		$job = $newArray;
 	#if ($for_display) dprint(print_r($job,1));#
@@ -3176,7 +3176,7 @@ function sql_get_one_job($job_id, $for_display)
 			ORDER BY SUB.OBSOLETE, SUB.JS_PRIMARY DESC, SUB.JOB_SUBJECT_ID
 			";
 	sql_execute($sql);
-	var_dump('sql execution time 2 ', microtime(true) - $start_time);
+	var_dump('\nsql execution time 2 ', microtime(true) - $start_time);
 	#if ($for_display) dprint($sql);#
 	while (($newArray = sql_fetch_assoc()) != false)
 	{
@@ -3198,7 +3198,7 @@ function sql_get_one_job($job_id, $for_display)
 		while (($newArray = sql_fetch_assoc()) != false)
 			$job['SUBJECTS'][$ii]['ADDRESS_HISTORY'][] = $newArray;
 	}
-	var_dump('sql execution time 3 ', microtime(true) - $start_time);
+	var_dump('\nsql execution time 3 ', microtime(true) - $start_time);
 
 	# For collection jobs, don't display any imported notes
 	# 04/08/19: why don't we display imported collection notes?! -- we do now
@@ -3215,7 +3215,7 @@ function sql_get_one_job($job_id, $for_display)
 			ORDER BY N.JN_ADDED_DT DESC
 			";
 	sql_execute($sql);
-	var_dump('sql execution time 4 ', microtime(true) - $start_time);
+	var_dump('\nsql execution time 4 ', microtime(true) - $start_time);
 	#if ($for_display) dprint($sql);#
 	while (($newArray = sql_fetch_assoc()) != false)
 		$job['NOTES'][] = $newArray;
@@ -3225,6 +3225,7 @@ function sql_get_one_job($job_id, $for_display)
 			'JN_ADDED_DT' => '2017-01-01 01:00:00', 'USER_ID' => $super_user_id, 'U_ADDED' => 'Kevin',
 			'JN_UPDATED_DT' => '', 'USER_ID_U' => 0, 'U_UPDATED' => '');
 
+	$start_time = microtime(true);
 	if ($job['JC_JOB'] == 1)
 	{
 		$end_of_imp_note = false;
@@ -3283,7 +3284,9 @@ function sql_get_one_job($job_id, $for_display)
 //		}
 	}
 
+	var_dump('\nsql execution time 5 ', microtime(true) - $start_time);
 	$job['PHONES'] = array();
+	$start_time = microtime(true);
 	$sql = "SELECT P.JOB_PHONE_ID, P.IMPORTED, P.IMP_PH, P.JP_PRIMARY_P, P.OBSOLETE,
 					" . sql_decrypt('P.JP_PHONE', '', true) . ", " . sql_decrypt('P.JP_DESCR', '', true) . "
 			FROM JOB_PHONE AS P
@@ -3291,10 +3294,12 @@ function sql_get_one_job($job_id, $for_display)
 			ORDER BY P.OBSOLETE, P.JP_PRIMARY_P DESC, P.JOB_PHONE_ID
 			";
 	sql_execute($sql);
+	var_dump('\nsql execution time 6 ', microtime(true) - $start_time);
 	while (($newArray = sql_fetch_assoc()) != false)
 		$job['PHONES'][] = $newArray;
 
 	$job['EMAILS'] = array();
+	$start_time = microtime(true);
 	$sql = "SELECT P.JOB_PHONE_ID, P.IMPORTED, P.JP_PRIMARY_E, P.OBSOLETE, P.IMP_PH,
 					" . sql_decrypt('P.JP_EMAIL', '', true) . ", " . sql_decrypt('P.JP_DESCR', '', true) . "
 			FROM JOB_PHONE AS P
@@ -3302,6 +3307,7 @@ function sql_get_one_job($job_id, $for_display)
 			ORDER BY P.OBSOLETE, P.JP_PRIMARY_E DESC, P.JOB_PHONE_ID
 			";
 	sql_execute($sql);
+	var_dump('\nsql execution time 7 ', microtime(true) - $start_time);
 	while (($newArray = sql_fetch_assoc()) != false)
 		$job['EMAILS'][] = $newArray;
 
@@ -3327,7 +3333,9 @@ function sql_get_one_job($job_id, $for_display)
 			ORDER BY L.JOB_LETTER_ID DESC
 			";
 	#dprint($sql);#
+	$start_time = microtime(true);
 	sql_execute($sql);
+	var_dump('\nsql execution time 8 ', microtime(true) - $start_time);
 	while (($newArray = sql_fetch_assoc()) != false)
 	{
 		$newArray['JL_TEXT'] = trim((string)$newArray['JL_TEXT']);
