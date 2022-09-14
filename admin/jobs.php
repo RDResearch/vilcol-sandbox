@@ -5,6 +5,11 @@ include_once("library.php");
 include_once("lib_pdf.php");
 include_once("lib_mail.php");
 
+include_once(__DIR__.'/vendor/autoload.php'); 
+
+use iio\libmergepdf\Merger;
+use iio\libmergepdf\Pages;
+
 global $denial_message;
 global $navi_1_jobs;
 global $role_agt;
@@ -7713,118 +7718,152 @@ function mass_print_letters($ticked_jobs, $upload_app=false)
 		$pdfs[] = $newArray['FILENAME'];
 	}
 
-	$dprint = "Letters:<br>";
-	$letter_ix = 0;
-	foreach ($letters as $one_ltr)
-	{
-		$dprint .= str_replace("[FILENAME]", "<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[FILENAME]", print_r($one_ltr,1) . "<br>");
-		$dprint .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=={$pdfs[$letter_ix]}<br>";
-		$letter_ix++;
+	//FIXME - MERGE HERE
+
+	$merger = new Merger;
+
+
+	$count = 0;
+	foreach($pdfs as $pdf){
+		$merger->addFile($pdf);
+		$count++;
 	}
-	dprint($dprint);
 
-//	$server_names = array('ftp.village.com', '169.0.0.5', '81.5.144.205');
-//	$ftp_server = $server_names[1];
-	$ftp_server = $tunnel_ftp_ip; #'169.0.0.5';
-	$ftp_user_name = "kevin";
-	$ftp_user_pass = "D0omBar#14";
-//	$ssl_ftp = false;
-	$ftp_log_debug = false;#
+	$createdPdf = $merger->merge();
 
-//	dlog("Connecting to \"$ftp_server\" (SSL:" . ($ssl_ftp ? 'yes' : 'no') . ") ...");
-	dlog("Connecting to \"$ftp_server\" (SSL:yes) ...");
-//	if ($ssl_ftp)
-//		$conn_id = ftp_ssl_connect($ftp_server);
-//	else
-		$conn_id = ftp_connect($ftp_server);
-	if ($conn_id)
-	{
-		dlog("...connected, conn_id=$conn_id");
+	$date = new DateTime();
+	$current_time = $date->format('Y-m-dTH-i-s');
 
-		dlog("Logging in as user \"$ftp_user_name\" (with password too)...");
-		$login_result = ftp_login($conn_id, $ftp_user_name, $ftp_user_pass);
-		if ($login_result)
-		{
-			dlog("...logged in, login_result=$login_result");
-//			if ($ssl_ftp)
-//			{
-//				dlog("Setting passive mode ON...");
-//				ftp_pasv($conn_id, true); # needed for SSL FTP
-//			}
-//			else
-//			{
-				dlog("Setting passive mode OFF...");
-				ftp_pasv($conn_id, 0);
-//			}
-			$debug_max = 0;#
-			$upload_count = 0;
-			foreach ($pdfs as $one_pdf)
-			{
-				$uploaded = false;
-				if ((!$debug_max) || ($upload_count < $debug_max))
-				{
-					$source_file = $one_pdf;
-					$pos = strrpos($one_pdf, "/");
-					if (($pos !== false) && ($pos < strlen($one_pdf)))
-						$destination_file = substr($one_pdf, $pos+1);
-					else
-						$destination_file = $one_pdf;
-					if ($ftp_log_debug)
-					{
-						$msg = "Uploading \"$source_file\" to \"$destination_file\"...";
-						if ($upload_count < 10)
-							dlog($msg);
-						else
-							dprint($msg);
-					}
-					$upload = ftp_put($conn_id, $destination_file, $source_file, FTP_BINARY);
-					if ($upload)
-					{
-						$msg = "...uploaded $source_file OK (count=" . ($upload_count+1) . ")";
-						$uploaded = true;
-					}
-					else
-						$msg = "...upload failed";
-					if ($ftp_log_debug)
-					{
-						if ($upload_count < 10)
-							dlog($msg);
-						else
-							dprint($msg);
-					}
-				}
-				if ($uploaded)
-					$upload_count++;
-			}
-			$msg = "$upload_count PDF files have been uploaded to the Vilcol print server";
-			log_write($msg);
-			dprint($msg, true, 'blue');
+	$file_name = "massprint/massPrint".(string)$current_time.".pdf";
 
-			if (global_debug() && $upload_app)
-			{
-				log_write("Uploading new app...");
-				$upload = ftp_put($conn_id, "app.zip", "csvex/app.zip", FTP_BINARY);
-				if ($upload)
-				{
-					$msg = "...uploaded new app OK";
-					$uploaded = true;
-				}
-				else
-					$msg = "...upload of new app failed";
-				log_write($msg);
-			}
-		}
-		else
-			dlog("...login failed");
+	$myfile = fopen($file_name, "w") or die("Unable to open file!");
+	$txt = $createdPdf;
+	fwrite($myfile, $txt);
+	
+	fclose($myfile);
 
-		dlog("...closing connection");
-		ftp_close($conn_id);
-	}
-	else
-	{
-		dprint("*** CONNECTION TO VILCOL FTP SERVER ($ftp_server) HAS FAILED ***", true);
-		dlog("...connection failed");
-	}
+	// $dprint = "Letters:<br>";
+	// $letter_ix = 0;
+	// foreach ($letters as $one_ltr)
+	// {
+	// 	$dprint .= str_replace("[FILENAME]", "<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[FILENAME]", print_r($one_ltr,1) . "<br>");
+	// 	$dprint .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=={$pdfs[$letter_ix]}<br>";
+	// 	$letter_ix++;
+	// }
+	// dprint($dprint);
+
+
+	echo("
+	<span>Mass printer - merged $count letters into 1 PDF</span>
+	<form target=\"_blank\" action=\"http://localhost/vilcol-php/admin/$file_name\">
+		<input type=\"submit\" value=\"Click to open\" />
+	</form>
+	");
+	
+	return;
+
+// //	$server_names = array('ftp.village.com', '169.0.0.5', '81.5.144.205');
+// //	$ftp_server = $server_names[1];
+// 	$ftp_server = $tunnel_ftp_ip; #'169.0.0.5';
+// 	// $ftp_user_name = "kevin"; FIX ME - uncommented to stop ftp
+// 	// $ftp_user_pass = "D0omBar#14"; - uncommented to stop ftp
+// //	$ssl_ftp = false;
+// 	$ftp_log_debug = false;#
+
+// //	dlog("Connecting to \"$ftp_server\" (SSL:" . ($ssl_ftp ? 'yes' : 'no') . ") ...");
+// 	dlog("Connecting to \"$ftp_server\" (SSL:yes) ...");
+// //	if ($ssl_ftp)
+// //		$conn_id = ftp_ssl_connect($ftp_server);
+// //	else
+// 		$conn_id = ftp_connect($ftp_server);
+// 	if ($conn_id)
+// 	{
+// 		dlog("...connected, conn_id=$conn_id");
+
+// 		dlog("Logging in as user \"$ftp_user_name\" (with password too)...");
+// 		$login_result = ftp_login($conn_id, $ftp_user_name, $ftp_user_pass);
+// 		if ($login_result)
+// 		{
+// 			dlog("...logged in, login_result=$login_result");
+// //			if ($ssl_ftp)
+// //			{
+// //				dlog("Setting passive mode ON...");
+// //				ftp_pasv($conn_id, true); # needed for SSL FTP
+// //			}
+// //			else
+// //			{
+// 				dlog("Setting passive mode OFF...");
+// 				ftp_pasv($conn_id, 0);
+// //			}
+// 			$debug_max = 0;#
+// 			$upload_count = 0;
+// 			foreach ($pdfs as $one_pdf)
+// 			{
+// 				$uploaded = false;
+// 				if ((!$debug_max) || ($upload_count < $debug_max))
+// 				{
+// 					$source_file = $one_pdf;
+// 					$pos = strrpos($one_pdf, "/");
+// 					if (($pos !== false) && ($pos < strlen($one_pdf)))
+// 						$destination_file = substr($one_pdf, $pos+1);
+// 					else
+// 						$destination_file = $one_pdf;
+// 					if ($ftp_log_debug)
+// 					{
+// 						$msg = "Uploading \"$source_file\" to \"$destination_file\"...";
+// 						if ($upload_count < 10)
+// 							dlog($msg);
+// 						else
+// 							dprint($msg);
+// 					}
+// 					$upload = ftp_put($conn_id, $destination_file, $source_file, FTP_BINARY);
+// 					if ($upload)
+// 					{
+// 						$msg = "...uploaded $source_file OK (count=" . ($upload_count+1) . ")";
+// 						$uploaded = true;
+// 					}
+// 					else
+// 						$msg = "...upload failed";
+// 					if ($ftp_log_debug)
+// 					{
+// 						if ($upload_count < 10)
+// 							dlog($msg);
+// 						else
+// 							dprint($msg);
+// 					}
+// 				}
+// 				if ($uploaded)
+// 					$upload_count++;
+// 			}
+// 			$msg = "$upload_count PDF files have been uploaded to the Vilcol print server";
+// 			log_write($msg);
+// 			dprint($msg, true, 'blue');
+
+// 			if (global_debug() && $upload_app)
+// 			{
+// 				log_write("Uploading new app...");
+// 				$upload = ftp_put($conn_id, "app.zip", "csvex/app.zip", FTP_BINARY);
+// 				if ($upload)
+// 				{
+// 					$msg = "...uploaded new app OK";
+// 					$uploaded = true;
+// 				}
+// 				else
+// 					$msg = "...upload of new app failed";
+// 				log_write($msg);
+// 			}
+// 		}
+// 		else
+// 			dlog("...login failed");
+
+// 		dlog("...closing connection");
+// 		ftp_close($conn_id);
+// 	}
+// 	else
+// 	{
+// 		dprint("*** CONNECTION TO VILCOL FTP SERVER ($ftp_server) HAS FAILED ***", true);
+// 		dlog("...connection failed");
+// 	}
 
 } # mass_print_letters())
 
