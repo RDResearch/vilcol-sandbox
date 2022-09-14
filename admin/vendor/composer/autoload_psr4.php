@@ -7,4 +7,5 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'setasign\\Fpdi\\' => array($vendorDir . '/setasign/fpdi/src'),
+    'iio\\libmergepdf\\' => array($vendorDir . '/iio/libmergepdf/src'),
 );
