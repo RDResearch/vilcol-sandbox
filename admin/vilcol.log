@@ -1,0 +1,81 @@
+2022-09-14 14:32:37/1 ... "kevin" logged in OK
+2022-09-14 15:03:35/1 ... "kevin" logged in OK
+2022-09-14 15:10:46/1 *** phpExcel_output() could not create directory "/home/forge/vilcoldbl.com/admin/csvex/search"
+2022-09-14 15:15:07/1 SELECT CL.CLIENT2_ID, CL.C_CODE, CONVERT(AES_DECRYPT(CL.C_CO_NAME,'_key_'),CHAR) AS C_CO_NAME, CL.C_COLLECT, CL.C_TRACE, CL.IMPORTED,
+				CONVERT(AES_DECRYPT(CL.C_ADDR_1,'_key_'),CHAR) AS C_ADDR_1, CONVERT(AES_DECRYPT(CL.C_ADDR_2,'_key_'),CHAR) AS C_ADDR_2,
+				CONVERT(AES_DECRYPT(CL.C_ADDR_3,'_key_'),CHAR) AS C_ADDR_3, CONVERT(AES_DECRYPT(CL.C_ADDR_4,'_key_'),CHAR) AS C_ADDR_4,
+				CONVERT(AES_DECRYPT(CL.C_ADDR_5,'_key_'),CHAR) AS C_ADDR_5, CONVERT(AES_DECRYPT(CL.C_ADDR_PC,'_key_'),CHAR) AS C_ADDR_PC,
+				CONVERT(AES_DECRYPT(CC.CC_FIRSTNAME,'_key_'),CHAR) AS CC_FIRSTNAME, CONVERT(AES_DECRYPT(CC.CC_LASTNAME,'_key_'),CHAR) AS CC_LASTNAME,
+				CONVERT(AES_DECRYPT(CC.CC_EMAIL_1,'_key_'),CHAR) AS CC_EMAIL_1, CONVERT(AES_DECRYPT(CC.CC_EMAIL_2,'_key_'),CHAR) AS CC_EMAIL_2,
+				CONVERT(AES_DECRYPT(PH.CP_PHONE,'_key_'),CHAR) AS CP_PHONE,
+				CL.C_ARCHIVED,
+				SUM(CASE JB.JOB_CLOSED WHEN 0 THEN (CASE JB.JT_JOB WHEN 1 THEN 1 ELSE 0 END) ELSE 0 END) AS OPEN_JOBS_T,
+				SUM(CASE JB.JOB_CLOSED WHEN 0 THEN (CASE JB.JC_JOB WHEN 1 THEN 1 ELSE 0 END) ELSE 0 END) AS OPEN_JOBS_C
+				FROM CLIENT2 AS CL
+				LEFT JOIN CLIENT_CONTACT AS CC ON CC.CLIENT2_ID=CL.CLIENT2_ID AND CC.CC_MAIN=TRUE
+				LEFT JOIN CLIENT_CONTACT_PHONE AS PH ON PH.CLIENT_CONTACT_ID=CC.CLIENT_CONTACT_ID AND PH.CP_MAIN=TRUE
+				LEFT JOIN JOB AS JB ON JB.CLIENT2_ID=CL.CLIENT2_ID
+				WHERE (CL.C_ARCHIVED=FALSE) AND (CONVERT(AES_DECRYPT(CL.C_CO_NAME,'_key_'),CHAR) LIKE '%test%')
+				GROUP BY CL.CLIENT2_ID, CL.C_CODE, CONVERT(AES_DECRYPT(CL.C_CO_NAME,'_key_'),CHAR), CL.C_COLLECT, CL.C_TRACE, CL.IMPORTED,
+						CONVERT(AES_DECRYPT(CL.C_ADDR_1,'_key_'),CHAR), CONVERT(AES_DECRYPT(CL.C_ADDR_2,'_key_'),CHAR),
+						CONVERT(AES_DECRYPT(CL.C_ADDR_3,'_key_'),CHAR), CONVERT(AES_DECRYPT(CL.C_ADDR_4,'_key_'),CHAR),
+						CONVERT(AES_DECRYPT(CL.C_ADDR_5,'_key_'),CHAR), CONVERT(AES_DECRYPT(CL.C_ADDR_PC,'_key_'),CHAR),
+						CONVERT(AES_DECRYPT(CC.CC_FIRSTNAME,'_key_'),CHAR), CONVERT(AES_DECRYPT(CC.CC_LASTNAME,'_key_'),CHAR),
+						CONVERT(AES_DECRYPT(CC.CC_EMAIL_1,'_key_'),CHAR), CONVERT(AES_DECRYPT(CC.CC_EMAIL_2,'_key_'),CHAR),
+						CONVERT(AES_DECRYPT(PH.CP_PHONE,'_key_'),CHAR), CL.C_ARCHIVED
+				ORDER BY C_CODE, CONVERT(AES_DECRYPT(CL.C_CO_NAME,'_key_'),CHAR)
+2022-09-14 15:18:10/1 *** phpExcel_output() could not create directory "/home/forge/vilcoldbl.com/admin/csvex/search"
+2022-09-14 15:28:12/1 *** phpExcel_output() could not create directory "/home/forge/vilcoldbl.com/admin/csvex/search"
+2022-09-14 15:31:05/1 SELECT CL.CLIENT2_ID, CL.C_CODE, CONVERT(AES_DECRYPT(CL.C_CO_NAME,'_key_'),CHAR) AS C_CO_NAME, CL.C_COLLECT, CL.C_TRACE, CL.IMPORTED,
+				CONVERT(AES_DECRYPT(CL.C_ADDR_1,'_key_'),CHAR) AS C_ADDR_1, CONVERT(AES_DECRYPT(CL.C_ADDR_2,'_key_'),CHAR) AS C_ADDR_2,
+				CONVERT(AES_DECRYPT(CL.C_ADDR_3,'_key_'),CHAR) AS C_ADDR_3, CONVERT(AES_DECRYPT(CL.C_ADDR_4,'_key_'),CHAR) AS C_ADDR_4,
+				CONVERT(AES_DECRYPT(CL.C_ADDR_5,'_key_'),CHAR) AS C_ADDR_5, CONVERT(AES_DECRYPT(CL.C_ADDR_PC,'_key_'),CHAR) AS C_ADDR_PC,
+				CONVERT(AES_DECRYPT(CC.CC_FIRSTNAME,'_key_'),CHAR) AS CC_FIRSTNAME, CONVERT(AES_DECRYPT(CC.CC_LASTNAME,'_key_'),CHAR) AS CC_LASTNAME,
+				CONVERT(AES_DECRYPT(CC.CC_EMAIL_1,'_key_'),CHAR) AS CC_EMAIL_1, CONVERT(AES_DECRYPT(CC.CC_EMAIL_2,'_key_'),CHAR) AS CC_EMAIL_2,
+				CONVERT(AES_DECRYPT(PH.CP_PHONE,'_key_'),CHAR) AS CP_PHONE,
+				CL.C_ARCHIVED,
+				SUM(CASE JB.JOB_CLOSED WHEN 0 THEN (CASE JB.JT_JOB WHEN 1 THEN 1 ELSE 0 END) ELSE 0 END) AS OPEN_JOBS_T,
+				SUM(CASE JB.JOB_CLOSED WHEN 0 THEN (CASE JB.JC_JOB WHEN 1 THEN 1 ELSE 0 END) ELSE 0 END) AS OPEN_JOBS_C
+				FROM CLIENT2 AS CL
+				LEFT JOIN CLIENT_CONTACT AS CC ON CC.CLIENT2_ID=CL.CLIENT2_ID AND CC.CC_MAIN=TRUE
+				LEFT JOIN CLIENT_CONTACT_PHONE AS PH ON PH.CLIENT_CONTACT_ID=CC.CLIENT_CONTACT_ID AND PH.CP_MAIN=TRUE
+				LEFT JOIN JOB AS JB ON JB.CLIENT2_ID=CL.CLIENT2_ID
+				WHERE (CL.C_ARCHIVED=FALSE) AND (CONVERT(AES_DECRYPT(CL.C_CO_NAME,'_key_'),CHAR) LIKE '%test%')
+				GROUP BY CL.CLIENT2_ID, CL.C_CODE, CONVERT(AES_DECRYPT(CL.C_CO_NAME,'_key_'),CHAR), CL.C_COLLECT, CL.C_TRACE, CL.IMPORTED,
+						CONVERT(AES_DECRYPT(CL.C_ADDR_1,'_key_'),CHAR), CONVERT(AES_DECRYPT(CL.C_ADDR_2,'_key_'),CHAR),
+						CONVERT(AES_DECRYPT(CL.C_ADDR_3,'_key_'),CHAR), CONVERT(AES_DECRYPT(CL.C_ADDR_4,'_key_'),CHAR),
+						CONVERT(AES_DECRYPT(CL.C_ADDR_5,'_key_'),CHAR), CONVERT(AES_DECRYPT(CL.C_ADDR_PC,'_key_'),CHAR),
+						CONVERT(AES_DECRYPT(CC.CC_FIRSTNAME,'_key_'),CHAR), CONVERT(AES_DECRYPT(CC.CC_LASTNAME,'_key_'),CHAR),
+						CONVERT(AES_DECRYPT(CC.CC_EMAIL_1,'_key_'),CHAR), CONVERT(AES_DECRYPT(CC.CC_EMAIL_2,'_key_'),CHAR),
+						CONVERT(AES_DECRYPT(PH.CP_PHONE,'_key_'),CHAR), CL.C_ARCHIVED
+				ORDER BY C_CODE, CONVERT(AES_DECRYPT(CL.C_CO_NAME,'_key_'),CHAR)
+2022-09-14 15:33:07/1 *** phpExcel_output() could not create directory "/home/forge/vilcoldbl.com/admin/csvex/search"
+2022-09-14 15:39:03/1 *** phpExcel_output() could not create directory "/home/forge/vilcoldbl.com/admin/csvex/search"
+2022-09-14 15:41:24/1 *** phpExcel_output() could not create directory "/home/forge/vilcoldbl.com/admin/csvex/search"
+2022-09-14 15:42:49/1 *** phpExcel_output() could not create directory "/home/forge/vilcoldbl.com/admin/csvex/search"
+2022-09-14 15:44:21/1 *** phpExcel_output() could not create directory "/home/forge/vilcoldbl.com/admin/csvex/search"
+2022-09-14 15:47:28/1 *** phpExcel_output() could not create directory "/home/forge/vilcoldbl.com/admin/csvex/search"
+2022-09-14 15:51:45/1 *** phpExcel_output() could not create directory "/home/forge/vilcoldbl.com/admin/csvex/search"
+2022-09-14 15:53:26/1 *** phpExcel_output() could not create directory "/home/forge/vilcoldbl.com/admin/csvex/search"
+2022-09-14 15:54:35/1 *** phpExcel_output() could not create directory "/home/forge/vilcoldbl.com/admin/csvex/search"
+2022-09-14 15:55:40/1 *** phpExcel_output() could not create directory "/home/forge/vilcoldbl.com/admin/csvex/search"
+2022-09-14 15:56:36/1 *** phpExcel_output() could not create directory "/home/forge/vilcoldbl.com/admin/csvex/search"
+2022-09-14 15:57:27/1 *** phpExcel_output() could not create directory "/home/forge/vilcoldbl.com/admin/csvex/search"
+2022-09-14 15:57:47/1 *** phpExcel_output() could not create directory "/home/forge/vilcoldbl.com/admin/csvex/search"
+2022-09-14 15:59:21/1 *** phpExcel_output() could not create directory "/home/forge/vilcoldbl.com/admin/csvex/search"
+2022-09-14 16:04:27/1 *** phpExcel_output() could not create directory "/home/forge/vilcoldbl.com/admin/csvex/search"
+2022-09-14 16:04:43/1 *** phpExcel_output() could not create directory "/home/forge/vilcoldbl.com/admin/csvex/search"
+2022-09-14 16:05:43/1 *** phpExcel_output() could not create directory "/home/forge/vilcoldbl.com/admin/csvex/search"
+2022-09-14 16:08:14/1 *** phpExcel_output() could not create directory "/home/forge/vilcoldbl.com/admin/csvex/search"
+2022-09-14 16:12:08/1 *** phpExcel_output() could not create directory "/home/forge/vilcoldbl.com/admin/csvex/search"
+2022-09-14 16:15:58/1 *** phpExcel_output() could not create directory "/home/forge/vilcoldbl.com/admin/csvex/search"
+2022-09-14 16:17:02/1 *** phpExcel_output() could not create directory "/home/forge/vilcoldbl.com/admin/csvex/search"
+2022-09-14 16:20:00/1 *** phpExcel_output() could not create directory "/home/forge/vilcoldbl.com/admin/csvex/search"
+2022-09-14 16:20:13/1 *** phpExcel_output() could not create directory "/home/forge/vilcoldbl.com/admin/csvex/search"
+2022-09-14 16:22:25/1 *** phpExcel_output() could not create directory "/home/forge/vilcoldbl.com/admin/csvex/search"
+2022-09-14 16:22:53/1 *** phpExcel_output() could not create directory "/home/forge/vilcoldbl.com/admin/csvex/search"
+2022-09-14 16:24:56/1 *** phpExcel_output() could not create directory "/home/forge/vilcoldbl.com/admin/csvex/search"
+2022-09-14 16:27:23/1 *** phpExcel_output() could not create directory "/home/forge/vilcoldbl.com/admin/csvex/search"
+2022-09-14 16:29:27/1 *** phpExcel_output() could not create directory "/home/forge/vilcoldbl.com/admin/csvex/search"
+2022-09-14 16:30:18/1 *** phpExcel_output() could not create directory "/home/forge/vilcoldbl.com/admin/csvex/search"
+2022-09-14 16:33:33/1 *** phpExcel_output() could not create directory "/home/forge/vilcoldbl.com/admin/csvex/search"

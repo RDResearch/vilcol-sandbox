@@ -1,0 +1,5 @@
+{
+    "require": {
+        "iio/libmergepdf": "^4.0"
+    }
+}
