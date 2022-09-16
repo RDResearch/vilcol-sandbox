@@ -127,6 +127,7 @@ $allowed_ips = array(	# $_SERVER['SERVER_ADDR'], $_SERVER['REMOTE_ADDR']
 						
 						array($rdr_server_forge, $rdr_client_kdb),
 						array($rdr_server_forge, $vil_client_oak),
+						array($rdr_server_forge, '82.47.38.95'),
 					);
 
 function script_name_2($a) # this is a copy of library.php/script_name()
