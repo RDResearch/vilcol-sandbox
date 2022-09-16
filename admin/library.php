@@ -753,16 +753,16 @@ function navi_2_system()
 	<table name=\"table_navi_2\" cellspacing=\"3\" border=\"0\">
 	<tr>
 		";
-//		print "
-//		<td>
-//		";
-//			if ($can_feedback)
-//				print button_n2("Feedback", $navi_2_sys_feedback, "location.href='feedback.php';");
-//			else
-//				print button_n2("Feedback", '', '', true);
-//			print "
-//		</td>
-//		";
+		print "
+		<td>
+		";
+			if ($can_feedback)
+				print button_n2("Feedback", $navi_2_sys_feedback, "location.href='feedback.php';");
+			else
+				print button_n2("Feedback", '', '', true);
+			print "
+		</td>
+		";
 		print "
 		<td>
 		";
