@@ -308,8 +308,13 @@ function print_create_and_list()
 				$f_resolved_yn .= "<br>" . str_replace(' ', '<br>', date_for_sql(str_replace('.000','',$newArray[6]), true));
 			$f_reported = str_replace(' ', '<br>', date_for_sql(str_replace('.000','',$newArray[0]), true, true, true));
 			$f_worker = "$newArray[1]<br>$newArray[2]<br>(ID $newArray[3])";
-			$f_comments = str_replace($crlf, '<br>', stripslashes($newArray[4]));
-			$f_response = str_replace($crlf, '<br>', stripslashes($newArray[7]));
+
+			// stripslashes replacement as deprecated
+
+
+
+			$f_comments = str_replace($crlf, '<br>', stripslashes($newArray[4] ?? ''));
+			$f_response = str_replace($crlf, '<br>', stripslashes($newArray[7] ?? ''));
 			
 			$lines = explode('<br>', $f_comments);
 			foreach ($lines as &$oneline)
