@@ -189,7 +189,7 @@ elseif ($site_forge)
 	$sql_host = 'vilcol-rds.cjszchdkthyc.eu-west-2.rds.amazonaws.com';
 	$sql_username = 'aws_admin';
 	$sql_password = 'yllJHiYHS7HGkqeirUTR';
-	$sql_database = 'vilcoldb_new';
+	$sql_database = 'vilcoldb';
 }
 
 $sql_key = "R3p0mAn";
