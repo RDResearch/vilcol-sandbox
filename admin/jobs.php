@@ -7734,10 +7734,12 @@ function mass_print_letters($ticked_jobs, $upload_app=false)
 
 	$file_name = "massprint/massPrint" . (string)$current_time . ".pdf";
 
-	$myfile = fopen($file_name, "w");
-	$txt = $createdPdf;
-	fwrite($myfile, $txt);
-	fclose($myfile);
+	var_dump($file_name);
+
+//	$myfile = fopen($file_name, "w");
+//	$txt = $createdPdf;
+//	fwrite($myfile, $txt);
+//	fclose($myfile);
 
 	// $dprint = "Letters:<br>";
 	// $letter_ix = 0;
