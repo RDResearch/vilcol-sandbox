@@ -7729,6 +7729,8 @@ function mass_print_letters($ticked_jobs, $upload_app=false)
 		$count++;
 	}
 
+	echo ("mass printing");
+
 	$createdPdf = $merger->merge();
 
 	$date = new DateTime();
