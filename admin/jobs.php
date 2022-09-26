@@ -524,7 +524,6 @@ function screen_content()
 		elseif ($export == 'reset_jobs')
 			reset_jobs($ticked_jobs);
 		elseif ($export == 'mass_print') {
-			var_dump('printing');
 			mass_print_letters($ticked_jobs);
 			}
 //		elseif ($export == 'hack_dates')
