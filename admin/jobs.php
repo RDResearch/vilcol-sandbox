@@ -524,6 +524,7 @@ function screen_content()
 		elseif ($export == 'reset_jobs')
 			reset_jobs($ticked_jobs);
 		elseif ($export == 'mass_print')
+			var_dump('printing');
 			mass_print_letters($ticked_jobs);
 //		elseif ($export == 'hack_dates')
 //			hack_dates($ticked_jobs);
@@ -7726,6 +7727,7 @@ function mass_print_letters($ticked_jobs, $upload_app=false)
 	$count = 0;
 	foreach($pdfs as $pdf){
 		$merger->addFile($pdf);
+		echo ('merging'. $pdf);
 		$count++;
 	}
 
