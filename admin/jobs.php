@@ -7658,7 +7658,7 @@ function mass_print_letters($ticked_jobs, $upload_app=false)
 	global $csv_dir;
 	global $job_id; # set here, used by add_collect_letter()
 	global $tunnel_ftp_ip;
-	
+
 	$letter_id_list = implode(', ', $ticked_jobs);
 
 	dprint("mass_print_letters($letter_id_list)");
@@ -7673,23 +7673,20 @@ function mass_print_letters($ticked_jobs, $upload_app=false)
 				";
 	sql_execute($sql);
 	$letters = array();
-	while (($newArray = sql_fetch_assoc()) != false)
-	{
+	while (($newArray = sql_fetch_assoc()) != false) {
 		$dt0 = str_replace(' ', '_', str_replace(':', '', str_replace('-', '', str_replace('.000', '', $newArray['JL_APPROVED_DT']))));
 		$newArray['FILENAME'] = "$csv_dir/v{$newArray['J_VILNO']}/" .
 			"letter_{$newArray['J_VILNO']}_{$newArray['J_SEQUENCE']}_{$newArray['JOB_LETTER_ID']}_{$dt0}.pdf";
 		$letters[] = $newArray;
 	}
 	$letter_count = count($letters);
-	for ($lix = 0; $lix < $letter_count; $lix++)
-	{
+	for ($lix = 0; $lix < $letter_count; $lix++) {
 		$job_letter_id = $letters[$lix]['JOB_LETTER_ID']; # used by add_collect_letter()
 		$job_id = $letters[$lix]['JOB_ID']; # used by add_collect_letter()
 		$letter_type_id = $letters[$lix]['LETTER_TYPE_ID']; # used by add_collect_letter()
 
 		# Delete existing PDF
-		if (file_exists($letters[$lix]['FILENAME']))
-		{
+		if (file_exists($letters[$lix]['FILENAME'])) {
 			#dprint("Deleting \"{$letters[$lix]['FILENAME']}\"...");#
 			unlink($letters[$lix]['FILENAME']);
 		}
@@ -7710,8 +7707,7 @@ function mass_print_letters($ticked_jobs, $upload_app=false)
 	sql_execute($sql);
 	$letters = array();
 	$pdfs = array();
-	while (($newArray = sql_fetch_assoc()) != false)
-	{
+	while (($newArray = sql_fetch_assoc()) != false) {
 		$dt1 = ($newArray['JL_CREATED_DT'] ? $newArray['JL_CREATED_DT'] : $newArray['JL_APPROVED_DT']);
 		$dt2 = str_replace(' ', '_', str_replace(':', '', str_replace('-', '', str_replace('.000', '', $dt1))));
 		$newArray['FILENAME'] = "$csv_dir/v{$newArray['J_VILNO']}/" .
@@ -7726,25 +7722,21 @@ function mass_print_letters($ticked_jobs, $upload_app=false)
 
 
 	$count = 0;
-	foreach($pdfs as $pdf){
+	foreach ($pdfs as $pdf) {
 		$merger->addFile($pdf);
-		echo ('merging'. $pdf);
 		$count++;
 	}
-
-	echo ("mass printing");
 
 	$createdPdf = $merger->merge();
 
 	$date = new DateTime();
 	$current_time = $date->format('Y-m-dTH-i-s');
 
-	$file_name = "massprint/massPrint".(string)$current_time.".pdf";
+	$file_name = "massprint/massPrint" . (string)$current_time . ".pdf";
 
 	$myfile = fopen($file_name, "w") or die("Unable to open file!");
 	$txt = $createdPdf;
 	fwrite($myfile, $txt);
-	
 	fclose($myfile);
 
 	// $dprint = "Letters:<br>";
@@ -7764,7 +7756,7 @@ function mass_print_letters($ticked_jobs, $upload_app=false)
 		<input type=\"submit\" value=\"Click to open\" />
 	</form>
 	");
-
+}
 
 // //	$server_names = array('ftp.village.com', '169.0.0.5', '81.5.144.205');
 // //	$ftp_server = $server_names[1];
@@ -7869,7 +7861,7 @@ function mass_print_letters($ticked_jobs, $upload_app=false)
 // 		dlog("...connection failed");
 // 	}
 
-} # mass_print_letters())
+#} # mass_print_letters())
 
 
 ?>
