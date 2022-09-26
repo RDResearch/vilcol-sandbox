@@ -7715,46 +7715,46 @@ function mass_print_letters($ticked_jobs, $upload_app=false)
 		$pdfs[] = $newArray['FILENAME'];
 	}
 
-	//FIXME - MERGE HERE
-
-	$merger = new Merger;
-
-
-	$count = 0;
-	foreach ($pdfs as $pdf) {
-		$merger->addFile($pdf);
-		$count++;
-	}
-
-	$createdPdf = $merger->merge();
-
-	$date = new DateTime();
-	$current_time = $date->format('Y-m-dTH-i-s');
-
-	$file_name = "massprint/massPrint" . (string)$current_time . ".pdf";
-
-	$myfile = fopen($file_name, "w");
-	$txt = $createdPdf;
-	fwrite($myfile, $txt);
-	fclose($myfile);
-
-	 $dprint = "Letters:<br>";
-	 $letter_ix = 0;
-	 foreach ($letters as $one_ltr)
-	 {
-	 	$dprint .= str_replace("[FILENAME]", "<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[FILENAME]", print_r($one_ltr,1) . "<br>");
-	 	$dprint .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=={$pdfs[$letter_ix]}<br>";
-	 	$letter_ix++;
-	 }
-	 dprint($dprint);
-
-
-	echo("
-	<span>Mass printer - merged $count letters into 1 PDF</span>
-	<form target=\"_blank\" action=\"http://localhost/vilcol-php/admin/$file_name\">
-		<input type=\"submit\" value=\"Click to open\" />
-	</form>
-	");
+//	//FIXME - MERGE HERE
+//
+//	$merger = new Merger;
+//
+//
+//	$count = 0;
+//	foreach ($pdfs as $pdf) {
+//		$merger->addFile($pdf);
+//		$count++;
+//	}
+//
+//	$createdPdf = $merger->merge();
+//
+//	$date = new DateTime();
+//	$current_time = $date->format('Y-m-dTH-i-s');
+//
+//	$file_name = "massprint/massPrint" . (string)$current_time . ".pdf";
+//
+//	$myfile = fopen($file_name, "w");
+//	$txt = $createdPdf;
+//	fwrite($myfile, $txt);
+//	fclose($myfile);
+//
+//	 $dprint = "Letters:<br>";
+//	 $letter_ix = 0;
+//	 foreach ($letters as $one_ltr)
+//	 {
+//	 	$dprint .= str_replace("[FILENAME]", "<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[FILENAME]", print_r($one_ltr,1) . "<br>");
+//	 	$dprint .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=={$pdfs[$letter_ix]}<br>";
+//	 	$letter_ix++;
+//	 }
+//	 dprint($dprint);
+//
+//
+//	echo("
+//	<span>Mass printer - merged $count letters into 1 PDF</span>
+//	<form target=\"_blank\" action=\"http://localhost/vilcol-php/admin/$file_name\">
+//		<input type=\"submit\" value=\"Click to open\" />
+//	</form>
+//	");
 }
 
 // //	$server_names = array('ftp.village.com', '169.0.0.5', '81.5.144.205');
