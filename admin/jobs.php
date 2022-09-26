@@ -7756,6 +7756,8 @@ function mass_print_letters($ticked_jobs, $upload_app=false)
 		<input type=\"submit\" value=\"Click to open\" />
 	</form>
 	");
+
+	return;
 }
 
 // //	$server_names = array('ftp.village.com', '169.0.0.5', '81.5.144.205');
