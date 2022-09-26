@@ -7750,14 +7750,14 @@ function mass_print_letters($ticked_jobs, $upload_app=false)
 	// dprint($dprint);
 
 
-	echo("
-	<span>Mass printer - merged $count letters into 1 PDF</span>
-	<form target=\"_blank\" action=\"http://localhost/vilcol-php/admin/$file_name\">
-		<input type=\"submit\" value=\"Click to open\" />
-	</form>
-	");
+//	echo("
+//	<span>Mass printer - merged $count letters into 1 PDF</span>
+//	<form target=\"_blank\" action=\"http://localhost/vilcol-php/admin/$file_name\">
+//		<input type=\"submit\" value=\"Click to open\" />
+//	</form>
+//	");
 
-	return;
+
 }
 
 // //	$server_names = array('ftp.village.com', '169.0.0.5', '81.5.144.205');
