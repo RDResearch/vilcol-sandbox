@@ -7718,23 +7718,25 @@ function mass_print_letters($ticked_jobs, $upload_app=false)
 
 	//FIXME - MERGE HERE
 
-	$merger = new Merger;
-
-
-	$count = 0;
-	foreach ($pdfs as $pdf) {
-		$merger->addFile($pdf);
-		$count++;
-	}
-
-	$createdPdf = $merger->merge();
-
-	$date = new DateTime();
-	$current_time = $date->format('Y-m-dTH-i-s');
-
-	$file_name = "massprint/massPrint" . (string)$current_time . ".pdf";
-
-	var_dump($file_name);
+//	$merger = new Merger;
+//
+//
+//	$count = 0;
+//	foreach ($pdfs as $pdf) {
+//		$merger->addFile($pdf);
+//		$count++;
+//	}
+//
+//	$createdPdf = $merger->merge();
+//
+//	$date = new DateTime();
+//	$current_time = $date->format('Y-m-dTH-i-s');
+//
+//	$file_name = "massprint/massPrint" . (string)$current_time . ".pdf";
+//
+//	var_dump($file_name);
+//
+//	return;
 
 //	$myfile = fopen($file_name, "w");
 //	$txt = $createdPdf;
