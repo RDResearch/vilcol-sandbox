@@ -7720,30 +7720,30 @@ function mass_print_letters($ticked_jobs, $upload_app=false)
 
 	//FIXME - MERGE HERE
 
-//	$merger = new Merger;
-//
-//
-//	$count = 0;
-//	foreach($pdfs as $pdf){
-//		$merger->addFile($pdf);
-//		$count++;
-//	}
-//
-//	$createdPdf = $merger->merge();
-//
-//	log_open('vilcol.log');
-//	log_write('Making new merged file');
-//
-//	$date = new DateTime();
-//	$current_time = $date->format('Y-m-dTH-i-s');
-//
-//	$file_name = "massprint/massPrint".(string)$current_time.".pdf";
-//
-//	$myfile = fopen($file_name, "w");
-//	$txt = $createdPdf;
-//	fwrite($myfile, $txt);
-//
-//	fclose($myfile);
+	$merger = new Merger;
+
+
+	$count = 0;
+	foreach($pdfs as $pdf){
+		$merger->addFile($pdf);
+		$count++;
+	}
+
+	$createdPdf = $merger->merge();
+
+	log_open('vilcol.log');
+	log_write('Making new merged file');
+
+	$date = new DateTime();
+	$current_time = $date->format('Y-m-dTH-i-s');
+
+	$file_name = "massprint/massPrint".(string)$current_time.".pdf";
+
+	$myfile = fopen($file_name, "w");
+	$txt = $createdPdf;
+	fwrite($myfile, $txt);
+
+	fclose($myfile);
 
 	log_write('Created merge file');
 
@@ -7759,12 +7759,12 @@ function mass_print_letters($ticked_jobs, $upload_app=false)
 
 //	log_write('Creating button');
 //
-//	print("
-//	<span>Mass printer - merged $count letters into 1 PDF</span>
-//	<form target=\"_blank\" action=\"https://vilcolbl.com//admin/$file_name\">
-//		<input type=\"submit\" value=\"Click to open\" />
-//	</form>
-//	");
+	print("
+	<span>Mass printer - merged $count letters into 1 PDF</span>
+	<form target=\"_blank\" action=\"https://vilcolbl.com//admin/$file_name\">
+		<input type=\"submit\" value=\"Click to open\" />
+	</form>
+	");
 //
 //	log_write('Button made');
 
