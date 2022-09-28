@@ -5,6 +5,11 @@ include_once("library.php");
 include_once("lib_pdf.php");
 include_once("lib_mail.php");
 
+include_once(__DIR__.'/vendor/autoload.php');
+
+use iio\libmergepdf\Merger;
+use iio\libmergepdf\Pages;
+
 global $denial_message;
 global $navi_1_jobs;
 global $role_agt;
@@ -547,8 +552,8 @@ function screen_content()
 			if (0 < count($last_job['SUBJECTS']))
 			{
 				$last_fn = trim(substr($last_job['SUBJECTS'][0]['JS_FIRSTNAME'],0,1));
-				$last_ln = trim($last_job['SUBJECTS'][0]['JS_LASTNAME']);
-				$last_co = trim($last_job['SUBJECTS'][0]['JS_COMPANY']);
+				$last_ln = trim((string)$last_job['SUBJECTS'][0]['JS_LASTNAME']);
+				$last_co = trim((string)$last_job['SUBJECTS'][0]['JS_COMPANY']);
 				#dprint("fn=$last_fn, ln=$last_ln, co=$last_co, job=" . print_r($last_job,1));#
 				if ($last_fn)
 				{
@@ -714,23 +719,23 @@ function screen_content()
 	<tr>
 		<td " . ($manager_x ? $col4 : '') . " $ar>Filter on VILNo, Sequence or Subject/Co name:</td>
 		<td>" . input_textbox('sc_text', $sc_text, $manager_x ? 15 : 45, 500, $onkeydown) . # onkeydown causes a backspace to delete two characters the first time it is used!
-			"</td>
+		"</td>
 		<td width=\"10\">&nbsp;</td>
 		<td>Client Code/Name:</td>
 		<td>" . input_textbox('sc_client', $sc_client, 15, 50, $onkeydown) . # onkeydown causes a backspace to delete two characters the first time it is used!
-			"</td>
+		"</td>
 		<td width=\"10\">&nbsp;</td>
 		";
-		if ($manager_x)
-		{
-			print "
+	if ($manager_x)
+	{
+		print "
 			<td $ar>Client Group:</td>
 			<td>" . input_select('sc_group', $client_groups, $sc_group, $onchange, false, false) . "</td>
 			";
-		}
-		else
-			print input_hidden('sc_group','');
-		print "
+	}
+	else
+		print input_hidden('sc_group','');
+	print "
 		<td $col2>" . input_button('Search', 'search_js(1)') . "</td>
 		<td width=\"10\">&nbsp;</td>
 		<td $ar>...or: " . input_button('Show all jobs', 'search_js(0)') . "</td>
@@ -738,22 +743,22 @@ function screen_content()
 	<tr>
 		<td $ar>Subject Addr/Tel:</td>
 		<td " . ($manager_x ? $col4 : '') . ">" . input_textbox('sc_addr', $sc_addr, 45, 50, $onkeydown) . # onkeydown causes a backspace to delete two characters the first time it is used!
-			"</td>
+		"</td>
 		<td></td>
 		<td $ar>Client Ref:</td>
 		<td>" . input_textbox('sc_clref', $sc_clref, 15, 100, $onkeydown) . "</td>
 		<td></td>
 		";
-		if ($manager_x)
-		{
-			print "
+	if ($manager_x)
+	{
+		print "
 			<td $ar>System:</td>
 			<td>" . input_select('sc_sys', $sys_list, $sc_sys, $onchange, false, false) . "</td>
 			";
-		}
-		else
-			print input_hidden('sc_sys','');
-		print "
+	}
+	else
+		print input_hidden('sc_sys','');
+	print "
 		<td $col2>" . input_button('Clear', 'clear_filters()') . "</td>
 		" . ($manager_x ? '' : $last_job_html) . "
 	</tr>
@@ -787,9 +792,9 @@ function screen_content()
 	print "
 	<tr " . ($manager_x ? '' : "style=\"display:none;\"") . ">
 		";
-		$calendar_names[] = "sc_date_fr";
-		$calendar_names[] = "sc_date_to";
-		print "
+	$calendar_names[] = "sc_date_fr";
+	$calendar_names[] = "sc_date_to";
+	print "
 		<td $ar>Received from:</td>
 		<td>" . input_textbox('sc_date_fr', $sc_date_fr, $sz_date, 10, $onkeydown) . calendar_icon('sc_date_fr') . "</td>
 		<td></td>
@@ -800,15 +805,15 @@ function screen_content()
 		<td></td>
 		<td $ar>Invoices:</td>
 		<td>" . input_select('sc_inv', array(1 => 'With invoice(s)', -1 => 'Without invoice(s)', -2 => 'Uninvoiced Payments'),
-								$sc_inv, $onchange, false, false) . "</td>
+			$sc_inv, $onchange, false, false) . "</td>
 		$last_job_html
 	</tr>
 	$html_jopenclosed_2
 	<tr " . ($manager_x ? '' : "style=\"display:none;\"") . ">
 		";
-		$calendar_names[] = "sc_closed_fr";
-		$calendar_names[] = "sc_closed_to";
-		print "
+	$calendar_names[] = "sc_closed_fr";
+	$calendar_names[] = "sc_closed_to";
+	print "
 		<td $ar $at>Closed from:</td>
 		<td $at>" . input_textbox('sc_closed_fr', $sc_closed_fr, $sz_date, 0, $onkeydown) . calendar_icon('sc_closed_fr') . "</td>
 		<td></td>
@@ -819,16 +824,16 @@ function screen_content()
 		<td width=\"10\"></td>
 		<td $ar>Letter(s):</td>
 		<td>" . input_select('sc_letters', array(2 => 'Unapproved', 1 => 'Approved', 3 => 'Sent'), $sc_letters, $onchange_letters, false, false) .
-						#input_tickbox('Letters pending approval', 'sc_pending', 1, $sc_pending) .
-			"</td>
+		#input_tickbox('Letters pending approval', 'sc_pending', 1, $sc_pending) .
+		"</td>
 		<td $col3>" . input_tickbox('Archived Jobs', 'sc_archived', 1, $sc_archived) . "</td>
 		<td $ar>" . input_tickbox('Deleted Jobs', 'sc_obsolete', 1, $sc_obsolete) . "</td>
 	</tr>
 	<tr " . ($manager_x ? '' : "style=\"display:none;\"") . ">
 		";
-		$calendar_names[] = "sc_upd_fr";
-		$calendar_names[] = "sc_upd_to";
-		print "
+	$calendar_names[] = "sc_upd_fr";
+	$calendar_names[] = "sc_upd_to";
+	print "
 		<td $ar $at>Updated from:</td>
 		<td $at>" . input_textbox('sc_upd_fr', $sc_upd_fr, $sz_date, 0, $onkeydown) . calendar_icon('sc_upd_fr') . "</td>
 		<td></td>
@@ -848,16 +853,16 @@ function screen_content()
 		print "
 		<tr " . ($manager_x ? '' : "style=\"display:none;\"") . ">
 			";
-			$calendar_names[] = "sc_target_fr";
-			$calendar_names[] = "sc_target_to";
-			print "
+		$calendar_names[] = "sc_target_fr";
+		$calendar_names[] = "sc_target_to";
+		print "
 			<td $ar>Target from:</td>
 			<td>" . input_textbox('sc_target_fr', $sc_target_fr, $sz_date, 0, $onkeydown) .
-											calendar_icon('sc_target_fr') . "</td>
+			calendar_icon('sc_target_fr') . "</td>
 			<td></td>
 			<td $ar>Target to:</td>
 			<td>" . input_textbox('sc_target_to', $sc_target_to, $sz_date, 0, $onkeydown) .
-											calendar_icon('sc_target_to') . "</td>
+			calendar_icon('sc_target_to') . "</td>
 			<td></td>
 			<td $ar>Trace Job Type:</td>
 			<td>" . input_select('sc_jobtype', $jobtypes, $sc_jobtype, $onchange, false, false) . "</td>
@@ -867,7 +872,7 @@ function screen_content()
 			<td></td>
 			<td $ar>Billing:</td>
 			<td $col2>" . input_select('sc_bill', array(1 => 'With billing', -1 => 'Without billing'),
-									$sc_bill, $onchange, false, false) . "</td>
+				$sc_bill, $onchange, false, false) . "</td>
 		</tr>
 		<tr " . ($manager_x ? '' : "style=\"display:none;\"") . ">
 			<td $ar>Trace Success:</td>
@@ -880,15 +885,15 @@ function screen_content()
 	}
 	else
 		print input_hidden('sc_target_fr','') . input_hidden('sc_target_to','') . input_hidden('sc_jobtype','') .
-				input_hidden('sc_complete','') . input_hidden('sc_bill','') . input_hidden('sc_success','') . input_hidden('sc_credit','');
+			input_hidden('sc_complete','') . input_hidden('sc_bill','') . input_hidden('sc_success','') . input_hidden('sc_credit','');
 	if ($agent_c)
 	{
 		print "
 		<tr " . ($manager_x ? '' : "style=\"display:none;\"") . ">
 			";
-			$calendar_names[] = "sc_act_fr";
-			$calendar_names[] = "sc_act_to";
-			print "
+		$calendar_names[] = "sc_act_fr";
+		$calendar_names[] = "sc_act_to";
+		print "
 			<td $ar>Activity from:</td>
 			<td>" . input_textbox('sc_act_fr', $sc_act_fr, $sz_date, 0, $onkeydown) . calendar_icon('sc_act_fr') . "</td>
 			<td></td>
@@ -902,9 +907,9 @@ function screen_content()
 		</tr>
 		<tr " . ($manager_x ? '' : "style=\"display:none;\"") . ">
 			";
-			$calendar_names[] = "sc_pmt_fr";
-			$calendar_names[] = "sc_pmt_to";
-			print "
+		$calendar_names[] = "sc_pmt_fr";
+		$calendar_names[] = "sc_pmt_to";
+		print "
 			<td $ar>Payments from:</td>
 			<td>" . input_textbox('sc_pmt_fr', $sc_pmt_fr, $sz_date, 0, $onkeydown) . calendar_icon('sc_pmt_fr') . "</td>
 			<td></td>
@@ -916,7 +921,7 @@ function screen_content()
 	}
 	else
 		print input_hidden('sc_act_fr','') . input_hidden('sc_act_to','') . input_hidden('sc_jobstatus','') . input_hidden('sc_inst','') .
-				input_hidden('sc_pmt_fr','') . input_hidden('sc_pmt_to','');
+			input_hidden('sc_pmt_fr','') . input_hidden('sc_pmt_to','');
 	print "
 	</table>
 	<hr>
@@ -2642,9 +2647,9 @@ function javascript()
 	function view_js(jid,ed)
 	{
 		";
-		# Arg jid is JOB_ID. If zero then we are creating a new job (and ed==1).
-		# Arg ed is edit mode: 0==view, 1=edit.
-		print "
+	# Arg jid is JOB_ID. If zero then we are creating a new job (and ed==1).
+	# Arg ed is edit mode: 0==view, 1=edit.
+	print "
 		if ((0 < jid) || confirm('Do you really want to create a New job?'))
 		{
 			document.form_main.task.value = (ed ? 'edit' : 'view');
@@ -3251,9 +3256,9 @@ function print_jobs()
 	$limit = 1000;
 	if ($time_tests) log_write("jobs.php/print_jobs(): Enter. Calling sql_get_jobs()...");
 	list($count, $jobs, $count_t, $count_c) = sql_get_jobs($sc_sys, $sc_text, $sc_addr, $sc_date_fr, $sc_date_to, $sc_client, $sc_clref, $sc_group, $sc_agent,
-										$sc_inst, $limit, $sc_closed_fr, $sc_closed_to, $sc_jobtype, $sc_jobstatus, $sc_jopenclosed,
-										$sc_success, $sc_credit, $sc_complete, $sc_inv, $sc_bill, $sc_act_fr, $sc_act_to, $sc_target_fr, $sc_target_to,
-										$sc_obsolete, $sc_letters, $sc_ltype, $sc_pmt_fr, $sc_pmt_to, $sc_upd_fr, $sc_upd_to, $sc_diary, $sc_archived, $sc_llist);#$sc_pending
+		$sc_inst, $limit, $sc_closed_fr, $sc_closed_to, $sc_jobtype, $sc_jobstatus, $sc_jopenclosed,
+		$sc_success, $sc_credit, $sc_complete, $sc_inv, $sc_bill, $sc_act_fr, $sc_act_to, $sc_target_fr, $sc_target_to,
+		$sc_obsolete, $sc_letters, $sc_ltype, $sc_pmt_fr, $sc_pmt_to, $sc_upd_fr, $sc_upd_to, $sc_diary, $sc_archived, $sc_llist);#$sc_pending
 	#print("jobs=" . print_r($jobs,1));#
 	#dprint("Found $count jobs/letters and count(\$jobs)=" . count($jobs));
 	$count_c=$count_c; # keep code_checker quiet
@@ -3361,8 +3366,8 @@ function print_jobs()
 			$headings = array('System', 'VILNo', 'Subject Name', 'Client', 'Client Name', 'Agent', 'Letter', 'PDF', 'Approved', 'Sent');
 			if ($mail_merge)
 				$headings_mail_merge = array('Letter Type', 'VILNO', 'Title', 'Firstname', 'Surname',
-												'Address1', 'Address2', 'Address3', 'Address4', 'Address5', 'Postcode',
-												'Client', 'Balance');
+					'Address1', 'Address2', 'Address3', 'Address4', 'Address5', 'Postcode',
+					'Client', 'Balance');
 		}
 		else
 		{
@@ -3413,7 +3418,7 @@ function print_jobs()
 			print "
 			<td $col2>" . input_button('Export list to Excel', "export_xl()", $manager_x ? '' : 'disabled', 'but_export_xl') . "</td>
 			<td $col3 $ar>" . input_button("Tick $tick_max", "tick_some($tick_max)", '', 'but_tick_some') .
-							input_textbox('tick_max', $tick_max, 2, 5, "style=\"text-align:right;\" onkeyup=\"tick_max_changed(this)\"") . "</td>
+				input_textbox('tick_max', $tick_max, 2, 5, "style=\"text-align:right;\" onkeyup=\"tick_max_changed(this)\"") . "</td>
 			<td $ac $col3>" .
 				#REVIEW input_button('Print ticked approved letters', "print_letters()", $manager_x ? '' : 'disabled', 'but_print_letters') .
 				input_button('Mail Merge to Excel', "mail_merge_excel()", $manager_x ? '' : 'disabled', 'but_print_letters') .
@@ -3430,9 +3435,9 @@ function print_jobs()
 			{
 				print "
 				<td>" .
-				input_button('Upl. App', "upload_app()", $manager_x ? '' : 'disabled', 'but_upload_app') .
-				//input_button('Hack Dates', "hack_dates()") .
-				"</td>
+					input_button('Upl. App', "upload_app()", $manager_x ? '' : 'disabled', 'but_upload_app') .
+					//input_button('Hack Dates', "hack_dates()") .
+					"</td>
 				";
 			}
 		}
@@ -3455,26 +3460,26 @@ function print_jobs()
 		<tr>
 			<th></th>
 			";
-			foreach ($headings as $hd)
-			{
-				if ($sc_llist && ($hd == 'Letter'))
-					print "<th>" . input_button('All', 'tick_all()', "style=\"width:30px;\"") . "</th>";
-				print "<th>$hd</th>";
-			}
-			if ((!$sc_diary) && (!$sc_llist))
-			{
-				print "<th>" . ($manager_x ? input_button('All', 'tick_all()', "style=\"width:30px;\"") : '') . "</th>";
-				if ($sc_inst)
+		foreach ($headings as $hd)
+		{
+			if ($sc_llist && ($hd == 'Letter'))
+				print "<th>" . input_button('All', 'tick_all()', "style=\"width:30px;\"") . "</th>";
+			print "<th>$hd</th>";
+		}
+		if ((!$sc_diary) && (!$sc_llist))
+		{
+			print "<th>" . ($manager_x ? input_button('All', 'tick_all()', "style=\"width:30px;\"") : '') . "</th>";
+			if ($sc_inst)
 				#if ($c_jobs_possible)
-					print "<th>Instalments</th>";
-				#if (0 < $sc_jopenclosed)
-					print "<th>Open</th>";
-				print "<th $grey>Imported?</th>";
-			}
-			print "<th $grey>Job ID</th>";
-			if ($sc_llist)
-				print "<th $grey>Letter ID</th>";
-			print "
+				print "<th>Instalments</th>";
+			#if (0 < $sc_jopenclosed)
+			print "<th>Open</th>";
+			print "<th $grey>Imported?</th>";
+		}
+		print "<th $grey>Job ID</th>";
+		if ($sc_llist)
+			print "<th $grey>Letter ID</th>";
+		print "
 		</tr>
 		";
 
@@ -3562,16 +3567,16 @@ function print_jobs()
 				else
 					$sent = '-';
 				$line_s = array($sys, $one['J_VILNO'], $subject, $one['C_CODE'], $one['C_CO_NAME'], $one['U_INITIALS'],
-								$one['LETTER_NAME'],
-								($one['PDF_LINK'] ?
-								"<a href=\"{$one['PDF_LINK']}\" target=\"_blank\" rel=\"noopener\"><img src=\"images/pdf.png\" height=\"23\" width=\"23\"></a>"
-								: ''),
-								$approved, $sent);
+					$one['LETTER_NAME'],
+					($one['PDF_LINK'] ?
+						"<a href=\"{$one['PDF_LINK']}\" target=\"_blank\" rel=\"noopener\"><img src=\"images/pdf.png\" height=\"23\" width=\"23\"></a>"
+						: ''),
+					$approved, $sent);
 				if ($export_xl)
 					$line_x = array($sys, $one['J_VILNO'], $subject, $one['C_CODE'], $one['C_CO_NAME'], "{$one['U_INITIALS']} ($agent)",
-									$one['LETTER_NAME'],
-									($one['PDF_LINK'] ? 'PDF' : ''),
-									$one['JL_APPROVED_DT'], $sent, $one['JOB_LETTER_ID']);
+						$one['LETTER_NAME'],
+						($one['PDF_LINK'] ? 'PDF' : ''),
+						$one['JL_APPROVED_DT'], $sent, $one['JOB_LETTER_ID']);
 				elseif ($mail_merge && in_array($one['JOB_LETTER_ID'], $ticked_letters))
 				{
 					if ($one['JS_COMPANY'])
@@ -3587,8 +3592,8 @@ function print_jobs()
 						$su_la = $one['JS_LASTNAME'];
 					}
 					$line_x = array($one['LETTER_NAME'], $one['J_VILNO'], $su_ti, $su_fi, $su_la,
-									$one['JS_ADDR_1'], $one['JS_ADDR_2'], $one['JS_ADDR_3'], $one['JS_ADDR_4'], $one['JS_ADDR_5'], $one['JS_ADDR_PC'],
-									"{$one['C_CO_NAME']} ({$one['C_CODE']})", round($one['JC_TOTAL_AMT'],2));
+						$one['JS_ADDR_1'], $one['JS_ADDR_2'], $one['JS_ADDR_3'], $one['JS_ADDR_4'], $one['JS_ADDR_5'], $one['JS_ADDR_PC'],
+						"{$one['C_CO_NAME']} ({$one['C_CODE']})", round($one['JC_TOTAL_AMT'],2));
 				}
 				else
 					$line_x = '';
@@ -3619,7 +3624,7 @@ function print_jobs()
 
 				$line_s = array($sys, $one['J_VILNO'], $one['J_SEQUENCE'], $subject, $one['C_CODE'], $one['C_CO_NAME'], $one['U_INITIALS'], $placement_s);
 				$line_x = array($sys, $one['J_VILNO'], $one['J_SEQUENCE'], $subject, $one['C_CODE'], $one['C_CO_NAME'],
-									"{$one['U_INITIALS']} ($agent)", $placement_x);
+					"{$one['U_INITIALS']} ($agent)", $placement_x);
 				if (0 < $count_t)
 				{
 					$line_s[] = $report_approved;
@@ -3647,11 +3652,11 @@ function print_jobs()
 			print "
 			<tr bgcolor=\"$trcol\" fgcolor=\"red\" onmouseover=\"this.className='Highlight'\" onmouseout=\"this.className='Normal'\">
 				<td style=\"white-space: nowrap;\">" . input_button('View', "view_js({$one['JOB_ID']},0)") .
-														input_button('Edit', "view_js({$one['JOB_ID']},1)", $allow_edit ? '' : 'disabled') . "</td>
+				input_button('Edit', "view_js({$one['JOB_ID']},1)", $allow_edit ? '' : 'disabled') . "</td>
 				";
-				if ($sc_diary)
-				{
-					print "
+			if ($sc_diary)
+			{
+				print "
 					<td $tdcol title=\"$agent\" $ac>{$line_s[0]}</td>
 					<td $tdcol $ar>{$line_s[1]}</td>
 					<td $tdcol>{$line_s[2]}</td>
@@ -3661,12 +3666,12 @@ function print_jobs()
 					<td $tdcol $ar>{$line_s[6]}</td>
 					<td $tdcol>{$line_s[7]}</td>
 					<td $ar $grey>{$one['JOB_ID']}</td>";
-				}
-				elseif ($sc_llist)
-				{
-					$pdf_link = $line_s[7];
-					$can_tick = $pdf_link; # || global_debug();#
-					print "
+			}
+			elseif ($sc_llist)
+			{
+				$pdf_link = $line_s[7];
+				$can_tick = $pdf_link; # || global_debug();#
+				print "
 					<td  style=\"white-space: nowrap;\" $tdcol>{$line_s[0]}</td>
 					<td $tdcol $ar>{$line_s[1]}</td>
 					<td $tdcol>{$line_s[2]}</td>
@@ -3674,8 +3679,8 @@ function print_jobs()
 					<td $tdcol>{$line_s[4]}</td>
 					<td $tdcol title=\"$agent\" $ac>{$line_s[5]}</td>
 					<td $tdcol $ac>" .
-						($can_tick ? input_tickbox('', "tck_{$one['JOB_LETTER_ID']}", 1, in_array($one['JOB_LETTER_ID'], $ticked_letters) ? true : false) : '') .
-						"</td>
+					($can_tick ? input_tickbox('', "tck_{$one['JOB_LETTER_ID']}", 1, in_array($one['JOB_LETTER_ID'], $ticked_letters) ? true : false) : '') .
+					"</td>
 					<td $tdcol>{$line_s[6]}</td>
 					<td $ar>$pdf_link</td>
 					<td $tdcol $ac>{$line_s[8]}</td>
@@ -3685,10 +3690,10 @@ function print_jobs()
 					";
 //					<td $tdcol $ac>" . ($line_s[7] ? 'Yes' : 'No') . "</td>
 //					<td $tdcol $ac>" . ($line_s[8] ? 'Yes' : 'No') . "</td>
-				}
-				else
-				{
-					print "
+			}
+			else
+			{
+				print "
 					<td  style=\"white-space: nowrap;\" $tdcol>{$line_s[0]}</td>
 					<td $tdcol $ar>{$line_s[1]}</td>
 					<td $tdcol $ar>{$line_s[2]}</td>
@@ -3698,23 +3703,23 @@ function print_jobs()
 					<td $tdcol title=\"$agent\" $ac>{$line_s[6]}</td>
 					<td $tdcol $ar>{$line_s[7]}</td>
 					";
-					if (0 < $count_t)
-						print "
+				if (0 < $count_t)
+					print "
 					<td $tdcol $ar>{$line_s[8]}</td>
 					<td $tdcol $ar>{$line_s[9]}</td>
 						";
-					print "
-					<td $tdcol $ac>" . (((!$manager_x) || $one['OBSOLETE'] || $one['J_ARCHIVED']) ? '' :
-										input_tickbox('', "tck_{$one['JOB_ID']}", 1, in_array($one['JOB_ID'], $ticked_jobs) ? true : false)) . "</td>
-					";
-					if ($sc_inst)
-					#if ($c_jobs_possible)
-						print "<td $tdcol $ar>$instal</td>";
-					#if (0 < $sc_jopenclosed)
-						print "<td $tdcol $ac>$job_open</td>";
-					print "<td $grey $ac>$imported</td><td $ar $grey>{$one['JOB_ID']}</td>";
-				}
 				print "
+					<td $tdcol $ac>" . (((!$manager_x) || $one['OBSOLETE'] || $one['J_ARCHIVED']) ? '' :
+						input_tickbox('', "tck_{$one['JOB_ID']}", 1, in_array($one['JOB_ID'], $ticked_jobs) ? true : false)) . "</td>
+					";
+				if ($sc_inst)
+					#if ($c_jobs_possible)
+					print "<td $tdcol $ar>$instal</td>";
+				#if (0 < $sc_jopenclosed)
+				print "<td $tdcol $ac>$job_open</td>";
+				print "<td $grey $ac>$imported</td><td $ar $grey>{$one['JOB_ID']}</td>";
+			}
+			print "
 			</tr>
 			";
 			$trcol = (($trcol == $tr_colour_1) ? $tr_colour_2 : $tr_colour_1);
@@ -3889,10 +3894,10 @@ function print_one_job($editing)
 	if (!$manager_x)
 	{
 		if (	($job['JOB_CLOSED'] == 1) || # Don't allow an agent to edit a closed job
-				($trace_job && ($job['J_AVAILABLE'] != 1)) # Don't allow an agent to edit a trace job that's not available to agents
-				#|| ($job['J_USER_ID'] != $USER['USER_ID']) # Don't allow an agent to edit a job that's not theirs
-				# || ( ($job['JT_JOB'] == 1) && ($job['TRACE_DETAILS']['J_COMPLETE'] == -1) ) # Don't allow an agent to edit a review trace job
-			)
+			($trace_job && ($job['J_AVAILABLE'] != 1)) # Don't allow an agent to edit a trace job that's not available to agents
+			#|| ($job['J_USER_ID'] != $USER['USER_ID']) # Don't allow an agent to edit a job that's not theirs
+			# || ( ($job['JT_JOB'] == 1) && ($job['TRACE_DETAILS']['J_COMPLETE'] == -1) ) # Don't allow an agent to edit a review trace job
+		)
 		{
 			$can_edit = false;
 			$editing = false;
@@ -4049,7 +4054,7 @@ function print_one_job($editing)
 		print input_button('Billing', "jump('billing')");
 	else
 		print input_button('Arrangement', "jump('arrangements')") . ' ' . input_button('Payments', "jump('payments')") . ' ' .
-				input_button('Activity', "jump('activity')");
+			input_button('Activity', "jump('activity')");
 
 	if ($job['J_ARCHIVED'] || $job['C_ARCHIVED'])
 	{
@@ -4071,51 +4076,51 @@ function print_one_job($editing)
 		<td $ar>VILNO</td>
 		<td>" . input_textbox('j_vilno', $job['J_VILNO'], $szsmall2, 20, $onchange_num_m) . "</td>
 		";
-		if ($manager_x)
+	if ($manager_x)
+	{
+		$group_add_button = "Group with VILNO " . input_textbox('group_addition', '', 6, 20, "$style_r $onchange_grpadd") . "";
+		$group_del_button = input_button('Remove from Group', "remove_from_group()");
+		if ($job['GROUP_MEMBERS'] || $user_debug)
 		{
-			$group_add_button = "Group with VILNO " . input_textbox('group_addition', '', 6, 20, "$style_r $onchange_grpadd") . "";
-			$group_del_button = input_button('Remove from Group', "remove_from_group()");
-			if ($job['GROUP_MEMBERS'] || $user_debug)
-			{
-				print "
+			print "
 				$gap
 				<td $ar>Grouping</td>
 				";
-				if ($job['GROUP_MEMBERS'])
-					print "<td $ar $at>Job Group Members:</td>";
-				else
-					print "<td>" . input_textbox('x', 'This job is not in a group.', $szmid, '', 'readonly') . "</td><td $col2></td>";
-				print "
+			if ($job['GROUP_MEMBERS'])
+				print "<td $ar $at>Job Group Members:</td>";
+			else
+				print "<td>" . input_textbox('x', 'This job is not in a group.', $szmid, '', 'readonly') . "</td><td $col2></td>";
+			print "
 				<td $col8>";
-				if ($job['GROUP_MEMBERS'])
+			if ($job['GROUP_MEMBERS'])
+			{
+				print "<table>";
+				$gix = 0;
+				foreach ($job['GROUP_MEMBERS'] as $member)
 				{
-					print "<table>";
-					$gix = 0;
-					foreach ($job['GROUP_MEMBERS'] as $member)
+					if (($gix % 5) == 0)
 					{
-						if (($gix % 5) == 0)
-						{
-							if (0 < $gix)
-								print "</tr>";
-							print "<tr>";
-						}
-						print "<td>" . input_button("{$member['J_VILNO']}/{$member['J_SEQUENCE']}", "goto_job({$member['JOB_ID']},{$member['J_VILNO']});") . "</td>";
-						$gix++;
+						if (0 < $gix)
+							print "</tr>";
+						print "<tr>";
 					}
-					print "</tr></table>";
-					#print print_r($job['GROUP_MEMBERS'],1);
+					print "<td>" . input_button("{$member['J_VILNO']}/{$member['J_SEQUENCE']}", "goto_job({$member['JOB_ID']},{$member['J_VILNO']});") . "</td>";
+					$gix++;
 				}
-				else
-					print "&nbsp;";
-				if ($editing && (!$eon))
-					print "&nbsp;&nbsp;&nbsp;$group_add_button" . ($job['GROUP_MEMBERS'] ? "&nbsp;&nbsp;&nbsp;$group_del_button" : '');
+				print "</tr></table>";
+				#print print_r($job['GROUP_MEMBERS'],1);
 			}
-			elseif ($editing && (!$eon))
-				print "<td $col10>$group_add_button</td>";
+			else
+				print "&nbsp;";
+			if ($editing && (!$eon))
+				print "&nbsp;&nbsp;&nbsp;$group_add_button" . ($job['GROUP_MEMBERS'] ? "&nbsp;&nbsp;&nbsp;$group_del_button" : '');
 		}
-		else
-			print "<td $col10></td>";
-		print "
+		elseif ($editing && (!$eon))
+			print "<td $col10>$group_add_button</td>";
+	}
+	else
+		print "<td $col10></td>";
+	print "
 	</tr>
 	<tr>
 		<td $ar>Sequence</td>
@@ -4124,7 +4129,7 @@ function print_one_job($editing)
 		<td $ar $client_dblclick>Client</td>
 		<td $col4>" . input_select('client2_id', $clients, $job['CLIENT2_ID'], "$onchange_sel_m style=\"width:350px;\"") . "</td>
 		<td $col2>" . input_button("Go to client (in new tab)", "goto_client('{$job['CLIENT2_ID']}','{$job['C_CODE']}');",
-									$manager_x ? '' : 'disabled') . "
+			$manager_x ? '' : 'disabled') . "
 			" . input_hidden('c_closeout', $job['C_CLOSEOUT']) . "
 			</td>
 		$gap
@@ -4132,20 +4137,20 @@ function print_one_job($editing)
 	</tr>
 	<tr>
 		";
-		#if ($trace_job)
-		#{
-			$j_opened_dt = ($trace_job ? date_for_sql($job['J_OPENED_DT'], true, true, true, false, false, false, false, true)
-										: date_for_sql($job['J_OPENED_DT'], true, false, true));
-			print "
+	#if ($trace_job)
+	#{
+	$j_opened_dt = ($trace_job ? date_for_sql($job['J_OPENED_DT'], true, true, true, false, false, false, false, true)
+		: date_for_sql($job['J_OPENED_DT'], true, false, true));
+	print "
 			<td $ar>Received</td>
 			<td>" . input_textbox('j_opened_dt', $j_opened_dt, $szsmall2, 20, $onchange_dt_m) . "</td>
 			$gap
 			";
-		#}
-		#else
-		#	print "
-		#			$gap";
-		print "
+	#}
+	#else
+	#	print "
+	#			$gap";
+	print "
 		<td $ar>Client Ref</td>
 		<td $col3>" . input_textbox('client_ref', $job['CLIENT_REF'], $szmid, 100, $onchange_txt_m) . "</td>
 		$gap
@@ -4154,7 +4159,7 @@ function print_one_job($editing)
 		";
 //		<td $ar>...Referrer</td>
 //		<td>" . input_textbox('j_referrer', $job['J_REFERRER'], $szmid, 1000, $onchange_txt) . "</td>
-		print "
+	print "
 	</tr>
 	<tr>
 		<td $ar>Agent</td>
@@ -4166,58 +4171,58 @@ function print_one_job($editing)
 		$gap
 		$gap
 		";
-		if ($trace_job)
-		{
-			print "
+	if ($trace_job)
+	{
+		print "
 			<td $ar>" . input_tickbox('', 'j_available', 1, $job['J_AVAILABLE'], $onchange_tck_ja, $extra_tck_ja) . "</td>
 			<td>Available to Agents</td>
 			";
-		}
-		else
-			print "<td $col2>" . input_hidden('j_available', $job['J_AVAILABLE']) . "</td>";
-		print "
+	}
+	else
+		print "<td $col2>" . input_hidden('j_available', $job['J_AVAILABLE']) . "</td>";
+	print "
 		$gap
 		<td $ar $ab>" . str_replace(' ', '&nbsp;', 'Job last updated') . "</td>
 		<td $ab>" . input_textbox('j_updated_dt', $job['J_UPDATED_DT'] ?
-								date_for_sql($job['J_UPDATED_DT'], true, true, true, false, false, false, false, true)
-								: 'n/a', $szsmall2, 10, 'readonly') . "</td>
+			date_for_sql($job['J_UPDATED_DT'], true, true, true, false, false, false, false, true)
+			: 'n/a', $szsmall2, 10, 'readonly') . "</td>
 	</tr>
 	<tr>
 		<td $ar $at>Job is </td>
 		<td>" . input_textbox('job_closed_txt', $job_is, $szsmall2, 0, 'readonly') . input_hidden('job_closed', $job['JOB_CLOSED']) .  "</td>
 		";
-		if ((!$editing) || $job['JOB_CLOSED']) #(0 < $job['J_CLOSED_ID']))
-			print "
+	if ((!$editing) || $job['JOB_CLOSED']) #(0 < $job['J_CLOSED_ID']))
+		print "
 			$gap
 			<td $ar $at>Closed&nbsp;by</td>
 			<td $at>" . input_select('j_closed_id', $agents_all, $job['J_CLOSED_ID'], 'disabled') . "</td>
 			<td $ar $at>...on</td>
 			<td $at>" . input_textbox('j_closed_dt', date_for_sql($job['J_CLOSED_DT'], true, true, true, false, false, false, false, true),
-										$szsmall2, 10, 'readonly') . "</td>
+				$szsmall2, 10, 'readonly') . "</td>
 			";
-		elseif ($manager_x)
-			print "
+	elseif ($manager_x)
+		print "
 			<td $col2 $at>" . ($trace_job ? '' : input_button('Close Job', 'close_job()')) . "</td>
 			<td $col3 $at></td>
 			";
-		print "
+	print "
 		$gap
 			";
-		if ($trace_job)
-		{
-			print "
+	if ($trace_job)
+	{
+		print "
 			<td $ar $at>Target End</td>
 			<td $at>" . input_textbox('j_target_dt', date_for_sql($job['J_TARGET_DT'], true, true, true, false, false, false, false, true),
-										$szsmall2, 20, $onchange_dt_m) .
-							(($editing && (!$eon)) ? calendar_icon('j_target_dt') : '') . "</td>
+				$szsmall2, 20, $onchange_dt_m) .
+			(($editing && (!$eon)) ? calendar_icon('j_target_dt') : '') . "</td>
 			$gap
 			";
-			if ($editing && (!$eon))
-				$calendar_names[] = "j_target_dt";
-		}
-		else
-			print "<td $col2></td>";
-		print "
+		if ($editing && (!$eon))
+			$calendar_names[] = "j_target_dt";
+	}
+	else
+		print "<td $col2></td>";
+	print "
 	</tr>
 	";
 	if (!$trace_job)
@@ -4242,32 +4247,32 @@ function print_one_job($editing)
 //				print input_button('Reopen', 'reopen_job()', "style=\"width:88px\"") . " " .
 //						($manager_x ? input_button('Archive', 'archive_job()', "style=\"width:88px\"") : '');
 //		}
-		if ($editing && $manager_x)
+	if ($editing && $manager_x)
+	{
+		if ($job['J_ARCHIVED'])
+			print input_button('Un-archive this job', 'unarchive_job()');
+		else
 		{
-			if ($job['J_ARCHIVED'])
-				print input_button('Un-archive this job', 'unarchive_job()');
-			else
-			{
-				if ($job['JOB_CLOSED'])
-					print input_button('Reopen', 'reopen_job()', "style=\"width:88px\"") . " " .
-							input_button('Archive', 'archive_job()', "style=\"width:88px\"");
-				print " " . ($trace_job ? input_button('Clone Job', 'clone_job()', "style=\"width:88px\"") : '');
-			}
+			if ($job['JOB_CLOSED'])
+				print input_button('Reopen', 'reopen_job()', "style=\"width:88px\"") . " " .
+					input_button('Archive', 'archive_job()', "style=\"width:88px\"");
+			print " " . ($trace_job ? input_button('Clone Job', 'clone_job()', "style=\"width:88px\"") : '');
 		}
-		print "
+	}
+	print "
 		</td>
 	</tr>
 	<tr>
 		<td $col11>&nbsp;</td>
 		";
-		if ($trace_job)
-		{
+	if ($trace_job)
+	{
 //			print "
 //			<td $ar>Turn-around in hours</td>
 //			<td>" . input_textbox('j_turn_h', $job['TRACE_DETAILS']['J_TURN_H'], 2, 4, $onchange_num . $style_r) . "</td>
 //			";
-		}
-		print "
+	}
+	print "
 	</tr>
 	";
 
@@ -4281,8 +4286,8 @@ function print_one_job($editing)
 			<td $at></td>
 			<td colspan=\"" . ($numcols-1) . "\">
 				";
-				print_one_job_trace($job, $editing && (!$eon), $open, $editing);
-				print "
+		print_one_job_trace($job, $editing && (!$eon), $open, $editing);
+		print "
 			</td>
 		</tr>
 		";
@@ -4322,42 +4327,42 @@ function print_one_job($editing)
 	print "
 	<tr>
 		<td $at $ar rowspan=\"2\">$subject_heading" .
-					(($editing && $open && (!$eon) && $manager_x) ? ("<br>" . input_button('Add' . chr(13)	 . 'New', 'add_subject()')) : '') . "</td>
+		(($editing && $open && (!$eon) && $manager_x) ? ("<br>" . input_button('Add' . chr(13)	 . 'New', 'add_subject()')) : '') . "</td>
 		<td $at $col6 rowspan=\"2\">
 			<div id=\"div_subjects\" style=\"height:{$div_h_x2}px; overflow-y:scroll; border:solid gray 1px;\">
 			<table class=\"basic_table\" id=\"table_subjects\" width=\"100%\" border=\"0\"><!---->
 			";
-			foreach ($job['SUBJECTS'] as $sub)
-			{
-				$editing2 = $editing && $open && (!$eon);
-				$tcol = '';
-				if ($sub['OBSOLETE'])
-				{
-					if (!($editing && $open && (!$eon)))
-						continue;
-					$editing2 = false;
-					$tcol = "style=\"color:red;\"";
-				}
+	foreach ($job['SUBJECTS'] as $sub)
+	{
+		$editing2 = $editing && $open && (!$eon);
+		$tcol = '';
+		if ($sub['OBSOLETE'])
+		{
+			if (!($editing && $open && (!$eon)))
+				continue;
+			$editing2 = false;
+			$tcol = "style=\"color:red;\"";
+		}
 
-				$id = $sub['JOB_SUBJECT_ID'];
-				#$aid = '';
-				#if ($id == $added_subject_id)
-				#	$aid = "id=\"js_{$added_subject_id}\"";
+		$id = $sub['JOB_SUBJECT_ID'];
+		#$aid = '';
+		#if ($id == $added_subject_id)
+		#	$aid = "id=\"js_{$added_subject_id}\"";
 
-				$onchange_sub_txt = ($editing2 ? "onchange=\"update_subject(this,$id);\"" : 'readonly');
-				$onchange_sub_txt_m = (($manager_x && $editing2) ? "onchange=\"update_subject(this,$id);\"" : 'readonly');
-				$onchange_sub_txt_adr = ((($manager_x || $agent_c) && $editing2) ? "onchange=\"update_subject(this,$id);\"" : 'readonly');
-				$onkey_subject = (($manager_x && $editing2) ? "onkeyup=\"subject_lookup($id);\"" : '');
-				#$onchange_sub_num = ($editing2 ? "onchange=\"update_subject(this,$id,'n');\"" : 'readonly');
-				#$onchange_sub_sel = ($editing2 ? "onchange=\"update_subject(this,$id,'n');\"" : 'disabled');
-				$onchange_sub_dt = ($editing2 ? "onchange=\"update_subject(this,$id,'d');\"" : 'readonly');
-				#$onchange_sub_tck = ($editing2 ? "update_subject(this,$id,'t')" : '');
-				#$extra_sub_tck = ($editing2 ? '' : 'disabled');
-				$onchange_sub_tck_m = (($manager_x && $editing2) ? "update_subject(this,$id,'t')" : '');
-				$extra_sub_tck_m = (($manager_x && $editing2) ? '' : 'disabled');
-				$onchange_sub_obs = (($editing && $open && (!$eon)) ? "update_subject(this,$id,'t')" : '');
-				$extra_obs = (($editing && $open && (!$eon)) ? '' : 'disabled');
-				print "
+		$onchange_sub_txt = ($editing2 ? "onchange=\"update_subject(this,$id);\"" : 'readonly');
+		$onchange_sub_txt_m = (($manager_x && $editing2) ? "onchange=\"update_subject(this,$id);\"" : 'readonly');
+		$onchange_sub_txt_adr = ((($manager_x || $agent_c) && $editing2) ? "onchange=\"update_subject(this,$id);\"" : 'readonly');
+		$onkey_subject = (($manager_x && $editing2) ? "onkeyup=\"subject_lookup($id);\"" : '');
+		#$onchange_sub_num = ($editing2 ? "onchange=\"update_subject(this,$id,'n');\"" : 'readonly');
+		#$onchange_sub_sel = ($editing2 ? "onchange=\"update_subject(this,$id,'n');\"" : 'disabled');
+		$onchange_sub_dt = ($editing2 ? "onchange=\"update_subject(this,$id,'d');\"" : 'readonly');
+		#$onchange_sub_tck = ($editing2 ? "update_subject(this,$id,'t')" : '');
+		#$extra_sub_tck = ($editing2 ? '' : 'disabled');
+		$onchange_sub_tck_m = (($manager_x && $editing2) ? "update_subject(this,$id,'t')" : '');
+		$extra_sub_tck_m = (($manager_x && $editing2) ? '' : 'disabled');
+		$onchange_sub_obs = (($editing && $open && (!$eon)) ? "update_subject(this,$id,'t')" : '');
+		$extra_obs = (($editing && $open && (!$eon)) ? '' : 'disabled');
+		print "
 				<tr><td $tcol $aid>Title</td>	<td>" . input_textbox('js_title', $sub['JS_TITLE'], $szsmall, 10, $onchange_sub_txt_m) . "</td>
 					<td $tcol $ar>" . input_tickbox('Primary', 'js_primary', 1, $sub['JS_PRIMARY'], $onchange_sub_tck_m, $extra_sub_tck_m) . "</td>
 					" . ($user_debug ? "<td $grey>&nbsp;&nbsp;DB ID: $id</td>" : '') . "
@@ -4369,11 +4374,11 @@ function print_one_job($editing)
 					</tr>
 				<tr><td $tcol>Company</td>		<td $col2>" . input_textbox('js_company', $sub['JS_COMPANY'], $szlong, 100, $onchange_sub_txt_m) . "</td></tr>
 				";
-				if ($trace_job)
-					print "
+		if ($trace_job)
+			print "
 						<tr><td $tcol $gry $col3>Address supplied by client:</td></tr>
 						";
-				print "
+		print "
 				<tr><td $tcol $gry>Addr 1</td>		<td $col2>" . input_textbox('js_addr_1', $sub['JS_ADDR_1'], $szlong, 100, $onchange_sub_txt_adr) . "</td></tr>
 				<tr><td $tcol $gry>Addr 2</td>		<td $col2>" . input_textbox('js_addr_2', $sub['JS_ADDR_2'], $szlong, 100, $onchange_sub_txt_adr) . "</td></tr>
 				<tr><td $tcol $gry>Addr 3</td>		<td $col2>" . input_textbox('js_addr_3', $sub['JS_ADDR_3'], $szlong, 100, $onchange_sub_txt_adr) . "</td></tr>
@@ -4384,16 +4389,16 @@ function print_one_job($editing)
 					<td>" . input_textbox('js_addr_pc', $sub['JS_ADDR_PC'] . (global_debug() ? "({$sub['JS_OUTCODE']})" : ''), $szsmall, 10, $onchange_sub_txt_adr) . "&nbsp;&nbsp;
 						" . input_button('Look-up', "postcode_lookup('js_addr_pc','{$sub['JS_ADDR_PC']}')") . "</td>
 					";
-					if ((!$trace_job) && $editing2)
-						print "
+		if ((!$trace_job) && $editing2)
+			print "
 						<td $ar>" . input_button('Add New Address', "new_address($id)") . "</td>
 						";
-					print "
+		print "
 				</tr>
 				";
-				if ($trace_job)
-				{
-					print "
+		if ($trace_job)
+		{
+			print "
 					<tr><td $col3 $tcol $pink>New Address:</td></tr>
 					<tr><td $tcol $pink>Addr 1</td>		<td $col2>" . input_textbox('new_addr_1', $sub['NEW_ADDR_1'], $szlong, 100, $onchange_sub_txt) . "</td></tr>
 					<tr><td $tcol $pink>Addr 2</td>		<td $col2>" . input_textbox('new_addr_2', $sub['NEW_ADDR_2'], $szlong, 100, $onchange_sub_txt) . "</td></tr>
@@ -4406,25 +4411,25 @@ function print_one_job($editing)
 							" . input_button('Look-up', "postcode_lookup('new_addr_pc','{$sub['NEW_ADDR_PC']}')") . "</td>
 					</tr>
 					";
-				}
-				print "
+		}
+		print "
 				<tr><td $tcol>D.O.B.</td>		<td>" . input_textbox('js_dob', date_for_sql($sub['JS_DOB'], true, false), $szsmall, 0, $onchange_sub_dt) . "</td></tr>
 				";
-				if ($editing && (!$eon) && $sub['OBSOLETE'])
-					print "
+		if ($editing && (!$eon) && $sub['OBSOLETE'])
+			print "
 					<tr><td>Obsolete</td>	<td>" . input_tickbox('', 'obsolete', 1, $sub['OBSOLETE'], $onchange_sub_obs, $extra_obs) . "</td></tr>
 					";
-				if ((!$trace_job) && $sub['ADDRESS_HISTORY'])
-				{
-					$tcol = "style=\"color:grey;\"";
-					foreach ($sub['ADDRESS_HISTORY'] as $hist)
-					{
-						$ad_from = ($hist['AD_FROM_DT'] ? date_for_sql($hist['AD_FROM_DT'], true, false) : '');
-						if ($ad_from == '01/01/1900')
-							$ad_from = '';
-						$ad_to = date_for_sql($hist['AD_TO_DT'], true, false);
-						$date_range = ($ad_from ? "between $ad_from and $ad_to" : "up to $ad_to");
-						print "
+		if ((!$trace_job) && $sub['ADDRESS_HISTORY'])
+		{
+			$tcol = "style=\"color:grey;\"";
+			foreach ($sub['ADDRESS_HISTORY'] as $hist)
+			{
+				$ad_from = ($hist['AD_FROM_DT'] ? date_for_sql($hist['AD_FROM_DT'], true, false) : '');
+				if ($ad_from == '01/01/1900')
+					$ad_from = '';
+				$ad_to = date_for_sql($hist['AD_TO_DT'], true, false);
+				$date_range = ($ad_from ? "between $ad_from and $ad_to" : "up to $ad_to");
+				print "
 						<tr><td $col3>Old Address ($date_range):</td></tr>
 						<tr><td $tcol>Addr 1</td> <td $col2>" . input_textbox('addr_1', $hist['ADDR_1'], $szlong, 100, "$tcol readonly") . "</td></tr>
 						<tr><td $tcol>Addr 2</td> <td $col2>" . input_textbox('addr_2', $hist['ADDR_2'], $szlong, 100, "$tcol readonly") . "</td></tr>
@@ -4437,11 +4442,11 @@ function print_one_job($editing)
 								" . input_button('Look-up', "postcode_lookup('','{$hist['ADDR_PC']}')") . "</td>
 						</tr>
 						";
-					}
-				}
-				if (!$trace_job)
-				{
-					print "
+			}
+		}
+		if (!$trace_job)
+		{
+			print "
 					<tr>
 						<td>Bank name</td> <td $col2>" . input_textbox('js_bank_name', $sub['JS_BANK_NAME'], $szlong, 100, "$tcol $onchange_sub_txt") . "</td>
 					</tr>
@@ -4459,12 +4464,12 @@ function print_one_job($editing)
 							<td $col2 $at>" . input_textbox('js_bank_country', $sub['JS_BANK_COUNTRY'], $szlong, 100, "$tcol $onchange_sub_txt") . "</td>
 					</tr>
 					";
-				}
-				print "
+		}
+		print "
 				<tr><td $col4><hr></td></tr>
 				";
-			} # foreach subject
-			print "
+	} # foreach subject
+	print "
 			</table><!--table_subjects-->
 		</div><!--div_subjects-->
 		</td>
@@ -4474,38 +4479,38 @@ function print_one_job($editing)
 			<div id=\"div_phones\" style=\"height:{$div_h}px; overflow-y:scroll; border:solid gray 1px;\">
 			<table class=\"basic_table\" id=\"table_phones\" width=\"100%\" border=\"0\"><!---->
 			<tr><td $ac>Phone</td><td $ac>Primary</td><td $ac>Obsolete</td><td $ac $grey>Imported</td>" .
-				($user_debug ? "<td $ac $grey>From<br>PHONES.DBF</td><td $ac $grey>DB ID</td>" : '') . "
+		($user_debug ? "<td $ac $grey>From<br>PHONES.DBF</td><td $ac $grey>DB ID</td>" : '') . "
 			";
-			foreach ($job['PHONES'] as $phone)
-			{
-				$editing2 = $editing && $open && (!$eon);
-				$tcol = '';
-				if ($phone['OBSOLETE'])
-				{
-					if (!($editing && $open && (!$eon)))
-						continue;
-					$editing2 = false;
-					$tcol = "style=\"color:red;\"";
-				}
+	foreach ($job['PHONES'] as $phone)
+	{
+		$editing2 = $editing && $open && (!$eon);
+		$tcol = '';
+		if ($phone['OBSOLETE'])
+		{
+			if (!($editing && $open && (!$eon)))
+				continue;
+			$editing2 = false;
+			$tcol = "style=\"color:red;\"";
+		}
 
-				$id = $phone['JOB_PHONE_ID'];
-				#$aid = '';
-				#if ($id == $added_phone_id)
-				#	$aid = "id=\"jp_{$added_phone_id}\"";
+		$id = $phone['JOB_PHONE_ID'];
+		#$aid = '';
+		#if ($id == $added_phone_id)
+		#	$aid = "id=\"jp_{$added_phone_id}\"";
 
-				$onchange_ph_txt = ($editing2 ? "onchange=\"update_phone(this,$id);\"" : 'readonly');
-				#$onchange_ph_num = ($editing2 ? "onchange=\"update_phone(this,$id,'n');\"" : 'readonly');
-				#$onchange_ph_sel = ($editing2 ? "onchange=\"update_phone(this,$id,'n');\"" : 'disabled');
-				#$onchange_ph_dt = ($editing2 ? "onchange=\"update_phone(this,$id,'d');\"" : 'readonly');
-				$onchange_ph_tck = ($editing2 ? "update_phone(this,$id,'t')" : '');
-				$extra_ph_tck = ($editing2 ? '' : 'disabled');
-				$onchange_ph_obs = (($editing && $open && (!$eon)) ? "update_phone(this,$id,'t')" : '');
-				$extra_obs = (($editing && $open && (!$eon)) ? '' : 'disabled');
+		$onchange_ph_txt = ($editing2 ? "onchange=\"update_phone(this,$id);\"" : 'readonly');
+		#$onchange_ph_num = ($editing2 ? "onchange=\"update_phone(this,$id,'n');\"" : 'readonly');
+		#$onchange_ph_sel = ($editing2 ? "onchange=\"update_phone(this,$id,'n');\"" : 'disabled');
+		#$onchange_ph_dt = ($editing2 ? "onchange=\"update_phone(this,$id,'d');\"" : 'readonly');
+		$onchange_ph_tck = ($editing2 ? "update_phone(this,$id,'t')" : '');
+		$extra_ph_tck = ($editing2 ? '' : 'disabled');
+		$onchange_ph_obs = (($editing && $open && (!$eon)) ? "update_phone(this,$id,'t')" : '');
+		$extra_obs = (($editing && $open && (!$eon)) ? '' : 'disabled');
 
-				$p_imported = (($phone['IMPORTED'] == 1) ? 'Yes' : 'No');
-				$imp_ph = (($phone['IMP_PH'] == 1) ? 'Yes' : 'No');
+		$p_imported = (($phone['IMPORTED'] == 1) ? 'Yes' : 'No');
+		$imp_ph = (($phone['IMP_PH'] == 1) ? 'Yes' : 'No');
 
-				print "
+		print "
 				<tr>
 					<td $aid>" . input_textbox('jp_phone', $phone['JP_PHONE'], $szmid, 0, "$onchange_ph_txt $tcol") . "</td>
 					<td $ac>" . input_tickbox('Pri.', 'jp_primary_p', 1, $phone['JP_PRIMARY_P'], $onchange_ph_tck, $extra_ph_tck, false) . "</td>
@@ -4525,8 +4530,8 @@ function print_one_job($editing)
 				<tr>
 				</tr>
 				";
-			}
-			print "
+	}
+	print "
 			</table><!--table_phones-->
 		</div><!--div_phones-->
 		<br>
@@ -4540,38 +4545,38 @@ function print_one_job($editing)
 			<div id=\"div_emails\" style=\"height:{$div_h}px; overflow-y:scroll; border:solid gray 1px;\">
 			<table class=\"basic_table\" id=\"table_emails\" width=\"100%\" border=\"0\"><!---->
 			<tr><td $ac>Email</td><td $ac>Primary</td><td $ac>Obsolete</td><td $ac $grey>Imported</td>" .
-				($user_debug ? "<td $ac $grey>From<br>PHONES.DBF</td><td $ac $grey>DB ID</td>" : '') . "
+		($user_debug ? "<td $ac $grey>From<br>PHONES.DBF</td><td $ac $grey>DB ID</td>" : '') . "
 			";
-			foreach ($job['EMAILS'] as $email)
-			{
-				$editing2 = $editing && $open && (!$eon);
-				$tcol = '';
-				if ($email['OBSOLETE'])
-				{
-					if (!($editing && $open && (!$eon)))
-						continue;
-					$editing2 = false;
-					$tcol = "style=\"color:red;\"";
-				}
+	foreach ($job['EMAILS'] as $email)
+	{
+		$editing2 = $editing && $open && (!$eon);
+		$tcol = '';
+		if ($email['OBSOLETE'])
+		{
+			if (!($editing && $open && (!$eon)))
+				continue;
+			$editing2 = false;
+			$tcol = "style=\"color:red;\"";
+		}
 
-				$id = $email['JOB_PHONE_ID'];
-				#$aid = '';
-				#if ($id == $added_email_id)
-				#	$aid = "id=\"jp_{$added_email_id}\"";
+		$id = $email['JOB_PHONE_ID'];
+		#$aid = '';
+		#if ($id == $added_email_id)
+		#	$aid = "id=\"jp_{$added_email_id}\"";
 
-				$onchange_ph_txt = ($editing2 ? "onchange=\"update_phone(this,$id);\"" : 'readonly');
-				#$onchange_ph_num = ($editing2 ? "onchange=\"update_phone(this,$id,'n');\"" : 'readonly');
-				#$onchange_ph_sel = ($editing2 ? "onchange=\"update_phone(this,$id,'n');\"" : 'disabled');
-				#$onchange_ph_dt = ($editing2 ? "onchange=\"update_phone(this,$id,'d');\"" : 'readonly');
-				$onchange_ph_tck = ($editing2 ? "update_phone(this,$id,'t')" : '');
-				$extra_ph_tck = ($editing2 ? '' : 'disabled');
-				$onchange_ph_obs = (($editing && $open && (!$eon)) ? "update_phone(this,$id,'t')" : '');
-				$extra_obs = (($editing && $open && (!$eon)) ? '' : 'disabled');
+		$onchange_ph_txt = ($editing2 ? "onchange=\"update_phone(this,$id);\"" : 'readonly');
+		#$onchange_ph_num = ($editing2 ? "onchange=\"update_phone(this,$id,'n');\"" : 'readonly');
+		#$onchange_ph_sel = ($editing2 ? "onchange=\"update_phone(this,$id,'n');\"" : 'disabled');
+		#$onchange_ph_dt = ($editing2 ? "onchange=\"update_phone(this,$id,'d');\"" : 'readonly');
+		$onchange_ph_tck = ($editing2 ? "update_phone(this,$id,'t')" : '');
+		$extra_ph_tck = ($editing2 ? '' : 'disabled');
+		$onchange_ph_obs = (($editing && $open && (!$eon)) ? "update_phone(this,$id,'t')" : '');
+		$extra_obs = (($editing && $open && (!$eon)) ? '' : 'disabled');
 
-				$p_imported = (($email['IMPORTED'] == 1) ? 'Yes' : 'No');
-				$imp_ph = (($email['IMP_PH'] == 1) ? 'Yes' : 'No');
+		$p_imported = (($email['IMPORTED'] == 1) ? 'Yes' : 'No');
+		$imp_ph = (($email['IMP_PH'] == 1) ? 'Yes' : 'No');
 
-				print "
+		print "
 				<tr>
 					<td $aid>" . input_textbox('jp_email', $email['JP_EMAIL'], $szmid, 0, "$onchange_ph_txt $tcol") . "</td>
 					<td $ac>" . input_tickbox('Pri.', 'jp_primary_e', 1, $email['JP_PRIMARY_E'], $onchange_ph_tck, $extra_ph_tck, false) . "</td>
@@ -4591,8 +4596,8 @@ function print_one_job($editing)
 				<tr>
 				</tr>
 				";
-			}
-			print "
+	}
+	print "
 			</table><!--table_emails-->
 		</div><!--div_emails-->
 		</td>
@@ -4612,23 +4617,23 @@ function print_one_job($editing)
 				" . ($user_debug ? "$gap<td $ac $grey>DB ID</td>" : '') . "
 			</tr>
 			";
-			foreach ($job['NOTES'] as $note)
-			{
-				$id = $note['JOB_NOTE_ID'];
-				$aid = '';
-				#if ($id == $added_note_id)
-				#	$aid = "id=\"jn_{$added_note_id}\"";
-				$added_dt = str_replace(' ', '<br>', date_for_sql($note['JN_ADDED_DT'], true, true, true, false, false, false, false, true));
-				$updated_dt = str_replace(' ', '<br>', date_for_sql($note['JN_UPDATED_DT'], true, true, true, false, false, false, false, true));
-				$onchange_note_txt = (($editing && ($open || $eon) && (!$note['IMPORTED'])) ? "onchange=\"update_note(this,$id);\"" : 'readonly');
+	foreach ($job['NOTES'] as $note)
+	{
+		$id = $note['JOB_NOTE_ID'];
+		$aid = '';
+		#if ($id == $added_note_id)
+		#	$aid = "id=\"jn_{$added_note_id}\"";
+		$added_dt = str_replace(' ', '<br>', date_for_sql($note['JN_ADDED_DT'], true, true, true, false, false, false, false, true));
+		$updated_dt = str_replace(' ', '<br>', date_for_sql($note['JN_UPDATED_DT'], true, true, true, false, false, false, false, true));
+		$onchange_note_txt = (($editing && ($open || $eon) && (!$note['IMPORTED'])) ? "onchange=\"update_note(this,$id);\"" : 'readonly');
 
-				$ta_rows_note = 5;
-				if ($note['IMPORTED'])
-				{
-					if (10 < strlen($note['J_NOTE']))
-						$ta_rows_note = 15;
-				}
-				print "
+		$ta_rows_note = 5;
+		if ($note['IMPORTED'])
+		{
+			if (10 < strlen($note['J_NOTE']))
+				$ta_rows_note = 15;
+		}
+		print "
 				<tr>
 					<td $aid>" . input_textarea('j_note', $ta_rows_note, $ta_cols, $note['J_NOTE'], $onchange_note_txt) . "</td>
 					$gap
@@ -4638,8 +4643,8 @@ function print_one_job($editing)
 					" . ($user_debug ? "$gap<td $ac $at $grey><br>$id</td>" : '') . "
 				</tr>
 				";
-			}
-			print "
+	}
+	print "
 			</table><!--table_notes-->
 		</div><!--div_notes-->
 		</td>
@@ -4663,34 +4668,34 @@ function print_one_job($editing)
 			print "
 			<tr>
 				<td $at>Billing";
-				if ($editing && (!$eon))
+			if ($editing && (!$eon))
+			{
+				if (0 < count($job['BILLING']))
+					print "<br>" . input_button('Refresh', 'billing_refresh()');
+				if ($editing && $open && (!$eon))
+					print "<br>" . input_button('Add new', 'billing_add()');
+				if ($editing && $open && (!$eon) && (0 < count($job['BILLING'])))# && (!$job['J_S_INVS']))# && $job['JOB_CLOSED'])
 				{
-					if (0 < count($job['BILLING']))
-						print "<br>" . input_button('Refresh', 'billing_refresh()');
-					if ($editing && $open && (!$eon))
-						print "<br>" . input_button('Add new', 'billing_add()');
-					if ($editing && $open && (!$eon) && (0 < count($job['BILLING'])))# && (!$job['J_S_INVS']))# && $job['JOB_CLOSED'])
+					if ($job['BILLING_COST_TOTAL'] < 0.0)
 					{
-						if ($job['BILLING_COST_TOTAL'] < 0.0)
-						{
-							$inv_type_text_1 = 'Credit';
-							$inv_type_text_2 = 'a credit';
-						}
-						else
-						{
-							$inv_type_text_1 = 'Invoice';
-							$inv_type_text_2 = 'an invoice';
-						}
-						print "<br><br>" . input_button(str_replace(' ', $crlf, "Create $inv_type_text_1"),
-														"add_trace_invoice({$job['J_S_INVS']},'$inv_type_text_2')");
+						$inv_type_text_1 = 'Credit';
+						$inv_type_text_2 = 'a credit';
 					}
+					else
+					{
+						$inv_type_text_1 = 'Invoice';
+						$inv_type_text_2 = 'an invoice';
+					}
+					print "<br><br>" . input_button(str_replace(' ', $crlf, "Create $inv_type_text_1"),
+							"add_trace_invoice({$job['J_S_INVS']},'$inv_type_text_2')");
 				}
-				print "
+			}
+			print "
 				</td>
 				<td $at colspan=\"" . ($numcols-1) . "\">
 					";
-					print_one_job_trace_bill($job, $editing && (!$eon), $open);
-					print "
+			print_one_job_trace_bill($job, $editing && (!$eon), $open);
+			print "
 				</td>
 			</tr>
 			";
@@ -4713,8 +4718,8 @@ function print_one_job($editing)
 			<td $at $ar>Collection<br>Details</td>
 			<td colspan=\"" . ($numcols-1) . "\">
 				";
-				print_one_job_collect($job, $editing && (!$eon), $open);
-				print "
+		print_one_job_collect($job, $editing && (!$eon), $open);
+		print "
 			</td>
 		</tr>
 		$jump_to_top
@@ -4723,15 +4728,15 @@ function print_one_job($editing)
 		</tr>
 		<tr id=\"section_payments\">
 			<td $at $ac>Payments<br><span style=\"color:blue;\">(adjustments<br>in blue)</span>" .
-					((($manager_c || $manager_a) && $editing && $open && (!$eon))
-						? ("<br>" . input_button('Refresh', 'payments_refresh()') . "<br>" .
-																			input_button('Add new', 'payments_add()', $manager_x ? '' : 'disabled'))
-						: '') . "
+			((($manager_c || $manager_a) && $editing && $open && (!$eon))
+				? ("<br>" . input_button('Refresh', 'payments_refresh()') . "<br>" .
+					input_button('Add new', 'payments_add()', $manager_x ? '' : 'disabled'))
+				: '') . "
 				</td>
 			<td colspan=\"" . ($numcols-1) . "\">
 				";
-				print_one_job_collect_pay($job, $editing && (!$eon), $open);
-				print "
+		print_one_job_collect_pay($job, $editing && (!$eon), $open);
+		print "
 			</td>
 		</tr>
 		$jump_to_top
@@ -4742,8 +4747,8 @@ function print_one_job($editing)
 			<td $at $ac>Schedule<br>calculated<br>from<br>arrange-<br>ment(s)<br><span style=\"color:blue\">(future<br>payments<br>in blue)</span></td>
 			<td colspan=\"" . ($numcols-1) . "\">
 				";
-				print_one_job_collect_schedule($job);
-				print "
+		print_one_job_collect_schedule($job);
+		print "
 			</td>
 		</tr>
 		$jump_to_top
@@ -4754,8 +4759,8 @@ function print_one_job($editing)
 			<td $at $ac>Combined<br>Schedule<br>and<br>Payments</td>
 			<td colspan=\"" . ($numcols-1) . "\">
 				";
-				print_one_job_collect_schpay($job); #($editing && $open) ? true : false);
-				print "
+		print_one_job_collect_schpay($job); #($editing && $open) ? true : false);
+		print "
 			</td>
 		</tr>
 		$jump_to_top
@@ -4767,14 +4772,14 @@ function print_one_job($editing)
 		</tr>
 		<tr>
 			<td $at>Activity" .
-					(($editing && $open && (!$eon)) ? ("<br>" . input_button('Refresh', 'activity_refresh()') .
-									"<br>" . input_textbox('act_new_count', 1, 2, 3, $style_r) .
-									"<br>" . input_button('Add new', 'activity_add()'))
-							: '') . "</td>
+			(($editing && $open && (!$eon)) ? ("<br>" . input_button('Refresh', 'activity_refresh()') .
+				"<br>" . input_textbox('act_new_count', 1, 2, 3, $style_r) .
+				"<br>" . input_button('Add new', 'activity_add()'))
+				: '') . "</td>
 			<td colspan=\"" . ($numcols-1) . "\">
 				";
-				print_one_job_collect_act($job, $editing && (!$eon), $open);
-				print "
+		print_one_job_collect_act($job, $editing && (!$eon), $open);
+		print "
 			</td>
 		</tr>
 		$jump_to_top
@@ -4822,15 +4827,15 @@ function print_one_job($editing)
 	</tr>
 	<tr>
 		";
-		if ($manager_x)
-			print "
+	if ($manager_x)
+		print "
 			<td $col2>" . input_button('Show Audit', "show_audit({$job['JOB_ID']})") . "</td>
 			";
-		if ($manager_x && $editing && $open && (!$eon))
-			print "
+	if ($manager_x && $editing && $open && (!$eon))
+		print "
 			<td></td>
 			<td $col2>" . input_button('Delete Job', "delete_job({$job['JOB_ID']})") . "</td>";
-		print "
+	print "
 	</tr>
 	<tr>
 		<td colspan=\"$numcols\"><hr style=\"border:1px solid $grey_colour;\"></td>
@@ -4848,11 +4853,11 @@ function print_one_job($editing)
 		<table class=\"basic_table\" border=\"1\">
 			<tr><th>Field</th><th>Value</th></tr>
 			";
-			foreach ($job['JOB_Z'] as $zf => $zv)
-				# Don't display first four characters "Z_" of field name (e.g. "Z_T_" or "Z_X_")
-				print "<tr><td>" . substr($zf, 4) . "</td><td>$zv</td></tr>
+		foreach ($job['JOB_Z'] as $zf => $zv)
+			# Don't display first four characters "Z_" of field name (e.g. "Z_T_" or "Z_X_")
+			print "<tr><td>" . substr($zf, 4) . "</td><td>$zv</td></tr>
 						";
-			print "
+		print "
 		$jump_to_top
 		</table>
 		";
@@ -4953,17 +4958,17 @@ function print_one_job_trace($job, $editing, $open, $trying_to_edit)
 		<td>" . input_select('jt_job_target_id', $targets, $job['TRACE_DETAILS']['JT_JOB_TARGET_ID'], $onchange_sel_m) . "</td>
 		$gap
 		";
-		if ($manager_t)
-		{
-			print "
+	if ($manager_t)
+	{
+		print "
 			<td $ar>Fee on success</td>
 			<td>" . input_textbox('jt_fee_y', money_format_kdb($details['JT_FEE_Y'], true, true, true), 4, 10, "$onchange_mon $style_r") . "</td>
 			$gap
 			<td $ar>Fee otherwise</td>
 			<td>" . input_textbox('jt_fee_n', money_format_kdb($details['JT_FEE_N'], true, true, true), 4, 10, "$onchange_mon $style_r") . "</td>
 			";
-		}
-		print "
+	}
+	print "
 	</tr>
 	<tr>
 		<td $ar>Complete</td>
@@ -5023,26 +5028,26 @@ function print_one_job_trace($job, $editing, $open, $trying_to_edit)
 		print "
 		<tr>
 			<td $col2>" . input_button('Submit for Approval', $job_review ? '' : "approval_submit()", $job_review ? 'disabled' : '',
-											'approval_button') . "</td>
+				'approval_button') . "</td>
 			";
-			if ($manager_t)
-				print "
+		if ($manager_t)
+			print "
 				$gap
 				<td $col2>" . input_button('Return to Agent', "approval_reject()") . "</td>
 				";
-			print "
+		print "
 			";
-			if ($manager_t)
+		if ($manager_t)
+		{
+			if ($editing && ($details['JT_JOB_TYPE_ID'] == $id_JOB_TYPE_tc))
 			{
-				if ($editing && ($details['JT_JOB_TYPE_ID'] == $id_JOB_TYPE_tc))
-				{
-					print "
+				print "
 					$gap
 					<td>" . input_button('Create Collection Job', 'create_collect_job()') . "</td>
 					";
-				}
 			}
-			print "
+		}
+		print "
 		</tr>
 		";
 	}
@@ -5144,7 +5149,7 @@ function print_one_job_collect($job, $editing, $open)
 	<tr>
 		<td $col3 $ar $at>Total Amount to be Paid</td>
 		<td $at>" . input_textbox('jc_total_amt', money_format_kdb($details['JC_TOTAL_AMT'], true, true, true), $szsmall, 10,
-									"$style_r " . ($manager_x ? $onchange_mon : 'readonly')) . "</td>
+			"$style_r " . ($manager_x ? $onchange_mon : 'readonly')) . "</td>
 		$gap
 		<td $ar $at>Paid so far</td>
 		<td $at>" . input_textbox('jc_paid_so_far', money_format_kdb($details['JC_PAID_SO_FAR'], true, true, true), $szsmall, 0, "$style_r $psf_edit") . "
@@ -5165,12 +5170,12 @@ function print_one_job_collect($job, $editing, $open)
 	<tr>
 		<td $col3>Collection Arrangement:</td>
 		";
-		if (($editing && $open))
-			print "
+	if (($editing && $open))
+		print "
 			<td $col8>&nbsp;</td>
 			<td $col2 $ar>" . input_button('Create New Arrangement', 'add_arrange()') . "</td>
 			";
-		print "
+	print "
 	</tr>
 	<tr>
 		<td $col3 $ar>Instalments</td>
@@ -5230,7 +5235,7 @@ function print_one_job_collect($job, $editing, $open)
 				$gap
 				<td $ar>Deposit</td>
 				<td>" . input_textbox('z_depamount', $prevar['Z_DEPAMOUNT'] ? money_format_kdb($prevar['Z_DEPAMOUNT'], true, true, true) : '',
-										$szsmall, 10, "$style_r readonly") . "</td>
+					$szsmall, 10, "$style_r readonly") . "</td>
 				$gap
 				<td $ar>Dep.Date</td>
 				<td>" . input_textbox('z_depdate', date_for_sql($prevar['Z_DEPDATE'], true, false), $szsmall, 10, "$style_r readonly") . "</td>
@@ -5370,7 +5375,7 @@ function print_one_job_collect_pay($job, $editing, $open)
 		#if ($id == $added_payment_id)
 		#	$aid = "id=\"j_{$added_payment_id}\"";
 		#else
-			$aid = '';
+		$aid = '';
 
 		$onchange_pmt_txt = (($editing && $open) ? "onchange=\"update_payment(this,$id);\"" : 'readonly');
 		#$onchange_pmt_num = (($editing && $open) ? "onchange=\"update_payment(this,$id,'n');\"" : 'readonly');
@@ -5401,8 +5406,8 @@ function print_one_job_collect_pay($job, $editing, $open)
 		#	$invoice_button = '';
 
 		$route = (($editing && $open) ?
-					input_select('col_payment_route_id', $payment_routes_sel, $details['COL_PAYMENT_ROUTE_ID'], $onchange_pmt_sel, false, false)
-					: $details['PAYMENT_ROUTE']);
+			input_select('col_payment_route_id', $payment_routes_sel, $details['COL_PAYMENT_ROUTE_ID'], $onchange_pmt_sel, false, false)
+			: $details['PAYMENT_ROUTE']);
 		$method = input_select('col_payment_method_id', $payment_methods_sel, $details['COL_PAYMENT_METHOD_ID'], $onchange_pmt_sel, false, false);
 		$adjust_reason = input_select('adjustment_id', $ADJUSTMENTS, $details['ADJUSTMENT_ID'], $onchange_pmt_sel, false, false);
 		$date = input_textbox('col_dt_rx', date_for_sql($details['COL_DT_RX'], true,false, true), 8, 10, "$style_r $onchange_pmt_dt");
@@ -5461,7 +5466,7 @@ function print_one_job_collect_pay($job, $editing, $open)
 	}
 	else
 		$pay_summary = "Number of payments: $count_pay, totalling " . money_format_kdb($sum, true, true, true) .
-							" (not including adjustments or bounced payments)";
+			" (not including adjustments or bounced payments)";
 
 	print "
 	$html_table
@@ -5493,7 +5498,7 @@ function print_one_job_collect_schedule($job)
 			if ($prev_start_dt && ($arrange['JA_INSTAL_DT_1'] == $prev_start_dt))
 				$jj--;
 			$arrangements[$jj] = array('START_DT' => $arrange['JA_INSTAL_DT_1'], 'AMOUNT' => $arrange['JA_INSTAL_AMT'],
-										'FREQ' => $arrange['JA_INSTAL_FREQ']);
+				'FREQ' => $arrange['JA_INSTAL_FREQ']);
 			$jj++;
 			$prev_start_dt = $arrange['JA_INSTAL_DT_1'];
 		}
@@ -5503,7 +5508,7 @@ function print_one_job_collect_schedule($job)
 		if ($prev_start_dt && ($job['COLLECT_DETAILS']['JC_INSTAL_DT_1'] == $prev_start_dt))
 			$jj--;
 		$arrangements[$jj] = array('START_DT' => $job['COLLECT_DETAILS']['JC_INSTAL_DT_1'], 'AMOUNT' => $job['COLLECT_DETAILS']['JC_INSTAL_AMT'],
-									'FREQ' => $job['COLLECT_DETAILS']['JC_INSTAL_FREQ']);
+			'FREQ' => $job['COLLECT_DETAILS']['JC_INSTAL_FREQ']);
 	}
 
 	$count_arr = count($arrangements);
@@ -5739,13 +5744,13 @@ function print_one_job_collect_act($job, $editing, $open)
 		$editing2 = $editing;
 		$all_acts = true;
 		if ($feedback_38){
-		if (!$manager_x)
-		{
-			if ((!$details['ACTIVITY_ID']) || array_key_exists($details['ACTIVITY_ID'], $activities_sel_nm))
-				$all_acts = false;
-			else
-				$editing2 = false;
-		}
+			if (!$manager_x)
+			{
+				if ((!$details['ACTIVITY_ID']) || array_key_exists($details['ACTIVITY_ID'], $activities_sel_nm))
+					$all_acts = false;
+				else
+					$editing2 = false;
+			}
 		}
 
 		$id = $details['JOB_ACT_ID'];
@@ -6016,7 +6021,7 @@ function request_next_trace_job()
 	$debug = false; #
 	if ($debug)
 		log_write("request_next_trace_job() for user {$USER['USER_ID']}");
-	
+
 	$job_stats = sql_agent_job_stats($USER['USER_ID']);
 
 	if (0 < $job_stats['OPEN_TRACE_COUNT_COMP_NO'])
@@ -6025,7 +6030,7 @@ function request_next_trace_job()
 		if ($job_stats['OPEN_TRACE_COUNT_COMP_NO'] == 1)
 			$msg = str_replace('jobs that are', 'job that is', $msg);
 		if ($debug) dlog($msg); else
-		dprint($msg, true);
+			dprint($msg, true);
 		return 0;
 	}
 
@@ -6035,7 +6040,7 @@ function request_next_trace_job()
 		if ($job_stats['OPEN_RETRACE_COUNT_COMP_NO'] == 1)
 			$msg = str_replace('jobs that are', 'job that is', $msg);
 		if ($debug) dlog($msg); else
-		dprint($msg, true);
+			dprint($msg, true);
 		return 0;
 	}
 
@@ -6045,7 +6050,7 @@ function request_next_trace_job()
 		if ($job_stats['OPEN_T_COUNT_COMP_NO'] == 1)
 			$msg = str_replace('open jobs', 'open job', $msg);
 		if ($debug) dlog($msg); else
-		dprint($msg, true);
+			dprint($msg, true);
 		return 0;
 	}
 
@@ -6065,13 +6070,13 @@ function request_next_trace_job()
 	{
 		$msg = "Sorry, no available jobs were found";
 		if ($debug) dlog($msg); else
-		dprint($msg, true);
+			dprint($msg, true);
 		return 0;
 	}
 
 	if ($debug)
 		log_write("request_next_trace_job(): assigning JOB_ID $job_id to user \"{$USER['USER_ID']}\"");
-		
+
 	# Assign this job to agent
 	assign_jobs_to_agent($USER['USER_ID'], array($job_id));
 
@@ -6199,40 +6204,40 @@ function print_one_job_trace_letter($job, $editing, $open, $numcols, $div_h_x2)
 			else
 				$sub_name .= ", $temp_name";
 		}
-		$temp = trim($sub['JS_ADDR_1']);
+		$temp = trim((string)$sub['JS_ADDR_1']);
 		if ($temp)
 			$sub_addr[] = $temp;
-		$temp = trim($sub['JS_ADDR_2']);
+		$temp = trim((string)$sub['JS_ADDR_2']);
 		if ($temp)
 			$sub_addr[] = $temp;
-		$temp = trim($sub['JS_ADDR_3']);
+		$temp = trim((string)$sub['JS_ADDR_3']);
 		if ($temp)
 			$sub_addr[] = $temp;
-		$temp = trim($sub['JS_ADDR_4']);
+		$temp = trim((string)$sub['JS_ADDR_4']);
 		if ($temp)
 			$sub_addr[] = $temp;
-		$temp = trim($sub['JS_ADDR_5']);
+		$temp = trim((string)$sub['JS_ADDR_5']);
 		if ($temp)
 			$sub_addr[] = $temp;
-		$temp = trim($sub['JS_ADDR_PC']);
+		$temp = trim((string)$sub['JS_ADDR_PC']);
 		if ($temp)
 			$sub_addr[] = $temp;
-		$temp = trim($sub['NEW_ADDR_1']);
+		$temp = trim((string)$sub['NEW_ADDR_1']);
 		if ($temp)
 			$new_addr[] = $temp;
-		$temp = trim($sub['NEW_ADDR_2']);
+		$temp = trim((string)$sub['NEW_ADDR_2']);
 		if ($temp)
 			$new_addr[] = $temp;
-		$temp = trim($sub['NEW_ADDR_3']);
+		$temp = trim((string)$sub['NEW_ADDR_3']);
 		if ($temp)
 			$new_addr[] = $temp;
-		$temp = trim($sub['NEW_ADDR_4']);
+		$temp = trim((string)$sub['NEW_ADDR_4']);
 		if ($temp)
 			$new_addr[] = $temp;
-		$temp = trim($sub['NEW_ADDR_5']);
+		$temp = trim((string)$sub['NEW_ADDR_5']);
 		if ($temp)
 			$new_addr[] = $temp;
-		$temp = trim($sub['NEW_ADDR_PC']);
+		$temp = trim((string)$sub['NEW_ADDR_PC']);
 		if ($temp)
 			$new_addr[] = $temp;
 	}
@@ -6241,16 +6246,16 @@ function print_one_job_trace_letter($job, $editing, $open, $numcols, $div_h_x2)
 		$letter_preview = $job['LETTERS_PENDING'][0]['JL_TEXT'];
 	elseif ($do_report || $do_letter)
 		$letter_preview = letter_for_trace_job($job['TRACE_DETAILS']['JT_JOB_TYPE_ID'], $job['TRACE_DETAILS']['JT_SUCCESS'],
-											$job['J_VILNO'], $job['CLIENT2_ID'], $job['CLIENT_REF'], $job['TRACE_DETAILS']['JT_LET_REPORT'],
-											$sub_name, $sub_addr, $new_addr, $job['PHONES']);
+			$job['J_VILNO'], $job['CLIENT2_ID'], $job['CLIENT_REF'], $job['TRACE_DETAILS']['JT_LET_REPORT'],
+			$sub_name, $sub_addr, $new_addr, $job['PHONES']);
 	else
 		$letter_preview = '';
 
 	$onchange_report_txt = (($editing && $open && $do_report && $agent_t) ? "onchange=\"update_job(this);\"" : 'readonly');
 	$onchange_report_tck = (($editing && $open && $manager_t &&
-								($do_report || ($do_letter && (!$letter_appr)))) ? "report_appr(this);" : '');
+		($do_report || ($do_letter && (!$letter_appr)))) ? "report_appr(this);" : '');
 	$extra_report_tck = (($editing && $open && $manager_t &&
-								($do_report || ($do_letter && (!$letter_appr)))) ? '' : 'disabled');
+		($do_report || ($do_letter && (!$letter_appr)))) ? '' : 'disabled');
 
 	$onchange_letter_txt = (($editing && $open && $do_letter && (!$letter_appr)) ? "onkeydown=\"letter_warn();\"" : 'readonly');
 	$onchange_letter_tck = (($manager_t && $editing && $open && $do_letter) ? "letter_approve(this);" : '');
@@ -6276,53 +6281,53 @@ function print_one_job_trace_letter($job, $editing, $open, $numcols, $div_h_x2)
 				&nbsp;Report Body<br>
 				&nbsp;" . input_textarea('jt_let_report', 16, $ta_cols, $job['TRACE_DETAILS']['JT_LET_REPORT'], $onchange_report_txt) . "<br>
 				&nbsp;" . ($do_report ? input_button('Check Spelling', 'spell_trace_report()', '', 'spellcheck_button') : '') . "&nbsp;" .
-										input_button('Save Report', "save_trace_report()", "style=\"display:none;\"", "save_report_button") . "
+		input_button('Save Report', "save_trace_report()", "style=\"display:none;\"", "save_report_button") . "
 				$biggap4" . input_tickbox('Report Approved', 'jt_report_appr', 1,
-									$job['TRACE_DETAILS']['JT_REPORT_APPR'] ? 1 : 0, $onchange_report_tck, $extra_report_tck) . "
+			$job['TRACE_DETAILS']['JT_REPORT_APPR'] ? 1 : 0, $onchange_report_tck, $extra_report_tck) . "
 			</div><!--div_report-->
 		</td>
 		$gap
 		<td $at colspan=\"$cols_preview\">
 			";
-			if (($manager_t || $manager_a) && ($do_report || $do_letter))
-			{
-				$div_h_ltr = (($editing && $letter_appr) ? 1.7 : 1.0) * $div_h_x2;
-				print "
+	if (($manager_t || $manager_a) && ($do_report || $do_letter))
+	{
+		$div_h_ltr = (($editing && $letter_appr) ? 1.7 : 1.0) * $div_h_x2;
+		print "
 				<div id=\"div_preview\" style=\"height:{$div_h_ltr}px; overflow-y:scroll; border:solid gray 1px;\">
 					&nbsp;" . (($do_report || (!$letter_appr)) ?
-								(input_button('Letter Preview', 'letter_preview_1()') . " &ndash; what the letter will look like when it is created")
-								: '') . "<br>
+				(input_button('Letter Preview', 'letter_preview_1()') . " &ndash; what the letter will look like when it is created")
+				: '') . "<br>
 					&nbsp;" . input_textarea('letter_preview', 15, $ta_cols, $letter_preview, $onchange_letter_txt) . "
 								" . input_hidden('letter_preview_id', $letter_id) . "<br>
 					<span style=\"color:red\" id=\"letter_warning\"></span>
 					&nbsp;";
-						if ($do_letter)
-						{
-							if ($editing && $open && (!$letter_appr))
-								print input_button('Check Spelling', 'spell_letter()', '', 'spellcheck_button') . "&nbsp;" .
-										input_button('Save Letter', "save_letter_preview('')");
-							print $biggap2;
-							if ($do_letter)
-								print input_tickbox('Letter Approved', 'jl_approved_dt', 1, $job['LETTERS_PENDING'][0]['JL_APPROVED_DT'] ? 1 : 0,
-														$onchange_letter_tck, $extra_letter_tck) . "&nbsp;&nbsp;";
-							if ($editing && $open && $letter_appr)
-							{
-								if ($pdf_url_pend)
-									print "
+		if ($do_letter)
+		{
+			if ($editing && $open && (!$letter_appr))
+				print input_button('Check Spelling', 'spell_letter()', '', 'spellcheck_button') . "&nbsp;" .
+					input_button('Save Letter', "save_letter_preview('')");
+			print $biggap2;
+			if ($do_letter)
+				print input_tickbox('Letter Approved', 'jl_approved_dt', 1, $job['LETTERS_PENDING'][0]['JL_APPROVED_DT'] ? 1 : 0,
+						$onchange_letter_tck, $extra_letter_tck) . "&nbsp;&nbsp;";
+			if ($editing && $open && $letter_appr)
+			{
+				if ($pdf_url_pend)
+					print "
 									<a href=\"$pdf_url_pend\" target=\"_blank\" rel=\"noopener\"><img src=\"images/pdf.png\" height=\"23\" width=\"23\"></a>&nbsp;&nbsp;&nbsp;";
-								#print input_button($pdf_button, "create_pdf('jl',$letter_id)"); # zero for not-yet-created letter ID
-							}
-							print "&nbsp;&nbsp;&nbsp;" . ($letter_id ? "<span $grey>ID $letter_id</span>" : '');
-							if ($editing && $open && $letter_appr)
-							{
-								$emails = sql_client_emails($job['CLIENT2_ID'], true);
-								$def_email = '';
-								foreach ($emails as $one_em)
-								{
-									$def_email = $one_em;
-									break; # just take the first one
-								}
-								print "
+				#print input_button($pdf_button, "create_pdf('jl',$letter_id)"); # zero for not-yet-created letter ID
+			}
+			print "&nbsp;&nbsp;&nbsp;" . ($letter_id ? "<span $grey>ID $letter_id</span>" : '');
+			if ($editing && $open && $letter_appr)
+			{
+				$emails = sql_client_emails($job['CLIENT2_ID'], true);
+				$def_email = '';
+				foreach ($emails as $one_em)
+				{
+					$def_email = $one_em;
+					break; # just take the first one
+				}
+				print "
 								<table name=\"email_table\" class=\"basic_table\" border=\"0\"><!---->
 								<tr>
 									<td>To:</td>
@@ -6335,13 +6340,13 @@ function print_one_job_trace_letter($job, $editing, $open, $numcols, $div_h_x2)
 								<tr>
 									<td $at>Message:</td>
 									<td>" . input_textarea('email_message', 5, 57,
-												"Please find attached our report" . ($invoice_trace_ex ? " and invoice" : "") .
-																				" in response to your recent Instruction.{$crlf}" .
-												$crlf .
-												$crlf .
-												"Best regards,{$crlf}" .
-												$crlf .
-												"Vilcol") . "</td>
+						"Please find attached our report" . ($invoice_trace_ex ? " and invoice" : "") .
+						" in response to your recent Instruction.{$crlf}" .
+						$crlf .
+						$crlf .
+						"Best regards,{$crlf}" .
+						$crlf .
+						"Vilcol") . "</td>
 								</tr>
 								<tr>
 									<td></td>
@@ -6349,30 +6354,30 @@ function print_one_job_trace_letter($job, $editing, $open, $numcols, $div_h_x2)
 								</tr>
 								<tr>
 									<td $col2>" . input_button('Email Letter', "email_letter('t', $letter_id, " . ($invoice_trace_ex ? '1' : '0') . ", " .
-																								($invoice_trace_ap ? '1' : '0') . ")");
-									if (!$job['J_S_INVS'])
-									{
-										if (!$invoice_trace_ex)
-											print "&nbsp;&nbsp;&nbsp;<span style=\"color:red;\">Warning: there is no invoice yet.</span>";
-										elseif (!$invoice_trace_ap)
-											print "&nbsp;&nbsp;&nbsp;<span style=\"color:red;\">Warning: the invoice is not APPROVED yet.</span>";
-									}
-									print "</td>
+						($invoice_trace_ap ? '1' : '0') . ")");
+				if (!$job['J_S_INVS'])
+				{
+					if (!$invoice_trace_ex)
+						print "&nbsp;&nbsp;&nbsp;<span style=\"color:red;\">Warning: there is no invoice yet.</span>";
+					elseif (!$invoice_trace_ap)
+						print "&nbsp;&nbsp;&nbsp;<span style=\"color:red;\">Warning: the invoice is not APPROVED yet.</span>";
+				}
+				print "</td>
 								</tr>
 								<tr>
 									<td $col7>" . input_button('Or, Letter has been printed and posted', "post_letter($letter_id)") . "</td>
 								</tr>
 								</table><!--email_table-->
 								";
-							}
-						}
-						else
-							print "The Letter can be created (and approved) once the Report is approved.";
-						print "
+			}
+		}
+		else
+			print "The Letter can be created (and approved) once the Report is approved.";
+		print "
 				</div><!--div_preview-->
 				";
-			}
-		print "
+	}
+	print "
 		</td>
 	</tr>
 	";
@@ -6404,9 +6409,9 @@ function print_one_job_trace_letter($job, $editing, $open, $numcols, $div_h_x2)
 			<td $at colspan=\"" . ($numcols-1) . "\">
 				<div id=\"div_letters_sent\" style=\"height:{$div_h_x2}px; overflow-y:scroll; border:solid gray 1px;\">
 				";
-				if ($manager_t || $manager_a)
-				{
-					print "
+		if ($manager_t || $manager_a)
+		{
+			print "
 					<table class=\"basic_table\" id=\"table_letters_sent\" border=\"0\"><!---->
 					<tr>
 						<td $ac>The Letter that was Sent</td>$gap<td $ac>Added</td>$gap<td $ac>Last Updated</td>$gap<td $ac>Posted</td>
@@ -6414,60 +6419,60 @@ function print_one_job_trace_letter($job, $editing, $open, $numcols, $div_h_x2)
 					</tr>
 					" . input_hidden('sent_letters_count', count($job['LETTERS_SENT'])) . "
 					";
-					foreach ($job['LETTERS_SENT'] as $letter)
+			foreach ($job['LETTERS_SENT'] as $letter)
+			{
+				$letter_id = $letter['JOB_LETTER_ID'];
+				$resend_now = (($resend_207 == $letter_id) ? true : false);
+				$added_dt = str_replace(' ', '<br>', date_for_sql($letter['JL_ADDED_DT'], true, true, true, false, false, false, false, true));
+				if ($letter['EM_DT'])
+				{
+					$posted_dt = '(emailed)';
+					$emailed_dt = date_for_sql($letter['EM_DT'], true, true, true, false, false, false, false, true);
+				}
+				else
+				{
+					$posted_pdf = ($letter['JL_POSTED_PDF'] ?
+						("<br><br><br>" .
+							"<a href=\"{$csv_dir}/{$letter['JL_POSTED_PDF']}\" target=\"_blank\" rel=\"noopener\">" .
+							"<img src=\"images/pdf.png\" height=\"23\" width=\"23\"></a>")
+						: '');
+					$posted_dt = str_replace(' ', '<br>', date_for_sql($letter['JL_POSTED_DT'], true, true, true, false, false, false, false, true)) .
+						$posted_pdf;
+					$emailed_dt = '';
+				}
+				if ($letter['JL_UPDATED_DT'])
+				{
+					$updated_dt = date_for_sql($letter['JL_UPDATED_DT'], true, true, true, false, false, false, false, true);
+					$updated_dt = $letter['UPDATED_U'] . '<br>' . str_replace(' ', '<br>', $updated_dt);
+				}
+				else
+					$updated_dt = '';
+
+				$attach = '';
+				if ($letter['EM_ATTACH'])
+				{
+					#dprint($letter['EM_ATTACH']);#
+					# Example EM_ATTACH: "v1512257/letter_1512257_90868311_373223_20161123_103127.pdf|c1234/invoice_204145_20161123_102417.pdf"
+					# Also: "v1546871/letter_1546871_90902925_1247469_20170103_145712.pdf|c/"
+					$afiles = explode('|', $letter['EM_ATTACH']);
+					foreach ($afiles as $one_af)
 					{
-						$letter_id = $letter['JOB_LETTER_ID'];
-						$resend_now = (($resend_207 == $letter_id) ? true : false);
-						$added_dt = str_replace(' ', '<br>', date_for_sql($letter['JL_ADDED_DT'], true, true, true, false, false, false, false, true));
-						if ($letter['EM_DT'])
+						if (($one_af != '') && ($one_af != "c/"))
 						{
-							$posted_dt = '(emailed)';
-							$emailed_dt = date_for_sql($letter['EM_DT'], true, true, true, false, false, false, false, true);
+							$pdf_url_sent = "{$csv_dir}/{$one_af}";
+							$bits = explode('_', $one_af);
+							$bits2 = explode('/', $bits[0]); # $bits[0]: subdir, stroke and first word of filename e.g. "v123456/letter"
+							$pdf_label = $bits2[count($bits2)-1]; # e.g. "letter"
+							$attach .= "&nbsp;&nbsp;$pdf_label:<a href=\"$pdf_url_sent\" target=\"_blank\" rel=\"noopener\">" .
+								"<img src=\"images/pdf.png\" height=\"23\" width=\"23\"></a>";
+							if ($resend_now)
+								$attach .= input_tickbox('', "resend_{$pdf_label}", $one_af, false);
+							$attach .= "&nbsp;&nbsp;";
 						}
-						else
-						{
-							$posted_pdf = ($letter['JL_POSTED_PDF'] ?
-											("<br><br><br>" .
-												"<a href=\"{$csv_dir}/{$letter['JL_POSTED_PDF']}\" target=\"_blank\" rel=\"noopener\">" .
-																					"<img src=\"images/pdf.png\" height=\"23\" width=\"23\"></a>")
-											: '');
-							$posted_dt = str_replace(' ', '<br>', date_for_sql($letter['JL_POSTED_DT'], true, true, true, false, false, false, false, true)) .
-											$posted_pdf;
-							$emailed_dt = '';
-						}
-						if ($letter['JL_UPDATED_DT'])
-						{
-							$updated_dt = date_for_sql($letter['JL_UPDATED_DT'], true, true, true, false, false, false, false, true);
-							$updated_dt = $letter['UPDATED_U'] . '<br>' . str_replace(' ', '<br>', $updated_dt);
-						}
-						else
-							$updated_dt = '';
+					}
+				}
 
-						$attach = '';
-						if ($letter['EM_ATTACH'])
-						{
-							#dprint($letter['EM_ATTACH']);#
-							# Example EM_ATTACH: "v1512257/letter_1512257_90868311_373223_20161123_103127.pdf|c1234/invoice_204145_20161123_102417.pdf"
-							# Also: "v1546871/letter_1546871_90902925_1247469_20170103_145712.pdf|c/"
-							$afiles = explode('|', $letter['EM_ATTACH']);
-							foreach ($afiles as $one_af)
-							{
-								if (($one_af != '') && ($one_af != "c/"))
-								{
-									$pdf_url_sent = "{$csv_dir}/{$one_af}";
-									$bits = explode('_', $one_af);
-									$bits2 = explode('/', $bits[0]); # $bits[0]: subdir, stroke and first word of filename e.g. "v123456/letter"
-									$pdf_label = $bits2[count($bits2)-1]; # e.g. "letter"
-									$attach .= "&nbsp;&nbsp;$pdf_label:<a href=\"$pdf_url_sent\" target=\"_blank\" rel=\"noopener\">" .
-												"<img src=\"images/pdf.png\" height=\"23\" width=\"23\"></a>";
-									if ($resend_now)
-										$attach .= input_tickbox('', "resend_{$pdf_label}", $one_af, false);
-									$attach .= "&nbsp;&nbsp;";
-								}
-							}
-						}
-
-						print "
+				print "
 						<tr>
 							<td $at rowspan=\"8\">" . input_textarea('jl_letter_sent', 15, $ta_cols, $letter['JL_TEXT'] . $letter['JL_TEXT_2'], 'readonly') . "</td>
 							$gap
@@ -6479,39 +6484,39 @@ function print_one_job_trace_letter($job, $editing, $open, $numcols, $div_h_x2)
 							" . ($user_debug ? "$gap<td $ac $at $grey><br>$letter_id</td>" : '') . "
 						</tr>
 						";
-						if ($letter['EM_DT'])
+				if ($letter['EM_DT'])
+				{
+					$resends = '';
+					if ($letter['JL_EMAIL_RESENDS'])
+						$resends .= "Simple re-sends:<br>" . str_replace('|', '<br>', str_replace('()','',$letter['JL_EMAIL_RESENDS'])) . "<hr><br>";
+					if ($letter['JL_EMAILS_OLD'])
+					{
+						foreach ($letter['JL_EMAILS_OLD'] as $old_email_id => $old_email_info)
 						{
-							$resends = '';
-							if ($letter['JL_EMAIL_RESENDS'])
-								$resends .= "Simple re-sends:<br>" . str_replace('|', '<br>', str_replace('()','',$letter['JL_EMAIL_RESENDS'])) . "<hr><br>";
-							if ($letter['JL_EMAILS_OLD'])
+							$resend_attach = '';
+							$afiles = explode('|', $old_email_info['EM_ATTACH']);
+							foreach ($afiles as $one_af)
 							{
-								foreach ($letter['JL_EMAILS_OLD'] as $old_email_id => $old_email_info)
+								if (($one_af != '') && ($one_af != "c/"))
 								{
-									$resend_attach = '';
-									$afiles = explode('|', $old_email_info['EM_ATTACH']);
-									foreach ($afiles as $one_af)
-									{
-										if (($one_af != '') && ($one_af != "c/"))
-										{
-											$pdf_url_sent = "{$csv_dir}/{$one_af}";
-											$bits = explode('_', $one_af);
-											$bits2 = explode('/', $bits[0]); # $bits[0]: subdir, stroke and first word of filename e.g. "v123456/letter"
-											$pdf_label = $bits2[count($bits2)-1]; # e.g. "letter"
-											$resend_attach .= "&nbsp;&nbsp;$pdf_label:<a href=\"$pdf_url_sent\" target=\"_blank\" rel=\"noopener\">" .
-														"<img src=\"images/pdf.png\" height=\"23\" width=\"23\"></a>&nbsp;&nbsp;";
-										}
-									}
-									$sent = date_for_sql($old_email_info['EM_DT'], true, true, true, false, false, false, false, true);
-									$resends .= "Sent: $sent to: " . $old_email_info['EM_TO'] .
-													"&nbsp;&nbsp;<span $grey>ID:$old_email_id</span><br>" .
-													"Subject: " . $old_email_info['EM_SUBJECT'] . "<br>" .
-													"Message: " . $old_email_info['EM_MESSAGE'] . "<br>" .
-													"Attached: " . $resend_attach . "<br>" .
-													"<hr><br>";
+									$pdf_url_sent = "{$csv_dir}/{$one_af}";
+									$bits = explode('_', $one_af);
+									$bits2 = explode('/', $bits[0]); # $bits[0]: subdir, stroke and first word of filename e.g. "v123456/letter"
+									$pdf_label = $bits2[count($bits2)-1]; # e.g. "letter"
+									$resend_attach .= "&nbsp;&nbsp;$pdf_label:<a href=\"$pdf_url_sent\" target=\"_blank\" rel=\"noopener\">" .
+										"<img src=\"images/pdf.png\" height=\"23\" width=\"23\"></a>&nbsp;&nbsp;";
 								}
 							}
-							print "
+							$sent = date_for_sql($old_email_info['EM_DT'], true, true, true, false, false, false, false, true);
+							$resends .= "Sent: $sent to: " . $old_email_info['EM_TO'] .
+								"&nbsp;&nbsp;<span $grey>ID:$old_email_id</span><br>" .
+								"Subject: " . $old_email_info['EM_SUBJECT'] . "<br>" .
+								"Message: " . $old_email_info['EM_MESSAGE'] . "<br>" .
+								"Attached: " . $resend_attach . "<br>" .
+								"<hr><br>";
+						}
+					}
+					print "
 							<tr>
 								$gap
 								<td $col7><br><u>Email Info</u></td>
@@ -6523,67 +6528,67 @@ function print_one_job_trace_letter($job, $editing, $open, $numcols, $div_h_x2)
 								<td></td>
 								<td align=\"right\">
 									";
-									if ($resend_207 == 0)
-										print input_button('Re-send', "resend_207($letter_id)", "");
-									elseif ($resend_now)
-										print input_button('Send now', "send_now_207($letter_id)", "");
-									print "
+					if ($resend_207 == 0)
+						print input_button('Re-send', "resend_207($letter_id)", "");
+					elseif ($resend_now)
+						print input_button('Send now', "send_now_207($letter_id)", "");
+					print "
 									</td>
 								";
-								$emails = sql_client_emails($job['CLIENT2_ID'], true);
-								$def_email = '';
-								foreach ($emails as $one_em)
-								{
-									if ($one_em == $letter['EM_TO'])
-									{
-										$def_email = $one_em;
-										break; # just take the first one
-									}
-								}
-								if (!$def_email)
-								{
-									if ($emails)
-										$def_email = $emails[0];
-								}
-								print "
+					$emails = sql_client_emails($job['CLIENT2_ID'], true);
+					$def_email = '';
+					foreach ($emails as $one_em)
+					{
+						if ($one_em == $letter['EM_TO'])
+						{
+							$def_email = $one_em;
+							break; # just take the first one
+						}
+					}
+					if (!$def_email)
+					{
+						if ($emails)
+							$def_email = $emails[0];
+					}
+					print "
 								<td $col3>
 									";
-									if ($resend_now)
-										print input_button('Cancel', "cancel_207($letter_id)", "");
-									#input_button('Re-send to', "email_resend($letter_id)", ($manager_a || $manager_t) ? '' : 'disabled') . "
-									#input_select('resend_to', $emails, $def_email) .
-									print "
+					if ($resend_now)
+						print input_button('Cancel', "cancel_207($letter_id)", "");
+					#input_button('Re-send to', "email_resend($letter_id)", ($manager_a || $manager_t) ? '' : 'disabled') . "
+					#input_select('resend_to', $emails, $def_email) .
+					print "
 									</td>
 							</tr>
 							<tr>
 								$gap
 								";
-								if ($resend_now)
-								{
-									print "
+					if ($resend_now)
+					{
+						print "
 									<td $ar>Send To:</td>
 									<td $col6>" . input_select('resend_to', $emails, $def_email) . "</td>
 									";
-								}
-								else
-								{
-									print "
+					}
+					else
+					{
+						print "
 									<td $ar>Sent To:</td>
 									<td $col6>{$letter['EM_TO']}</td>
 									";
-								}
-								print "
+					}
+					print "
 							</tr>
 							<tr>
 								$gap
 								<td $ar $at>Subject:</td>
 								<td $col6>
 									";
-									if ($resend_now)
-										print input_textarea('resend_subject', 1, 60, $letter['EM_SUBJECT'], "style=\"height:25px;\"");
-									else
-										print "<textarea rows=\"1\" cols=\"60\" style=\"height:25px;\" readonly>{$letter['EM_SUBJECT']}</textarea>";
-									print "
+					if ($resend_now)
+						print input_textarea('resend_subject', 1, 60, $letter['EM_SUBJECT'], "style=\"height:25px;\"");
+					else
+						print "<textarea rows=\"1\" cols=\"60\" style=\"height:25px;\" readonly>{$letter['EM_SUBJECT']}</textarea>";
+					print "
 									</td>
 							</tr>
 							<tr>
@@ -6591,11 +6596,11 @@ function print_one_job_trace_letter($job, $editing, $open, $numcols, $div_h_x2)
 								<td $ar $at>Message:</td>
 								<td $col6>
 									";
-									if ($resend_now)
-										print input_textarea('resend_message', 3, 60, br2nl_kdb($letter['EM_MESSAGE']));
-									else
-										print "<textarea rows=\"3\" cols=\"60\" readonly>" . br2nl_kdb($letter['EM_MESSAGE']) . "</textarea>";
-									print "
+					if ($resend_now)
+						print input_textarea('resend_message', 3, 60, br2nl_kdb($letter['EM_MESSAGE']));
+					else
+						print "<textarea rows=\"3\" cols=\"60\" readonly>" . br2nl_kdb($letter['EM_MESSAGE']) . "</textarea>";
+					print "
 									</td>
 							</tr>
 							<tr>
@@ -6612,10 +6617,10 @@ function print_one_job_trace_letter($job, $editing, $open, $numcols, $div_h_x2)
 									</div></td>
 							</tr>
 							";
-						}
-						else
-						{
-							print "
+				}
+				else
+				{
+					print "
 							<tr>$gap</tr>
 							<tr>$gap</tr>
 							<tr>$gap</tr>
@@ -6623,15 +6628,15 @@ function print_one_job_trace_letter($job, $editing, $open, $numcols, $div_h_x2)
 							<tr>$gap</tr>
 							<tr>$gap</tr>
 							";
-						}
-					} # foreach LETTERS_SENT
-					print "
+				}
+			} # foreach LETTERS_SENT
+			print "
 					</table><!--table_letters_sent-->
 					";
-				}
-				else
-					print "A letter has been sent.";
-				print "
+		}
+		else
+			print "A letter has been sent.";
+		print "
 				</div><!--div_letters_sent-->
 			</td>
 		</tr>
@@ -6737,13 +6742,13 @@ function print_one_job_collect_letter($job, $editing, $open, $numcols, $div_h_x2
 	$all_letters = true;
 	$editing2 = $editing;
 	if ($feedback_39) {
-	if (!$manager_x)
-	{
-		if (array_key_exists($job['COLLECT_DETAILS']['JC_LETTER_TYPE_ID'], $letter_types_nm))
-			$all_letters = false;
-		else
-			$editing2 = false;
-	}
+		if (!$manager_x)
+		{
+			if (array_key_exists($job['COLLECT_DETAILS']['JC_LETTER_TYPE_ID'], $letter_types_nm))
+				$all_letters = false;
+			else
+				$editing2 = false;
+		}
 	}
 
 	$biggap2 = "	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -6759,11 +6764,11 @@ function print_one_job_collect_letter($job, $editing, $open, $numcols, $div_h_x2
 		<td $ar $at>More letters</td>
 		<td $at>" . input_tickbox('', 'jc_letter_more', 1, $more_letters, $onchange_ml_tck, $extra_ml_tck) . "</td>
 		<td $ac $col2>Next Letter: " . input_select('jc_letter_type_id', $all_letters ? $letter_types : $letter_types_nm, $job['COLLECT_DETAILS']['JC_LETTER_TYPE_ID'],
-								($editing2 && $more_letters) ? $onchange_sel : 'disabled') . "</td>
+			($editing2 && $more_letters) ? $onchange_sel : 'disabled') . "</td>
 		<td></td>
 		<td $col4>Delay: " . input_textbox('jc_letter_delay', $job['COLLECT_DETAILS']['JC_LETTER_DELAY'], 3, 10, "$onchange_txt $style_r") . "days</td>
 		<td>" . (($editing && $open) ? input_button('Add Next Letter', 'add_collect_letter()',
-															$more_letters ? '' : 'disabled', 'add_cltr_button') : '') . "</td>
+			$more_letters ? '' : 'disabled', 'add_cltr_button') : '') . "</td>
 	</tr>
 	";
 
@@ -6774,40 +6779,40 @@ function print_one_job_collect_letter($job, $editing, $open, $numcols, $div_h_x2
 		<td $at colspan=\"" . ($numcols-1) . "\">
 		" . input_hidden('pending_letters_count', count($job['LETTERS_PENDING'])) . "
 		";
-		if ($job['LETTERS_PENDING'])
-		{
-			#dprint("LETTERS_PENDING=" . print_r($job['LETTERS_PENDING'],1));#
-			$div_h_ltr = (($editing && $job['LETTERS_PENDING'][0]['JL_APPROVED_DT']) ? 1.7 : 1.0) * $div_h_x2;
-			print "
+	if ($job['LETTERS_PENDING'])
+	{
+		#dprint("LETTERS_PENDING=" . print_r($job['LETTERS_PENDING'],1));#
+		$div_h_ltr = (($editing && $job['LETTERS_PENDING'][0]['JL_APPROVED_DT']) ? 1.7 : 1.0) * $div_h_x2;
+		print "
 			<div id=\"div_letters_pending\" style=\"height:{$div_h_ltr}px; overflow-y:scroll; border:solid gray 1px;\">
 			<table class=\"basic_table\" id=\"table_letters_pending\" border=\"0\"><!---->
 			<tr>
 				<td>" .#&nbsp;The Letter that is Pending (\"{$job['LETTERS_PENDING'][0]['LETTER_NAME']}\")
-					"</td>
+			"</td>
 				$gap<td $ac>Added</td>$gap<td $ac>Last Updated</td>
 				" . (user_debug() ? "$gap<td $ac $grey>DB ID</td>" : '') . "
 			</tr>
 			";
-			foreach ($job['LETTERS_PENDING'] as $letter)
+		foreach ($job['LETTERS_PENDING'] as $letter)
+		{
+			$letter_id = $letter['JOB_LETTER_ID'];
+			$letter_appr = (($letter['JL_APPROVED_DT'] == '') ? false : true);
+			$pdf_url_pend = pdf_link('jl', "v{$job['J_VILNO']}", "{$job['J_VILNO']}_{$job['J_SEQUENCE']}_{$letter_id}");
+
+			$added_dt = str_replace(' ', '<br>', date_for_sql($letter['JL_ADDED_DT'], true, true, true, false, false, false, false, true));
+			if ($letter['JL_UPDATED_DT'])
 			{
-				$letter_id = $letter['JOB_LETTER_ID'];
-				$letter_appr = (($letter['JL_APPROVED_DT'] == '') ? false : true);
-				$pdf_url_pend = pdf_link('jl', "v{$job['J_VILNO']}", "{$job['J_VILNO']}_{$job['J_SEQUENCE']}_{$letter_id}");
+				$updated_dt = date_for_sql($letter['JL_UPDATED_DT'], true, true, true, false, false, false, false, true);
+				$updated_dt = $letter['UPDATED_U'] . '<br>' . str_replace(' ', '<br>', $updated_dt);
+			}
+			else
+				$updated_dt = '';
 
-				$added_dt = str_replace(' ', '<br>', date_for_sql($letter['JL_ADDED_DT'], true, true, true, false, false, false, false, true));
-				if ($letter['JL_UPDATED_DT'])
-				{
-					$updated_dt = date_for_sql($letter['JL_UPDATED_DT'], true, true, true, false, false, false, false, true);
-					$updated_dt = $letter['UPDATED_U'] . '<br>' . str_replace(' ', '<br>', $updated_dt);
-				}
-				else
-					$updated_dt = '';
+			$onchange_letter_txt = (($editing && $open && (!$letter_appr)) ? "onkeydown=\"letter_warn();\"" : 'readonly');
+			$onchange_letter_tck = (($editing && $open && $manager_c) ? "letter_approve(this);" : '');
+			$extra_letter_tck = (($editing && $open && $manager_c) ? '' : 'disabled');
 
-				$onchange_letter_txt = (($editing && $open && (!$letter_appr)) ? "onkeydown=\"letter_warn();\"" : 'readonly');
-				$onchange_letter_tck = (($editing && $open && $manager_c) ? "letter_approve(this);" : '');
-				$extra_letter_tck = (($editing && $open && $manager_c) ? '' : 'disabled');
-
-				print "
+			print "
 				<tr>
 					<td rowspan=\"2\">
 						\"{$job['LETTERS_PENDING'][0]['LETTER_NAME']}\"<br>
@@ -6815,22 +6820,22 @@ function print_one_job_collect_letter($job, $editing, $open, $numcols, $div_h_x2
 						" . input_hidden('letter_preview_id', $letter_id) . "
 						<span style=\"color:red\" id=\"letter_warning\"></span>
 						";
-						if ($editing && $open && (!$letter_appr))
-							print "&nbsp;" . input_button('Check Spelling', 'spell_letter()', '', 'spellcheck_button') . "&nbsp;" .
-									input_button('Save Letter', "save_letter_preview('')");
-						print $biggap2;
-						print input_tickbox('Letter Approved', 'jl_approved_dt', 1, $letter_appr ? 1 : 0,
-													$onchange_letter_tck, $extra_letter_tck) . "&nbsp;&nbsp;";
-						if ($open && $letter_appr)#$editing &&
-						{
-							if ($pdf_url_pend)
-								print "
+			if ($editing && $open && (!$letter_appr))
+				print "&nbsp;" . input_button('Check Spelling', 'spell_letter()', '', 'spellcheck_button') . "&nbsp;" .
+					input_button('Save Letter', "save_letter_preview('')");
+			print $biggap2;
+			print input_tickbox('Letter Approved', 'jl_approved_dt', 1, $letter_appr ? 1 : 0,
+					$onchange_letter_tck, $extra_letter_tck) . "&nbsp;&nbsp;";
+			if ($open && $letter_appr)#$editing &&
+			{
+				if ($pdf_url_pend)
+					print "
 								<a href=\"$pdf_url_pend\" target=\"_blank\" rel=\"noopener\"><img src=\"images/pdf.png\" height=\"23\" width=\"23\"></a>&nbsp;&nbsp;&nbsp;";
-						}
-						if ($editing && $manager_c && $open && (global_debug() || (!$letter_appr)))
-							print $biggap2 . input_button('Delete letter', "delete_letter($letter_id)");
-						print "&nbsp;&nbsp;&nbsp;" . ($letter_id ? "<span $grey>ID $letter_id</span>" : '');
-						print "
+			}
+			if ($editing && $manager_c && $open && (global_debug() || (!$letter_appr)))
+				print $biggap2 . input_button('Delete letter', "delete_letter($letter_id)");
+			print "&nbsp;&nbsp;&nbsp;" . ($letter_id ? "<span $grey>ID $letter_id</span>" : '');
+			print "
 					</td>
 					$gap
 					<td $ac $at><br>" . ($letter['IMPORTED'] ? 'Imported<br>from old system<br>' : '') . "$added_dt</td>
@@ -6839,17 +6844,17 @@ function print_one_job_collect_letter($job, $editing, $open, $numcols, $div_h_x2
 					" . ($user_debug ? "$gap<td $ac $at $grey><br>$letter_id</td>" : '') . "
 				</tr>
 				";
-				if ($editing && $open && $letter_appr && $manager_c)
+			if ($editing && $open && $letter_appr && $manager_c)
+			{
+				#$emails = sql_client_emails($job['CLIENT2_ID'], true);
+				$emails = sql_subject_emails($job_id, true);
+				$def_email = '';
+				foreach ($emails as $one_em)
 				{
-					#$emails = sql_client_emails($job['CLIENT2_ID'], true);
-					$emails = sql_subject_emails($job_id, true);
-					$def_email = '';
-					foreach ($emails as $one_em)
-					{
-						$def_email = $one_em;
-						break; # just take the first one
-					}
-					print "
+					$def_email = $one_em;
+					break; # just take the first one
+				}
+				print "
 				  <tr>
 					$gap
 					<td $col5>
@@ -6880,18 +6885,18 @@ function print_one_job_collect_letter($job, $editing, $open, $numcols, $div_h_x2
 					</td>
 				  </tr>
 					";
-				}
-				print "
+			}
+			print "
 				<tr><td>&nbsp;</td></tr>
 				";
-			} # foreach LETTERS_PENDING
-			print "
+		} # foreach LETTERS_PENDING
+		print "
 			</table><!--table_letters_pending-->
 			</div><!--div_letters_pending-->
 			";
 
-			if ($editing && $open && (!$letter_appr))
-				print "
+		if ($editing && $open && (!$letter_appr))
+			print "
 				<script>
 				var checker = new sc.SpellChecker({
 					button: 'spellcheck_button', // HTML element that will open the spell checker when clicked
@@ -6900,14 +6905,14 @@ function print_one_job_collect_letter($job, $editing, $open, $numcols, $div_h_x2
 					});
 				</script>
 				";
-		} # if pending letters
-		else
-			print "
+	} # if pending letters
+	else
+		print "
 			<div id=\"div_letters_pending\" style=\"height:80px; overflow-y:scroll; border:solid gray 1px;\">
 			There are no letters that are pending.
 			</div><!--div_letters_pending-->
 			";
-		print "
+	print "
 		</td>
 	</tr>
 	";
@@ -6919,64 +6924,64 @@ function print_one_job_collect_letter($job, $editing, $open, $numcols, $div_h_x2
 		<td $at $ar>Sent<br>Letters</td>
 		<td $at colspan=\"" . ($numcols-1) . "\">
 		";
-		if (#$manager_c &&
-			$job['LETTERS_SENT'])
-		{
-			$headers = "
+	if (#$manager_c &&
+	$job['LETTERS_SENT'])
+	{
+		$headers = "
 				<tr>
 					<td>&nbsp;The Letter that was Sent (\"unknown type\")</td>$gap<td $ac>Added</td>$gap<td $ac>Last Updated</td>$gap<td $ac>Posted</td>
 					" . ($user_debug ? "$gap<td $ac $grey>DB ID</td>" : '') . "
 				</tr>
 				";
-			print "
+		print "
 			<div id=\"div_letters_sent\" style=\"height:{$div_h_x2}px; overflow-y:scroll; border:solid gray 1px;\">
 			&nbsp;Contact Letters: ";
-				if (0 < $job['LETTERS_SENT_COUNT'])
-					print $job['LETTERS_SENT_COUNT'] . ", last one: " . $job['LETTERS_SENT_LAST'] . '.';
-				else
-					print "none.";
-				print "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		if (0 < $job['LETTERS_SENT_COUNT'])
+			print $job['LETTERS_SENT_COUNT'] . ", last one: " . $job['LETTERS_SENT_LAST'] . '.';
+		else
+			print "none.";
+		print "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				Demand Letters: ";
-				if (0 < $job['LETTERS_DEMD_COUNT'])
-					print $job['LETTERS_DEMD_COUNT'] . ", last one: " . $job['LETTERS_DEMD_LAST'] . '.';
-				else
-					print "none.";
-				print "
+		if (0 < $job['LETTERS_DEMD_COUNT'])
+			print $job['LETTERS_DEMD_COUNT'] . ", last one: " . $job['LETTERS_DEMD_LAST'] . '.';
+		else
+			print "none.";
+		print "
 			<br><br>
 			<table class=\"basic_table\" id=\"table_letters_sent\" border=\"0\"><!---->
 			";
-			foreach ($job['LETTERS_SENT'] as $letter)
+		foreach ($job['LETTERS_SENT'] as $letter)
+		{
+			$letter_id = $letter['JOB_LETTER_ID'];
+			$added_dt = str_replace(' ', '<br>', date_for_sql($letter['JL_ADDED_DT'], true, true, true, false, false, false, false, true));
+			$posted_dt = str_replace(' ', '<br>', date_for_sql($letter['JL_POSTED_DT'], true, true, true, false, false, false, false, true));
+			$emailed_dt = date_for_sql($letter['EM_DT'], true, true, true, false, false, false, false, true);
+
+			if ($letter['JL_UPDATED_DT'])
 			{
-				$letter_id = $letter['JOB_LETTER_ID'];
-				$added_dt = str_replace(' ', '<br>', date_for_sql($letter['JL_ADDED_DT'], true, true, true, false, false, false, false, true));
-				$posted_dt = str_replace(' ', '<br>', date_for_sql($letter['JL_POSTED_DT'], true, true, true, false, false, false, false, true));
-				$emailed_dt = date_for_sql($letter['EM_DT'], true, true, true, false, false, false, false, true);
+				$updated_dt = date_for_sql($letter['JL_UPDATED_DT'], true, true, true, false, false, false, false, true);
+				$updated_dt = $letter['UPDATED_U'] . '<br>' . str_replace(' ', '<br>', $updated_dt);
+			}
+			else
+				$updated_dt = '';
 
-				if ($letter['JL_UPDATED_DT'])
+			$attach = '';
+			if ($letter['EM_ATTACH'])
+			{
+				# Example EM_ATTACH: "v1512257/letter_1512257_90868311_373223_20161123_103127.pdf|i/invoice_204145_20161123_102417.pdf"
+				$afiles = explode('|', $letter['EM_ATTACH']);
+				foreach ($afiles as $one_af)
 				{
-					$updated_dt = date_for_sql($letter['JL_UPDATED_DT'], true, true, true, false, false, false, false, true);
-					$updated_dt = $letter['UPDATED_U'] . '<br>' . str_replace(' ', '<br>', $updated_dt);
+					$pdf_url_sent = "{$csv_dir}/{$one_af}";
+					$bits = explode('_', $one_af);
+					$bits2 = explode('/', $bits[0]); # $bits[0]: subdir, stroke and first word of filename e.g. "v123456/letter"
+					$pdf_label = $bits2[count($bits2)-1]; # e.g. "letter"
+					$attach .= "&nbsp;&nbsp;$pdf_label:" .
+						"<a href=\"$pdf_url_sent\" target=\"_blank\" rel=\"noopener\"><img src=\"images/pdf.png\" height=\"23\" width=\"23\"></a>&nbsp;&nbsp;";
 				}
-				else
-					$updated_dt = '';
+			}
 
-				$attach = '';
-				if ($letter['EM_ATTACH'])
-				{
-					# Example EM_ATTACH: "v1512257/letter_1512257_90868311_373223_20161123_103127.pdf|i/invoice_204145_20161123_102417.pdf"
-					$afiles = explode('|', $letter['EM_ATTACH']);
-					foreach ($afiles as $one_af)
-					{
-						$pdf_url_sent = "{$csv_dir}/{$one_af}";
-						$bits = explode('_', $one_af);
-						$bits2 = explode('/', $bits[0]); # $bits[0]: subdir, stroke and first word of filename e.g. "v123456/letter"
-						$pdf_label = $bits2[count($bits2)-1]; # e.g. "letter"
-						$attach .= "&nbsp;&nbsp;$pdf_label:" .
-									"<a href=\"$pdf_url_sent\" target=\"_blank\" rel=\"noopener\"><img src=\"images/pdf.png\" height=\"23\" width=\"23\"></a>&nbsp;&nbsp;";
-					}
-				}
-
-				print "
+			print "
 				" . str_replace('unknown type', $letter['LETTER_NAME'], $headers) . "
 				<tr>
 					<td " . ($letter['EM_DT'] ? "rowspan=\"7\"" : '') . ">
@@ -6990,9 +6995,9 @@ function print_one_job_collect_letter($job, $editing, $open, $numcols, $div_h_x2
 					" . ($user_debug ? "$gap<td $ac $at $grey><br>$letter_id</td>" : '') . "
 				</tr>
 				";
-				if ($letter['EM_DT'])
-				{
-					print "
+			if ($letter['EM_DT'])
+			{
+				print "
 					<tr>
 						$gap
 						<td $col7><br><u>Email Info</u></td>
@@ -7023,7 +7028,7 @@ function print_one_job_collect_letter($job, $editing, $open, $numcols, $div_h_x2
 						<td $col6>" . ($manager_c ? $attach : '...') . "</td>
 					</tr>
 					";
-				}
+			}
 //				else
 //				{
 //					print "
@@ -7035,30 +7040,30 @@ function print_one_job_collect_letter($job, $editing, $open, $numcols, $div_h_x2
 //					<tr>$gap</tr>
 //					";
 //				}
-				print "
+			print "
 				<tr><td colspan=\"7\"><hr style=\"color:#f0f0f0\"></td></tr>
 				";
-			} # foreach LETTERS_SENT
+		} # foreach LETTERS_SENT
 
-			print "
+		print "
 			</table><!--table_letters_sent-->
 			</div><!--div_letters_sent-->
 			";
-		}
-		else
-		{
-			print "
+	}
+	else
+	{
+		print "
 			<div id=\"div_letters_sent\" style=\"height:80px; overflow-y:scroll; border:solid gray 1px;\">
 			";
-				if ($job['LETTERS_SENT'])
-					print "Letters have been sent.";
-				else
-					print "There are no letters that have been sent.";
-			print "
+		if ($job['LETTERS_SENT'])
+			print "Letters have been sent.";
+		else
+			print "There are no letters that have been sent.";
+		print "
 			</div><!--div_letters_sent-->
 			";
-		}
-		print "
+	}
+	print "
 		</td>
 	</tr>
 	";
@@ -7246,7 +7251,7 @@ function print_one_job_collect_schpay($job)#, $editable)
 			if ($prev_start_dt && ($arrange['JA_INSTAL_DT_1'] == $prev_start_dt))
 				$jj--;
 			$arrangements[$jj] = array('START_DT' => $arrange['JA_INSTAL_DT_1'], 'AMOUNT' => $arrange['JA_INSTAL_AMT'],
-										'FREQ' => $arrange['JA_INSTAL_FREQ']);
+				'FREQ' => $arrange['JA_INSTAL_FREQ']);
 			$jj++;
 			$prev_start_dt = $arrange['JA_INSTAL_DT_1'];
 		}
@@ -7256,7 +7261,7 @@ function print_one_job_collect_schpay($job)#, $editable)
 		if ($prev_start_dt && ($job['COLLECT_DETAILS']['JC_INSTAL_DT_1'] == $prev_start_dt))
 			$jj--;
 		$arrangements[$jj] = array('START_DT' => $job['COLLECT_DETAILS']['JC_INSTAL_DT_1'], 'AMOUNT' => $job['COLLECT_DETAILS']['JC_INSTAL_AMT'],
-									'FREQ' => $job['COLLECT_DETAILS']['JC_INSTAL_FREQ']);
+			'FREQ' => $job['COLLECT_DETAILS']['JC_INSTAL_FREQ']);
 	}
 
 	$count_arr = count($arrangements);
@@ -7334,7 +7339,7 @@ function print_one_job_collect_schpay($job)#, $editable)
 			if (($job['COLLECT_DETAILS']['JC_TOTAL_AMT'] <= $total_paid) && ($job['COLLECT_DETAILS']['JC_PAID_SO_FAR'] <= $total_paid ))
 				$last_line = true;
 			$schedule[] = array('DUE_EP' => $ep, 'DUE_DT' => date_from_epoch(true, $ep, false, false, true),
-									'DUE_AMT' => $due_amt, 'PAID' => $paid, 'TOTAL_DUE' => $total_due, 'TOTAL_PAID' => $total_paid);
+				'DUE_AMT' => $due_amt, 'PAID' => $paid, 'TOTAL_DUE' => $total_due, 'TOTAL_PAID' => $total_paid);
 			if ($last_line)
 				break;
 
@@ -7362,15 +7367,15 @@ function print_one_job_collect_schpay($job)#, $editable)
 		$bits = explode(' ', $paymt['COL_DT_RX']);
 		$col_dt_rx = $bits[0];
 		$payments[] = array('JOB_PAYMENT_ID' => $paymt['JOB_PAYMENT_ID'],
-							'IS_ADJ' => (($paymt['COL_PAYMENT_ROUTE_ID'] == $id_ROUTE_cspent) ? 1 : 0),
-							'COL_DT_RX' => $col_dt_rx, 'COL_AMT_RX' => $paymt['COL_AMT_RX'],
-							'COL_PAYMENT_ROUTE_ID' => $paymt['COL_PAYMENT_ROUTE_ID'], 'PAYMENT_ROUTE' => $paymt['PAYMENT_ROUTE'],
-							'COL_PAYMENT_METHOD_ID' => $paymt['COL_PAYMENT_METHOD_ID'],
-							'INVOICE_ID' => $paymt['INVOICE_ID'], 'INV_NUM' => $paymt['INV_NUM'],
-							'ADJUSTMENT_ID' => $paymt['ADJUSTMENT_ID'], 'COL_PERCENT' => $paymt['COL_PERCENT'],
-							'COL_BOUNCED' => $paymt['COL_BOUNCED'], 'COL_NOTES' => $paymt['COL_NOTES'],
-							'IMPORTED' => $paymt['IMPORTED']
-							);
+			'IS_ADJ' => (($paymt['COL_PAYMENT_ROUTE_ID'] == $id_ROUTE_cspent) ? 1 : 0),
+			'COL_DT_RX' => $col_dt_rx, 'COL_AMT_RX' => $paymt['COL_AMT_RX'],
+			'COL_PAYMENT_ROUTE_ID' => $paymt['COL_PAYMENT_ROUTE_ID'], 'PAYMENT_ROUTE' => $paymt['PAYMENT_ROUTE'],
+			'COL_PAYMENT_METHOD_ID' => $paymt['COL_PAYMENT_METHOD_ID'],
+			'INVOICE_ID' => $paymt['INVOICE_ID'], 'INV_NUM' => $paymt['INV_NUM'],
+			'ADJUSTMENT_ID' => $paymt['ADJUSTMENT_ID'], 'COL_PERCENT' => $paymt['COL_PERCENT'],
+			'COL_BOUNCED' => $paymt['COL_BOUNCED'], 'COL_NOTES' => $paymt['COL_NOTES'],
+			'IMPORTED' => $paymt['IMPORTED']
+		);
 	}
 	#dprint("payments(" . count($payments) . "): " . print_r($payments,1));#
 
@@ -7416,26 +7421,26 @@ function print_one_job_collect_schpay($job)#, $editable)
 		else
 			$total_paid = $prev_total_paid + $show_p['COL_AMT_RX'];
 		$combined[] = array('WHICH' => $which,
-							'DUE_DT' => ($show_s ? $show_s['DUE_DT'] : ''),
-							'DUE_EP' => ($show_s ? $show_s['DUE_EP'] : 0),
-							'DUE_AMT' => ($show_s ? $show_s['DUE_AMT'] : 0.0),
-							'COL_DT_RX' => ($show_p ? $show_p['COL_DT_RX'] : ''),
-							'COL_AMT_RX' => ($show_p ? $show_p['COL_AMT_RX'] : 0.0),
-							'JOB_PAYMENT_ID' => ($show_p ? $show_p['JOB_PAYMENT_ID'] : 0),
-							'IS_ADJ' => (($show_p && ($show_p['COL_PAYMENT_ROUTE_ID'] == $id_ROUTE_cspent)) ? 1 : 0),
-							'COL_PAYMENT_ROUTE_ID' => ($show_p ? $show_p['COL_PAYMENT_ROUTE_ID'] : 0),
-							'PAYMENT_ROUTE' => ($show_p ? $show_p['PAYMENT_ROUTE'] : ''),
-							'COL_PAYMENT_METHOD_ID' => ($show_p ? $show_p['COL_PAYMENT_METHOD_ID'] : 0),
-							'INVOICE_ID' => ($show_p ? $show_p['INVOICE_ID'] : 0),
-							'INV_NUM' => ($show_p ? $show_p['INV_NUM'] : 0),
-							'ADJUSTMENT_ID' => ($show_p ? $show_p['ADJUSTMENT_ID'] : 0),
-							'COL_PERCENT' => ($show_p ? $show_p['COL_PERCENT'] : 0.0),
-							'COL_BOUNCED' => ($show_p ? $show_p['COL_BOUNCED'] : 0),
-							'COL_NOTES' =>  ($show_p ? $show_p['COL_NOTES'] : ''),
-							'IMPORTED' => ($show_p ? $show_p['IMPORTED'] : 0),
-							'TOTAL_DUE' => ($show_s ? $show_s['TOTAL_DUE'] : $prev_total_due),
-							'TOTAL_PAID' => $total_paid
-							);
+			'DUE_DT' => ($show_s ? $show_s['DUE_DT'] : ''),
+			'DUE_EP' => ($show_s ? $show_s['DUE_EP'] : 0),
+			'DUE_AMT' => ($show_s ? $show_s['DUE_AMT'] : 0.0),
+			'COL_DT_RX' => ($show_p ? $show_p['COL_DT_RX'] : ''),
+			'COL_AMT_RX' => ($show_p ? $show_p['COL_AMT_RX'] : 0.0),
+			'JOB_PAYMENT_ID' => ($show_p ? $show_p['JOB_PAYMENT_ID'] : 0),
+			'IS_ADJ' => (($show_p && ($show_p['COL_PAYMENT_ROUTE_ID'] == $id_ROUTE_cspent)) ? 1 : 0),
+			'COL_PAYMENT_ROUTE_ID' => ($show_p ? $show_p['COL_PAYMENT_ROUTE_ID'] : 0),
+			'PAYMENT_ROUTE' => ($show_p ? $show_p['PAYMENT_ROUTE'] : ''),
+			'COL_PAYMENT_METHOD_ID' => ($show_p ? $show_p['COL_PAYMENT_METHOD_ID'] : 0),
+			'INVOICE_ID' => ($show_p ? $show_p['INVOICE_ID'] : 0),
+			'INV_NUM' => ($show_p ? $show_p['INV_NUM'] : 0),
+			'ADJUSTMENT_ID' => ($show_p ? $show_p['ADJUSTMENT_ID'] : 0),
+			'COL_PERCENT' => ($show_p ? $show_p['COL_PERCENT'] : 0.0),
+			'COL_BOUNCED' => ($show_p ? $show_p['COL_BOUNCED'] : 0),
+			'COL_NOTES' =>  ($show_p ? $show_p['COL_NOTES'] : ''),
+			'IMPORTED' => ($show_p ? $show_p['IMPORTED'] : 0),
+			'TOTAL_DUE' => ($show_s ? $show_s['TOTAL_DUE'] : $prev_total_due),
+			'TOTAL_PAID' => $total_paid
+		);
 
 		if ($show_s)
 			$prev_total_due = $show_s['TOTAL_DUE'];
@@ -7501,10 +7506,10 @@ function print_one_job_collect_schpay($job)#, $editable)
 		$com_gbp = 0.01 * floatval($details['COL_AMT_RX']) * floatval($details['COL_PERCENT']);
 		$col_percent = round($col_percent,2);
 		$col_percent = (($details['WHICH'] == 'S') ? '' :
-							input_textbox('col_percent', "{$col_percent}%", 2, 10, "$style_r $onchange_pmt_pc"));
+			input_textbox('col_percent', "{$col_percent}%", 2, 10, "$style_r $onchange_pmt_pc"));
 		$comm_amt = (($details['WHICH'] == 'S') ? '' :
-							($com_gbp ? money_format_kdb($com_gbp, true, true, true) : '-')
-						);
+			($com_gbp ? money_format_kdb($com_gbp, true, true, true) : '-')
+		);
 
 		if ($details['WHICH'] == 'S')
 			$invoice_button = '';
@@ -7520,20 +7525,20 @@ function print_one_job_collect_schpay($job)#, $editable)
 		}
 
 		$route = (($details['WHICH'] == 'S') ? '' :
-					($editable ?
-						input_select('col_payment_route_id', $payment_routes_sel, $details['COL_PAYMENT_ROUTE_ID'], $onchange_pmt_sel, false, false)
-						: $details['PAYMENT_ROUTE'])
-					);
+			($editable ?
+				input_select('col_payment_route_id', $payment_routes_sel, $details['COL_PAYMENT_ROUTE_ID'], $onchange_pmt_sel, false, false)
+				: $details['PAYMENT_ROUTE'])
+		);
 		$method = (($details['WHICH'] == 'S') ? '' :
-					input_select('col_payment_method_id', $payment_methods_sel, $details['COL_PAYMENT_METHOD_ID'], $onchange_pmt_sel, false, false));
+			input_select('col_payment_method_id', $payment_methods_sel, $details['COL_PAYMENT_METHOD_ID'], $onchange_pmt_sel, false, false));
 		#$adjust_reason = (($details['WHICH'] == 'S') ? '' :
 		#					input_select('adjustment_id', $ADJUSTMENTS, $details['ADJUSTMENT_ID'], $onchange_pmt_sel, false, false));
 		$date_rx = (($details['WHICH'] == 'S') ? '' :
-					input_textbox('col_dt_rx', date_for_sql($details['COL_DT_RX'], true,false, true), 6, 10, "$style_r $onchange_pmt_dt"));
+			input_textbox('col_dt_rx', date_for_sql($details['COL_DT_RX'], true,false, true), 6, 10, "$style_r $onchange_pmt_dt"));
 		$amt_rx = (($details['WHICH'] == 'S') ? '' :
-					input_textbox('col_amt_rx', money_format_kdb($details['COL_AMT_RX'], true, true, true), 4, 10, "$style_r $onchange_pmt_mon"));
+			input_textbox('col_amt_rx', money_format_kdb($details['COL_AMT_RX'], true, true, true), 4, 10, "$style_r $onchange_pmt_mon"));
 		$bounced = (($details['WHICH'] == 'S') ? '' :
-					input_select('col_bounced', $yn_list, $details['COL_BOUNCED'], $onchange_pmt_sel, true));
+			input_select('col_bounced', $yn_list, $details['COL_BOUNCED'], $onchange_pmt_sel, true));
 		$imported = (($details['WHICH'] == 'S') ? '' : ($details['IMPORTED'] ? "Imp." : "-"));
 
 		if ($future)
@@ -7651,7 +7656,7 @@ function mass_print_letters($ticked_jobs, $upload_app=false)
 	global $csv_dir;
 	global $job_id; # set here, used by add_collect_letter()
 	global $tunnel_ftp_ip;
-	
+
 	$letter_id_list = implode(', ', $ticked_jobs);
 
 	dprint("mass_print_letters($letter_id_list)");
@@ -7713,118 +7718,152 @@ function mass_print_letters($ticked_jobs, $upload_app=false)
 		$pdfs[] = $newArray['FILENAME'];
 	}
 
-	$dprint = "Letters:<br>";
-	$letter_ix = 0;
-	foreach ($letters as $one_ltr)
-	{
-		$dprint .= str_replace("[FILENAME]", "<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[FILENAME]", print_r($one_ltr,1) . "<br>");
-		$dprint .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=={$pdfs[$letter_ix]}<br>";
-		$letter_ix++;
+	//FIXME - MERGE HERE
+
+	$merger = new Merger;
+
+
+	$count = 0;
+	foreach($pdfs as $pdf){
+		$merger->addFile($pdf);
+		$count++;
 	}
-	dprint($dprint);
 
-//	$server_names = array('ftp.village.com', '169.0.0.5', '81.5.144.205');
-//	$ftp_server = $server_names[1];
-	$ftp_server = $tunnel_ftp_ip; #'169.0.0.5';
-	$ftp_user_name = "kevin";
-	$ftp_user_pass = "D0omBar#14";
-//	$ssl_ftp = false;
-	$ftp_log_debug = false;#
+	$createdPdf = $merger->merge();
 
-//	dlog("Connecting to \"$ftp_server\" (SSL:" . ($ssl_ftp ? 'yes' : 'no') . ") ...");
-	dlog("Connecting to \"$ftp_server\" (SSL:yes) ...");
-//	if ($ssl_ftp)
-//		$conn_id = ftp_ssl_connect($ftp_server);
-//	else
-		$conn_id = ftp_connect($ftp_server);
-	if ($conn_id)
-	{
-		dlog("...connected, conn_id=$conn_id");
+	$date = new DateTime();
+	$current_time = $date->format('Y-m-dTH-i-s');
 
-		dlog("Logging in as user \"$ftp_user_name\" (with password too)...");
-		$login_result = ftp_login($conn_id, $ftp_user_name, $ftp_user_pass);
-		if ($login_result)
-		{
-			dlog("...logged in, login_result=$login_result");
-//			if ($ssl_ftp)
-//			{
-//				dlog("Setting passive mode ON...");
-//				ftp_pasv($conn_id, true); # needed for SSL FTP
-//			}
-//			else
-//			{
-				dlog("Setting passive mode OFF...");
-				ftp_pasv($conn_id, 0);
-//			}
-			$debug_max = 0;#
-			$upload_count = 0;
-			foreach ($pdfs as $one_pdf)
-			{
-				$uploaded = false;
-				if ((!$debug_max) || ($upload_count < $debug_max))
-				{
-					$source_file = $one_pdf;
-					$pos = strrpos($one_pdf, "/");
-					if (($pos !== false) && ($pos < strlen($one_pdf)))
-						$destination_file = substr($one_pdf, $pos+1);
-					else
-						$destination_file = $one_pdf;
-					if ($ftp_log_debug)
-					{
-						$msg = "Uploading \"$source_file\" to \"$destination_file\"...";
-						if ($upload_count < 10)
-							dlog($msg);
-						else
-							dprint($msg);
-					}
-					$upload = ftp_put($conn_id, $destination_file, $source_file, FTP_BINARY);
-					if ($upload)
-					{
-						$msg = "...uploaded $source_file OK (count=" . ($upload_count+1) . ")";
-						$uploaded = true;
-					}
-					else
-						$msg = "...upload failed";
-					if ($ftp_log_debug)
-					{
-						if ($upload_count < 10)
-							dlog($msg);
-						else
-							dprint($msg);
-					}
-				}
-				if ($uploaded)
-					$upload_count++;
-			}
-			$msg = "$upload_count PDF files have been uploaded to the Vilcol print server";
-			log_write($msg);
-			dprint($msg, true, 'blue');
+	$file_name = "massprint/massPrint".(string)$current_time.".pdf";
 
-			if (global_debug() && $upload_app)
-			{
-				log_write("Uploading new app...");
-				$upload = ftp_put($conn_id, "app.zip", "csvex/app.zip", FTP_BINARY);
-				if ($upload)
-				{
-					$msg = "...uploaded new app OK";
-					$uploaded = true;
-				}
-				else
-					$msg = "...upload of new app failed";
-				log_write($msg);
-			}
-		}
-		else
-			dlog("...login failed");
+	$myfile = fopen($file_name, "w") or die("Unable to open file!");
+	$txt = $createdPdf;
+	fwrite($myfile, $txt);
 
-		dlog("...closing connection");
-		ftp_close($conn_id);
-	}
-	else
-	{
-		dprint("*** CONNECTION TO VILCOL FTP SERVER ($ftp_server) HAS FAILED ***", true);
-		dlog("...connection failed");
-	}
+	fclose($myfile);
+
+	// $dprint = "Letters:<br>";
+	// $letter_ix = 0;
+	// foreach ($letters as $one_ltr)
+	// {
+	// 	$dprint .= str_replace("[FILENAME]", "<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[FILENAME]", print_r($one_ltr,1) . "<br>");
+	// 	$dprint .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=={$pdfs[$letter_ix]}<br>";
+	// 	$letter_ix++;
+	// }
+	// dprint($dprint);
+
+
+	echo("
+	<span>Mass printer - merged $count letters into 1 PDF</span>
+	<form target=\"_blank\" action=\"http://localhost/vilcol-php/admin/$file_name\">
+		<input type=\"submit\" value=\"Click to open\" />
+	</form>
+	");
+
+	return;
+
+// //	$server_names = array('ftp.village.com', '169.0.0.5', '81.5.144.205');
+// //	$ftp_server = $server_names[1];
+// 	$ftp_server = $tunnel_ftp_ip; #'169.0.0.5';
+// 	// $ftp_user_name = "kevin"; FIX ME - uncommented to stop ftp
+// 	// $ftp_user_pass = "D0omBar#14"; - uncommented to stop ftp
+// //	$ssl_ftp = false;
+// 	$ftp_log_debug = false;#
+
+// //	dlog("Connecting to \"$ftp_server\" (SSL:" . ($ssl_ftp ? 'yes' : 'no') . ") ...");
+// 	dlog("Connecting to \"$ftp_server\" (SSL:yes) ...");
+// //	if ($ssl_ftp)
+// //		$conn_id = ftp_ssl_connect($ftp_server);
+// //	else
+// 		$conn_id = ftp_connect($ftp_server);
+// 	if ($conn_id)
+// 	{
+// 		dlog("...connected, conn_id=$conn_id");
+
+// 		dlog("Logging in as user \"$ftp_user_name\" (with password too)...");
+// 		$login_result = ftp_login($conn_id, $ftp_user_name, $ftp_user_pass);
+// 		if ($login_result)
+// 		{
+// 			dlog("...logged in, login_result=$login_result");
+// //			if ($ssl_ftp)
+// //			{
+// //				dlog("Setting passive mode ON...");
+// //				ftp_pasv($conn_id, true); # needed for SSL FTP
+// //			}
+// //			else
+// //			{
+// 				dlog("Setting passive mode OFF...");
+// 				ftp_pasv($conn_id, 0);
+// //			}
+// 			$debug_max = 0;#
+// 			$upload_count = 0;
+// 			foreach ($pdfs as $one_pdf)
+// 			{
+// 				$uploaded = false;
+// 				if ((!$debug_max) || ($upload_count < $debug_max))
+// 				{
+// 					$source_file = $one_pdf;
+// 					$pos = strrpos($one_pdf, "/");
+// 					if (($pos !== false) && ($pos < strlen($one_pdf)))
+// 						$destination_file = substr($one_pdf, $pos+1);
+// 					else
+// 						$destination_file = $one_pdf;
+// 					if ($ftp_log_debug)
+// 					{
+// 						$msg = "Uploading \"$source_file\" to \"$destination_file\"...";
+// 						if ($upload_count < 10)
+// 							dlog($msg);
+// 						else
+// 							dprint($msg);
+// 					}
+// 					$upload = ftp_put($conn_id, $destination_file, $source_file, FTP_BINARY);
+// 					if ($upload)
+// 					{
+// 						$msg = "...uploaded $source_file OK (count=" . ($upload_count+1) . ")";
+// 						$uploaded = true;
+// 					}
+// 					else
+// 						$msg = "...upload failed";
+// 					if ($ftp_log_debug)
+// 					{
+// 						if ($upload_count < 10)
+// 							dlog($msg);
+// 						else
+// 							dprint($msg);
+// 					}
+// 				}
+// 				if ($uploaded)
+// 					$upload_count++;
+// 			}
+// 			$msg = "$upload_count PDF files have been uploaded to the Vilcol print server";
+// 			log_write($msg);
+// 			dprint($msg, true, 'blue');
+
+// 			if (global_debug() && $upload_app)
+// 			{
+// 				log_write("Uploading new app...");
+// 				$upload = ftp_put($conn_id, "app.zip", "csvex/app.zip", FTP_BINARY);
+// 				if ($upload)
+// 				{
+// 					$msg = "...uploaded new app OK";
+// 					$uploaded = true;
+// 				}
+// 				else
+// 					$msg = "...upload of new app failed";
+// 				log_write($msg);
+// 			}
+// 		}
+// 		else
+// 			dlog("...login failed");
+
+// 		dlog("...closing connection");
+// 		ftp_close($conn_id);
+// 	}
+// 	else
+// 	{
+// 		dprint("*** CONNECTION TO VILCOL FTP SERVER ($ftp_server) HAS FAILED ***", true);
+// 		dlog("...connection failed");
+// 	}
 
 } # mass_print_letters())
 
