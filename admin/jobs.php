@@ -7755,7 +7755,7 @@ function mass_print_letters($ticked_jobs, $upload_app=false)
 
 	echo("
 	<span>Mass printer - merged $count letters into 1 PDF</span>
-	<form target=\"_blank\" action=\"http://localhost/vilcol-php/admin/$file_name\">
+	<form target=\"_blank\" action=\"https://vilcolbl.com//admin/$file_name\">
 		<input type=\"submit\" value=\"Click to open\" />
 	</form>
 	");
