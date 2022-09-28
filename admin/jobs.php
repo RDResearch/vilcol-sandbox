@@ -7731,6 +7731,9 @@ function mass_print_letters($ticked_jobs, $upload_app=false)
 
 	$createdPdf = $merger->merge();
 
+	log_open('vilcol.log');
+	log_write('Making new merged file');
+
 	$date = new DateTime();
 	$current_time = $date->format('Y-m-dTH-i-s');
 
@@ -7742,6 +7745,8 @@ function mass_print_letters($ticked_jobs, $upload_app=false)
 
 	fclose($myfile);
 
+	log_write('Created merge file');
+
 	// $dprint = "Letters:<br>";
 	// $letter_ix = 0;
 	// foreach ($letters as $one_ltr)
@@ -7752,6 +7757,7 @@ function mass_print_letters($ticked_jobs, $upload_app=false)
 	// }
 	// dprint($dprint);
 
+	log_write('Creating button');
 
 	print("
 	<span>Mass printer - merged $count letters into 1 PDF</span>
