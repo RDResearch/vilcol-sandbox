@@ -7874,5 +7874,4 @@ function mass_print_letters($ticked_jobs, $upload_app=false)
 
 } # mass_print_letters())
 
-return;
 ?>
