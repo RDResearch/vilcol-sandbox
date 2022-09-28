@@ -7739,7 +7739,7 @@ function mass_print_letters($ticked_jobs, $upload_app=false)
 
 	$file_name = "massprint/massPrint".(string)$current_time.".pdf";
 
-	$myfile = fopen($file_name, "w") or die("Unable to open file!");
+	$myfile = fopen($file_name, "w");
 	$txt = $createdPdf;
 	fwrite($myfile, $txt);
 
