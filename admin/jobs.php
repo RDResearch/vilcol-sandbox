@@ -7766,6 +7766,9 @@ function mass_print_letters($ticked_jobs, $upload_app=false)
 	</form>
 	");
 
+	log_write('Button made');
+
+
 // //	$server_names = array('ftp.village.com', '169.0.0.5', '81.5.144.205');
 // //	$ftp_server = $server_names[1];
 // 	$ftp_server = $tunnel_ftp_ip; #'169.0.0.5';
