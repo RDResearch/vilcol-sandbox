@@ -7759,6 +7759,7 @@ function mass_print_letters($ticked_jobs, $upload_app=false)
 
 //	log_write('Creating button');
 //
+	// Link works - was a typo in the url
 	print("
 	<span>Mass printer - merged $count letters into 1 PDF</span>
 	<form target=\"_blank\" action=\"https://vilcoldbl.com/admin/$file_name\">
