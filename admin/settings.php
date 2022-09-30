@@ -13,7 +13,7 @@ $screen_html = ''; # used if $screen_delay is true
 # First, do security checks on scripts and IP addresses
 $script_debug = false;#
 global $script_check; # a cronjob script may set this to true to bypass the tests
-#$script_check = true; # enable this line to bypass the tests - NOTE: also need to rename .htaccess
+$script_check = true; # enable this line to bypass the tests - NOTE: also need to rename .htaccess
 if (!$script_check) {
 	include_once('script_check.php');
 }
