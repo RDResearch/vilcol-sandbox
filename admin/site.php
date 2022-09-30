@@ -2,6 +2,8 @@
 
 # This should be false on the live server, and true on the local development machine.
 
+error_reporting(E_ALL ^ E_NOTICE);  
+
 $site_local = false; # My Win 10 Fuji PC
 $site_live = false; # RDR Linux server (vilcoldb.com)
 $site_forge = true; # RDR Forge server
