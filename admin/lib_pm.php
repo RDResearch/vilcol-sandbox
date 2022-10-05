@@ -48,8 +48,8 @@ function mail_pm($mailto, $subject, $message, $from_addr, $from_name, $attachmen
 	$pmail->SMTPAuth = true;
 	$pmail->Username = ($mxrouting ? 'outgoing@looking.co.uk' : 'sclbykevin@rdresearch.co.uk');
 	$pmail->Password = ($mxrouting ? 'tt#Ra^!dXz@g' : 'h*23YE$y1p');
-	$pmail->SMTPSecure = '';
-	$pmail->Port = 25;
+	$pmail->SMTPSecure = 'ssl';
+	$pmail->Port = 465;
 	
 	$pmail->From = $from_addr;
 	$pmail->FromName = $from_name;
