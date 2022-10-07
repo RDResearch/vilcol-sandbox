@@ -7761,6 +7761,7 @@ function mass_print_letters($ticked_jobs, $upload_app=false)
 	}
 
 	//	$pool->wait();
+	header('Location: ' . $_SERVER['HTTP_REFERER']);
 
 	return;
 
