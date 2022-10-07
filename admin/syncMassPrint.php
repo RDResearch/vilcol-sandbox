@@ -30,7 +30,7 @@ sql_disconnect();
 
 log_write("SYNC ---------------------");
 
-log_write(var_dump($_POST));
+log_write($_POST['data']);
 
 log_write($_POST);
 
