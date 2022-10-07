@@ -62,6 +62,7 @@ function screen_content_2(){
 
 function scan_mass_prints()
 {
+    global $unix_path;
     $dir = $unix_path."/massprint";
 
     $files = scandir($dir);
