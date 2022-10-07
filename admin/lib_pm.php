@@ -46,7 +46,7 @@ function mail_pm($mailto, $subject, $message, $from_addr, $from_name, $attachmen
 	$pmail->isSMTP();
 	$pmail->Host = ($mxrouting ? 'pixel.mxrouting.net' : 'rdresearch.co.uk');
 	$pmail->SMTPAuth = true;
-	$pmail->Username = ($mxrouting ? 'outgoing@looking.co.uk' : 'sclbykevin@rdresearch.co.uk');
+	//$pmail->Username = ($mxrouting ? 'outgoing@looking.co.uk' : 'sclbykevin@rdresearch.co.uk'); // TODO - uncomment this
 	$pmail->Password = ($mxrouting ? 'tt#Ra^!dXz@g' : 'h*23YE$y1p');
 	$pmail->SMTPSecure = 'ssl';
 	$pmail->Port = 465;
