@@ -5,6 +5,8 @@ include_once("library.php");
 global $navi_1_home;
 global $USER; # set by admin_verify()
 global $unix_path;
+global $admin_domain;
+$mass_print_path = "/massprint";
 
 log_open("vilcol.log");
 
@@ -62,8 +64,9 @@ function screen_content_2(){
 
 function scan_mass_prints()
 {
+    global $mass_print_path;
     global $unix_path;
-    $dir = $unix_path."/massprint";
+    $dir = $unix_path.$mass_print_path;
 
     $files = scandir($dir);
 
@@ -81,7 +84,7 @@ $files = scan_mass_prints();
     if(isset($files)){
         foreach($files as $file){
             ?>
-            <div><?php echo($file) ?></div>
+            <a href="<?php echo($admin_domain.$mass_print_path."/".$file) ?>"><?php echo($file) ?></a>
             <?php
         }
     }
