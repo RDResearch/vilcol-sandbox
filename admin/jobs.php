@@ -9,6 +9,7 @@ include_once(__DIR__.'/vendor/autoload.php');
 
 use iio\libmergepdf\Merger;
 use iio\libmergepdf\Pages;
+use Spatie\Async\Pool;
 
 global $denial_message;
 global $navi_1_jobs;
@@ -7720,30 +7721,44 @@ function mass_print_letters($ticked_jobs, $upload_app=false)
 
 	//FIXME - MERGE HERE
 
-	$merger = new Merger;
 
-
-	$count = 0;
-	foreach($pdfs as $pdf){
-		$merger->addFile($pdf);
-		$count++;
-	}
-
-	$createdPdf = $merger->merge();
-
-	log_open('vilcol.log');
-	log_write('Making new merged file');
 
 	$date = new DateTime();
 	$current_time = $date->format('Y-m-dTH-i-s');
 
-	$file_name = "massprint/massPrint".(string)$current_time.".pdf";
+	$file_name = "massprint/massPrint".(string)$current_time;
 
-	$myfile = fopen($file_name, "w");
-	$txt = $createdPdf;
-	fwrite($myfile, $txt);
+	// asynchronus merging
+	$pool = Pool::create();
 
-	fclose($myfile);
+	$count = 0;
+	foreach (chunk_array($pdfs, 100) as $key=>$pdf_chunk){
+		$pool->add(function () use ($pdf_chunk, $key, $file_name){
+			$merger = new Merger;
+
+			foreach($pdf_chunk as $pdf){
+				$merger->addFile($pdf);
+			}
+
+			$createdPdf = $merger->merge();
+
+			// append count amount
+			$file_name .= "-".$count."-".($count+100).".pdf";
+
+			$myfile = fopen($file_name, "wb");
+			$txt = $createdPdf;
+			fwrite($myfile, $txt);
+			fclose($myfile);
+
+		});
+		$count = count + 100;
+	}
+
+	$pool->wait();
+
+
+
+
 
 	log_write('Created merge file');
 
