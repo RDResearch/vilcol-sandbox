@@ -40,6 +40,9 @@ if ($USER['IS_ENABLED'])
 else
 	print "<p>" . server_php_self() . ": login is not enabled</p>";
 
+
+
+
 sql_disconnect();
 log_close();
 
@@ -3424,6 +3427,10 @@ function print_jobs()
 				#REVIEW input_button('Print ticked approved letters', "print_letters()", $manager_x ? '' : 'disabled', 'but_print_letters') .
 				input_button('Mail Merge to Excel', "mail_merge_excel()", $manager_x ? '' : 'disabled', 'but_print_letters') .
 				'<br>' .
+				"
+				<form action='syncMassPrint.php' method='post'>
+					<button type='submit'>Mass Print</button> 
+				</form>".
 				input_button('Mass Print', "mass_print()", $manager_x ? '' : 'disabled', 'but_mass_print') .
 				input_select('mp_age_dd', array('0' => 'All', -1 => 'Old', 1 => 'New'), $mp_age, "title=\"All letters, or just letters with Old letterheads, or just letters with New letterheads\" onchange=\"document.form_main.mp_age_main.value=this.value;search_js(1)\"", true) .
 				"</td>
@@ -7761,7 +7768,6 @@ function mass_print_letters($ticked_jobs, $upload_app=false)
 	}
 
 	//	$pool->wait();
-	header('Location: ' . $_SERVER['HTTP_REFERER']);
 
 	return;
 
