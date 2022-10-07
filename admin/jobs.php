@@ -7721,7 +7721,7 @@ function mass_print_letters($ticked_jobs, $upload_app=false)
 
 	//FIXME - MERGE HERE
 
-
+	log_open("vilcol.log");
 	log_write("Begin merge");
 
 	$date = new DateTime();
