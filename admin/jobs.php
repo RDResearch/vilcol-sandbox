@@ -1339,6 +1339,7 @@ function javascript()
 			else
 				alert('There are no ticked letters to mass-print');
 	
+	document.form_main.export.value = '';
 	
 		
 	}
