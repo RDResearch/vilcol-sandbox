@@ -42,6 +42,8 @@ function mass_print_letters($ticked_jobs, $upload_app=false)
 
     $letter_id_list = implode(', ', $ticked_jobs);
 
+    log_write("Letter id list: ",$letter_id_list);
+
     dprint("mass_print_letters($letter_id_list)");
 
 
