@@ -43,8 +43,7 @@ else
 
 
 
-sql_disconnect();
-log_close();
+
 
 
 if(isset($_POST['submitMassPrint']))
@@ -54,6 +53,9 @@ if(isset($_POST['submitMassPrint']))
 	log_write('test');
 	mass_print_letters($ticked_jobs);
 }
+
+sql_disconnect();
+log_close();
 
 function screen_content()
 {
