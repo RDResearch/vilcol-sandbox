@@ -61,6 +61,8 @@ function scan_mass_prints()
 	return $files;
 }
 
+
+$mass_print_path = "/massprint";
 $files = scan_mass_prints();
 
 ?>
