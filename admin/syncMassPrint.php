@@ -38,6 +38,9 @@ header('Location: ' . $_SERVER['HTTP_REFERER']);
 
 function mass_print_letters($ticked_jobs, $upload_app=false)
 {
+
+    sleep(10);
+
     # $ticked_jobs is an array of JOB_LETTER.JOB_LETTER_ID
 
     global $csv_dir;
