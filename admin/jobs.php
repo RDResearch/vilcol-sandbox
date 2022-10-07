@@ -157,7 +157,7 @@ function screen_content()
 	{
 		global $mass_print_path;
 		global $unix_path;
-		$dir = $unix_path.$mass_print_path;
+		$dir = "/home/forge/vilcoldbl.com/admin/massprint/";
 
 		$files = scandir($dir);
 
