@@ -7722,6 +7722,7 @@ function mass_print_letters($ticked_jobs, $upload_app=false)
 	//FIXME - MERGE HERE
 
 
+	log_write("Begin merge");
 
 	$date = new DateTime();
 	$current_time = $date->format('Y-m-dTH-i-s');
@@ -7733,6 +7734,7 @@ function mass_print_letters($ticked_jobs, $upload_app=false)
 
 	$count = 0;
 	foreach (chunk_array($pdfs, 100) as $key=>$pdf_chunk){
+		log_write("Merging ".$count);
 		$pool->add(function () use ($pdf_chunk, $key, $file_name){
 			$merger = new Merger;
 
@@ -7760,7 +7762,7 @@ function mass_print_letters($ticked_jobs, $upload_app=false)
 
 
 
-	log_write('Created merge file');
+	log_write('Created merges');
 
 	// $dprint = "Letters:<br>";
 	// $letter_ix = 0;
