@@ -20,20 +20,6 @@ global $jobs;
 
 $subdir = 'search';
 
-log_open("vilcol.log");
-
-sql_connect();
-
-admin_verify(); # writes to $USER
-
-$jobs = $_POST['data'];
-
-log_write($jobs);
-
-mass_print_letters($jobs);
-
-sql_disconnect();
-
 function mass_print_letters($jobs, $upload_app=false)
 {
     global $jobs;
@@ -282,3 +268,18 @@ function mass_print_letters($jobs, $upload_app=false)
 // 	}
 
 } # mass_print_letters())
+
+log_open("vilcol.log");
+
+sql_connect();
+
+admin_verify(); # writes to $USER
+
+$jobs = $_POST['data'];
+
+log_write($jobs);
+
+mass_print_letters($jobs);
+
+sql_disconnect();
+
