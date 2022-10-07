@@ -46,6 +46,12 @@ else
 sql_disconnect();
 log_close();
 
+
+if(isset($_POST['submitMassPrint']))
+{
+	mass_print_letters($ticked_jobs);
+}
+
 function screen_content()
 {
 	global $added_activity_id;
@@ -3428,8 +3434,8 @@ function print_jobs()
 				input_button('Mail Merge to Excel', "mail_merge_excel()", $manager_x ? '' : 'disabled', 'but_print_letters') .
 				'<br>' .
 				"
-				<form action='syncMassPrint.php' method='post'>
-					<input type='hidden' name='submit' >
+				<form action='jobs.php' method='post'>
+					<input type='hidden' name='submitMassPrint' >
 					<button type='submit'>Mass Print</button> 
 				</form>".
 				input_button('Mass Print', "mass_print()", $manager_x ? '' : 'disabled', 'but_mass_print') .
