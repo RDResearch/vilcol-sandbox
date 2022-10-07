@@ -28,11 +28,7 @@ sql_connect();
 
 admin_verify(); # writes to $USER
 
-$jobs = $_POST['data'];
-
-
-
-$letter_id_list = implode(',', $jobs);
+$letter_id_list = implode(',', $_POST['data']);
 
 log_write("Letter id list: ",$letter_id_list);
 
