@@ -1327,7 +1327,7 @@ function javascript()
 					   $.ajax({
 							type: 'POST',
 							url: 'syncMassPrint.php',
-							data:{data: $(dataString).serializeArray()}, 
+							data:{data: $(dataString)}, 
 							cache: false,
 					
 							success: function(){
