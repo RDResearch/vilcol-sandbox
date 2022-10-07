@@ -1322,7 +1322,6 @@ function javascript()
 					document.form_main.ticked_jobs_main.value = ticked.toString(); // ticked letter IDs
 					
 					dataString = ticked.toString();
-					console.log(ticked.toString());
 					console.log(dataString);
 					   $.ajax({
 							type: 'POST',
@@ -1336,10 +1335,9 @@ function javascript()
 					});
 				}
 			}
-			else
+			else{
 				alert('There are no ticked letters to mass-print');
-	
-	document.form_main.export.value = '';
+				}
 	
 		
 	}
