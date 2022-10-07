@@ -41,20 +41,6 @@ if ($USER['IS_ENABLED'])
 else
 	print "<p>" . server_php_self() . ": login is not enabled</p>";
 
-
-
-
-
-$ticked_jobs = explode(',', post_val('ticked_jobs_main'));
-
-if(isset($_POST['submitMassPrint']))
-{
-	echo ("this works");
-	log_open('vilcol.log');
-	log_write('test');
-	mass_print_letters($ticked_jobs);
-}
-
 sql_disconnect();
 log_close();
 
@@ -1299,6 +1285,61 @@ function javascript()
 //		else
 //			alert('There are no ticked letters to hack');
 //	}
+
+
+	function submit_mass_print(){
+	
+		if (" . post_val2('mp_age_main', true) . " != 1)
+			{
+				alert('Mass Print can only be used for PDFs with NEW letterheads');
+				return false;
+			}
+	
+			var inputs = document.getElementsByTagName('input');
+			var ticked = [];
+			for (var i = 0; i < inputs.length; i++)
+			{
+				if (inputs[i].type == 'checkbox')
+				{
+					if (inputs[i].name.substring(0,4) == 'tck_')
+					{
+						jid = inputs[i].name.replace('tck_',''); // letter ID
+						if (isNumeric(jid,false,false,false,false))
+						{
+							if (inputs[i].checked)
+								ticked.push(jid); // letter ID
+						}
+					}
+				}
+			}
+			if (0 < ticked.length)
+			{
+				if (confirm('Do you really want to mass-print all the ticked letters?'))
+				{
+					relay_filters();
+					document.form_main.task.value = 'search';
+					document.form_main.export.value = 'mass_print';
+					document.form_main.ticked_jobs_main.value = ticked.toString(); // ticked letter IDs
+					
+					dataString = ticked.toString();;
+					   $.ajax({
+							type: 'POST',
+							url: 'syncMassPrint.php',
+							data:{data: $(dataString).serializeArray()}, 
+							cache: false,
+					
+							success: function(){
+								alert('OK');
+							}
+					});
+				}
+			}
+			else
+				alert('There are no ticked letters to mass-print');
+	
+	
+		
+	}
 
 	function upload_app()
 	{
@@ -3439,12 +3480,7 @@ function print_jobs()
 				#REVIEW input_button('Print ticked approved letters', "print_letters()", $manager_x ? '' : 'disabled', 'but_print_letters') .
 				input_button('Mail Merge to Excel', "mail_merge_excel()", $manager_x ? '' : 'disabled', 'but_print_letters') .
 				'<br>' .
-				"
-				<form action='jobs.php' method='post'>
-					<input type='hidden' name='submitMassPrint' >
-					<button type='submit'>Mass Print</button> 
-				</form>".
-				input_button('Mass Print', "mass_print()", $manager_x ? '' : 'disabled', 'but_mass_print') .
+				input_button('Mass Print', "submit_mass_print()", $manager_x ? '' : 'disabled', 'but_mass_print') .
 				input_select('mp_age_dd', array('0' => 'All', -1 => 'Old', 1 => 'New'), $mp_age, "title=\"All letters, or just letters with Old letterheads, or just letters with New letterheads\" onchange=\"document.form_main.mp_age_main.value=this.value;search_js(1)\"", true) .
 				"</td>
 			<td $col2>" .
