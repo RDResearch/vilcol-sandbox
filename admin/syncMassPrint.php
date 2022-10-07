@@ -26,6 +26,8 @@ log_open("vilcol.log");
 
 sql_connect();
 
+log_write($_REQUEST['data']);
+
 admin_verify(); # writes to $USER
 
 $letter_id_list = implode(',', $_REQUEST['data']);
