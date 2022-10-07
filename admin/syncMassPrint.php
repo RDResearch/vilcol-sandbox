@@ -25,11 +25,15 @@ sql_connect();
 
 admin_verify(); # writes to $USER
 
+log_write($_POST['data']);
+
+$jobs = $_POST['data'];
+
 mass_print_letters($_POST['data']);
 
 sql_disconnect();
 
-function mass_print_letters($ticked_jobs, $upload_app=false)
+function mass_print_letters($jobs, $upload_app=false)
 {
 
     sleep(10);
