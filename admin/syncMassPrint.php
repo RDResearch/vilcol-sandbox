@@ -34,6 +34,8 @@ if(isset($_POST['submit']))
     mass_print_letters();
 }
 
+header('Location: ' . $_SERVER['HTTP_REFERER']);
+
 function mass_print_letters($ticked_jobs, $upload_app=false)
 {
     # $ticked_jobs is an array of JOB_LETTER.JOB_LETTER_ID
