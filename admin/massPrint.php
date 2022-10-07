@@ -40,17 +40,6 @@ log_close();
 
 function screen_content()
 {
-    #global $mysql_server;
-//	global $auto_search;
-//	global $search_clicked;
-//	#global $USER;#
-//	global $vlf_clicked;
-//	global $vlf_client_dec;
-//	global $vlf_client_hex;
-//	global $vlf_collect_dec;
-//	global $vlf_trace_dec;
-
-    #dprint(post_values());#
     $post2 = array();
     foreach ($_POST as $key => $val) {
         if (($key == 'admin_password') || ($key == 'app_pw'))
@@ -70,3 +59,29 @@ function screen_content_2(){
     return;
 }
 
+function scan_mass_prints()
+{
+    $dir = "/massPrint";
+
+    $files = scandir($dir);
+
+    return $files;
+}
+
+$files = scan_mass_prints();
+
+?>
+<div>
+    <h1>View massprints</h1>
+    <p>Here you can download your massprints</p>
+
+    <?php
+    if(isset($files)){
+        foreach($files as $file){
+            ?>
+            <div><?php echo($file) ?></div>
+            <?php
+        }
+    }
+    ?>
+</div>
