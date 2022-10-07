@@ -7735,7 +7735,7 @@ function mass_print_letters($ticked_jobs, $upload_app=false)
 	$pool = Pool::create();
 
 	$count = 0;
-	foreach (a($pdfs, 100) as $key=>$pdf_chunk){
+	foreach (array_chunk($pdfs, 100) as $key=>$pdf_chunk){
 		log_write("Merging ".$count);
 		$pool->add(function () use ($pdf_chunk, $key, $file_name, $count){
 			$merger = new Merger;
@@ -7759,10 +7759,6 @@ function mass_print_letters($ticked_jobs, $upload_app=false)
 	}
 
 	$pool->wait();
-
-
-
-
 
 	log_write('Created merges');
 
