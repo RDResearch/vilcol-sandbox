@@ -4,6 +4,7 @@ include_once("settings.php");
 include_once("library.php");
 global $navi_1_home;
 global $USER; # set by admin_verify()
+global $unix_path;
 
 log_open("vilcol.log");
 
@@ -61,7 +62,7 @@ function screen_content_2(){
 
 function scan_mass_prints()
 {
-    $dir = "/massPrint";
+    $dir = $unix_path."/massprint";
 
     $files = scandir($dir);
 
