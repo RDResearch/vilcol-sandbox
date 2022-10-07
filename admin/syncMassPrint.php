@@ -29,14 +29,12 @@ log_write($_POST['data']);
 
 $jobs = $_POST['data'];
 
-mass_print_letters($_POST['data']);
+mass_print_letters($jobs);
 
 sql_disconnect();
 
 function mass_print_letters($jobs, $upload_app=false)
 {
-
-    sleep(10);
 
     # $ticked_jobs is an array of JOB_LETTER.JOB_LETTER_ID
 
@@ -44,12 +42,11 @@ function mass_print_letters($jobs, $upload_app=false)
     global $job_id; # set here, used by add_collect_letter()
     global $tunnel_ftp_ip;
 
-    $letter_id_list = implode(', ', $ticked_jobs);
+    $letter_id_list = implode(',', $ticked_jobs);
 
     log_write("Letter id list: ",$letter_id_list);
 
     dprint("mass_print_letters($letter_id_list)");
-
 
     # --- Delete and Recreate
     # PDF Recreate 28/09/17:
