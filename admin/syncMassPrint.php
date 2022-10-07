@@ -30,7 +30,7 @@ log_write(json_decode($_REQUEST['data']));
 
 admin_verify(); # writes to $USER
 
-$letter_id_list = implode(',', json_decode($_REQUEST['data']));
+$letter_id_list = implode(',', $_REQUEST['data']);
 
 log_write("Letter id list: ",$letter_id_list);
 
