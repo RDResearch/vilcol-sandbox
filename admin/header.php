@@ -17,6 +17,8 @@ printD("
   gtag('config', 'G-67Q7QMKMSK');
 </script>
 
+<script src='https://code.jquery.com/jquery-3.6.1.min.js' integrity='sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=' crossorigin='anonymous'></script>
+
 
 ");
 #<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
