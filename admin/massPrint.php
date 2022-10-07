@@ -71,8 +71,13 @@ function scan_mass_prints()
     $files = scandir($dir);
 
     // remove . and .. from the array
-    $files = array_shift($files);
-    $files = array_shift($files);
+    try {
+
+        $files = array_shift($files);
+        $files = array_shift($files);
+    }
+    catch (Exception $e){
+    }
 
     return $files;
 }
