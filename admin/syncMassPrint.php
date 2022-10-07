@@ -24,10 +24,10 @@ log_open("vilcol.log");
 sql_connect();
 
 admin_verify(); # writes to $USER
-sql_disconnect();
 
 mass_print_letters($_POST['data']);
 
+sql_disconnect();
 
 function mass_print_letters($ticked_jobs, $upload_app=false)
 {
