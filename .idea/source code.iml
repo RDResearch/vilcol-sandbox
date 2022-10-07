@@ -8,6 +8,9 @@
       <excludeFolder url="file://$MODULE_DIR$/admin/vendor/setasign/fpdi" />
       <excludeFolder url="file://$MODULE_DIR$/admin/vendor/setasign/fpdi-tcpdf" />
       <excludeFolder url="file://$MODULE_DIR$/admin/vendor/tecnickcom/tcpdf" />
+      <excludeFolder url="file://$MODULE_DIR$/admin/vendor/spatie/async" />
+      <excludeFolder url="file://$MODULE_DIR$/admin/vendor/symfony/process" />
+      <excludeFolder url="file://$MODULE_DIR$/admin/vendor/laravel/serializable-closure" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
