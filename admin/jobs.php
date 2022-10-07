@@ -7754,8 +7754,10 @@ function mass_print_letters($ticked_jobs, $upload_app=false)
 			fwrite($myfile, $txt);
 			fclose($myfile);
 
+		})->then(function($output){
+			echo ('Merge completed');
 		});
-		$count = count + 100;
+		$count = $count + 100;
 	}
 
 	$pool->wait();
