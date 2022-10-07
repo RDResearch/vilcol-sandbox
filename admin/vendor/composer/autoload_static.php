@@ -6,6 +6,10 @@ namespace Composer\Autoload;
 
 class ComposerStaticInit5c21d3a00f94d3efe8f2012167bb253e
 {
+    public static $files = array (
+        '7dd996d98a91d095f100c75e0b9e2391' => __DIR__ . '/..' . '/spatie/async/src/helpers.php',
+    );
+
     public static $prefixLengthsPsr4 = array (
         's' => 
         array (
@@ -14,6 +18,15 @@ class ComposerStaticInit5c21d3a00f94d3efe8f2012167bb253e
         'i' => 
         array (
             'iio\\libmergepdf\\' => 16,
+        ),
+        'S' => 
+        array (
+            'Symfony\\Component\\Process\\' => 26,
+            'Spatie\\Async\\' => 13,
+        ),
+        'L' => 
+        array (
+            'Laravel\\SerializableClosure\\' => 28,
         ),
     );
 
@@ -25,6 +38,18 @@ class ComposerStaticInit5c21d3a00f94d3efe8f2012167bb253e
         'iio\\libmergepdf\\' => 
         array (
             0 => __DIR__ . '/..' . '/iio/libmergepdf/src',
+        ),
+        'Symfony\\Component\\Process\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/process',
+        ),
+        'Spatie\\Async\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/spatie/async/src',
+        ),
+        'Laravel\\SerializableClosure\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/laravel/serializable-closure/src',
         ),
     );
 

@@ -1,5 +1,6 @@
 {
     "require": {
-        "iio/libmergepdf": "^4.0"
+        "iio/libmergepdf": "^4.0",
+        "spatie/async": "^1.5"
     }
 }

@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PhpProjectSharedConfiguration" php_language_level="8.1" />
+  <component name="PhpIncludePathManager">
+    <include_path>
+      <path value="$PROJECT_DIR$/admin/vendor/iio/libmergepdf" />
+      <path value="$PROJECT_DIR$/admin/vendor/composer" />
+      <path value="$PROJECT_DIR$/admin/vendor/rafikhaceb/tcpdi" />
+      <path value="$PROJECT_DIR$/admin/vendor/setasign/fpdi" />
+      <path value="$PROJECT_DIR$/admin/vendor/setasign/fpdi-tcpdf" />
+      <path value="$PROJECT_DIR$/admin/vendor/tecnickcom/tcpdf" />
+    </include_path>
+  </component>
+  <component name="PhpProjectSharedConfiguration" php_language_level="7.4" />
 </project>
