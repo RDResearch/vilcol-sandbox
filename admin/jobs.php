@@ -151,6 +151,8 @@ function screen_content()
 		return;
 	}
 
+
+	$mass_print_path = "/massprint";
 	function scan_mass_prints()
 	{
 		global $mass_print_path;
@@ -172,7 +174,6 @@ function screen_content()
 	}
 
 
-	$mass_print_path = "/massprint";
 	$files = scan_mass_prints();
 
 	?>
