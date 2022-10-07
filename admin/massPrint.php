@@ -70,6 +70,10 @@ function scan_mass_prints()
 
     $files = scandir($dir);
 
+    // remove . and .. from the array
+    $files = array_shift($files);
+    $files = array_shift($files);
+
     return $files;
 }
 
@@ -83,8 +87,23 @@ $files = scan_mass_prints();
     <?php
     if(isset($files)){
         foreach($files as $file){
+
+            $split_file_name = preg_split("[\s-]+", $file);
+            $name_array = [8];
+            $name_array[0] = $split_file_name[1];
+            $name_array[1] = $split_file_name[2];
+            $name_array[2] = $split_file_name[3];
+            $name_array[3] = $split_file_name[4];
+            $name_array[4] = $split_file_name[5];
+            $name_array[5] = $split_file_name[6];
+            $name_array[6] = $split_file_name[7];
+            $name_array[7] = $split_file_name[8];
+            $file_date = implode("-", $name_array);
+
             ?>
-            <a href="<?php echo($admin_domain.$mass_print_path."/".$file) ?>"><?php echo($file) ?></a>
+                <div>
+                    <a href="<?php echo($mass_print_path."/".$file) ?>"><?php echo($file_date) ?></a>
+                </div>
             <?php
         }
     }

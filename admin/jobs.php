@@ -7727,9 +7727,9 @@ function mass_print_letters($ticked_jobs, $upload_app=false)
 	error_log("Starting merge");
 
 	$date = new DateTime();
-	$current_time = $date->format('Y-m-dTH-i-s');
+	$current_time = $date->format('Y-m-d-H-i-s');
 
-	$file_name = "massprint/massPrint".(string)$current_time;
+	$file_name = "massprint/massPrint-".(string)$current_time;
 
 	// asynchronus merging
 	$pool = Pool::create();
