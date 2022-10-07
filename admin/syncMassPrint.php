@@ -27,19 +27,22 @@ admin_verify(); # writes to $USER
 
 
 sql_disconnect();
-log_close();
 
-var_dump("AAAAAAAAAAAAAA");
+log_write("SYNC ---------------------");
 
-if(isset($_POST['submitMassPrint']))
-{
-    log_open('vilcol.log');
-    log_write('Other file');
-    sleep(10);
-    mass_print_letters();
-    log_write('Other file done');
-    log_close();
-}
+log_write(var_dump($_POST));
+
+log_write($_POST);
+
+//if(isset($_POST['submit']))
+//{
+//    log_open('vilcol.log');
+//    log_write('Other file');
+//    sleep(10);
+//    mass_print_letters();
+//    log_write('Other file done');
+//    log_close();
+//}
 
 //header('Location: ' . $_SERVER['HTTP_REFERER']);
 
