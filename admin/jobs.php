@@ -7762,6 +7762,8 @@ function mass_print_letters($ticked_jobs, $upload_app=false)
 
 	//	$pool->wait();
 
+	return;
+
 	log_write('Created merges');
 
 	// $dprint = "Letters:<br>";
