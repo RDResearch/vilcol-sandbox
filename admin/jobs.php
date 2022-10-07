@@ -150,13 +150,13 @@ function screen_content()
 
 	print "<h3>Jobs Screen</h3>";
 
-//	print "
-//	<div id=\"div_wait\">
-//		<p id=\"para_wait\" style=\"color:blue\">Please wait...</p>
-//		<p id=\"para_wait_extra\" style=\"color:blue\">" . post_val2('wait_longer') . "</p>
-//	</div><!--div_wait-->
-//	<div id=\"div_form\" style=\"display:none;\">
-//	";
+	print "
+	<div id=\"div_wait\">
+		<p id=\"para_wait\" style=\"color:blue\">Please wait...</p>
+		<p id=\"para_wait_extra\" style=\"color:blue\">" . post_val2('wait_longer') . "</p>
+	</div><!--div_wait-->
+	<div id=\"div_form\" style=\"display:none;\">
+	";
 //	print "<span id=\"span_message\" style=\"color:blue; font-weight:bold;\">Please wait...</span>";
 //	print "<div id=\"screen_content\" style=\"display:none;\">";
 
