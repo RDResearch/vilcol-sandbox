@@ -29,7 +29,9 @@ admin_verify(); # writes to $USER
 sql_disconnect();
 log_close();
 
-if(isset($_POST['submit']))
+var_dump("AAAAAAAAAAAAAA");
+
+if(isset($_POST['submitMassPrint']))
 {
     log_open('vilcol.log');
     log_write('Other file');
@@ -39,7 +41,7 @@ if(isset($_POST['submit']))
     log_close();
 }
 
-header('Location: ' . $_SERVER['HTTP_REFERER']);
+//header('Location: ' . $_SERVER['HTTP_REFERER']);
 
 function mass_print_letters($ticked_jobs, $upload_app=false)
 {
