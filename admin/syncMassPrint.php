@@ -16,7 +16,9 @@ global $navi_1_jobs;
 global $role_agt;
 global $time_tests; # settings.php
 global $USER; # set by admin_verify()
-global $jobs;
+global $csv_dir;
+global $job_id; # set here, used by add_collect_letter()
+global $tunnel_ftp_ip;
 
 $subdir = 'search';
 
@@ -28,17 +30,9 @@ admin_verify(); # writes to $USER
 
 $jobs = $_POST['data'];
 
-log_write($jobs);
 
-# $ticked_jobs is an array of JOB_LETTER.JOB_LETTER_ID
-
-global $csv_dir;
-global $job_id; # set here, used by add_collect_letter()
-global $tunnel_ftp_ip;
 
 $letter_id_list = implode(',', $jobs);
-
-log_write("Inside function: ", $jobs);
 
 log_write("Letter id list: ",$letter_id_list);
 
