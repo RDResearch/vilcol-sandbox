@@ -7724,39 +7724,41 @@ function mass_print_letters($ticked_jobs, $upload_app=false)
 	log_open("vilcol.log");
 	log_write("Begin merge");
 
+	error_log("Starting merge");
+
 	$date = new DateTime();
 	$current_time = $date->format('Y-m-dTH-i-s');
 
 	$file_name = "massprint/massPrint".(string)$current_time;
 
-//	// asynchronus merging
-//	$pool = Pool::create();
-//
-//	$count = 0;
-//	foreach (a($pdfs, 100) as $key=>$pdf_chunk){
-//		log_write("Merging ".$count);
-//		$pool->add(function () use ($pdf_chunk, $key, $file_name, $count){
-//			$merger = new Merger;
-//
-//			foreach($pdf_chunk as $pdf){
-//				$merger->addFile($pdf);
-//			}
-//
-//			$createdPdf = $merger->merge();
-//
-//			// append count amount
-//			$file_name .= "-".$count."-".($count+100).".pdf";
-//
-//			$myfile = fopen($file_name, "wb");
-//			$txt = $createdPdf;
-//			fwrite($myfile, $txt);
-//			fclose($myfile);
-//
-//		});
-//		$count = count + 100;
-//	}
-//
-//	$pool->wait();
+	// asynchronus merging
+	$pool = Pool::create();
+
+	$count = 0;
+	foreach (a($pdfs, 100) as $key=>$pdf_chunk){
+		log_write("Merging ".$count);
+		$pool->add(function () use ($pdf_chunk, $key, $file_name, $count){
+			$merger = new Merger;
+
+			foreach($pdf_chunk as $pdf){
+				$merger->addFile($pdf);
+			}
+
+			$createdPdf = $merger->merge();
+
+			// append count amount
+			$file_name .= "-".$count."-".($count+100).".pdf";
+
+			$myfile = fopen($file_name, "wb");
+			$txt = $createdPdf;
+			fwrite($myfile, $txt);
+			fclose($myfile);
+
+		});
+		$count = count + 100;
+	}
+
+	$pool->wait();
 
 
 
