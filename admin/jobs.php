@@ -1322,7 +1322,7 @@ function javascript()
 					   $.ajax({
 							type: 'POST',
 							url: 'syncMassPrint.php',
-							data:{data: $(ticked.toString())}, 
+							data:{data: $(ticked.toString()).serializeArray()}, 
 							cache: false,
 					
 							success: function(){
