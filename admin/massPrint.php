@@ -61,7 +61,7 @@ function screen_content_2(){
 
 function scan_mass_prints()
 {
-    $dir = "/massPrint";
+    $dir = "/massprint";
 
     $files = scandir($dir);
 
