@@ -1326,7 +1326,7 @@ function javascript()
 							cache: false,
 					
 							success: function(){
-								alert('OK');
+								alert('Mass Merge triggered 😊');
 							}
 					});
 				}

@@ -24,27 +24,10 @@ log_open("vilcol.log");
 sql_connect();
 
 admin_verify(); # writes to $USER
-
-
 sql_disconnect();
 
-log_write("SYNC ---------------------");
+mass_print_letters($_POST['data']);
 
-log_write($_POST['data']);
-
-log_write($_POST);
-
-//if(isset($_POST['submit']))
-//{
-//    log_open('vilcol.log');
-//    log_write('Other file');
-//    sleep(10);
-//    mass_print_letters();
-//    log_write('Other file done');
-//    log_close();
-//}
-
-//header('Location: ' . $_SERVER['HTTP_REFERER']);
 
 function mass_print_letters($ticked_jobs, $upload_app=false)
 {
