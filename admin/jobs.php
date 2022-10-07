@@ -1317,15 +1317,12 @@ function javascript()
 				if (confirm('Do you really want to mass-print all the ticked letters?'))
 				{
 					relay_filters();
-					document.form_main.task.value = 'search';
-					document.form_main.export.value = 'mass_print';
-					document.form_main.ticked_jobs_main.value = ticked.toString(); // ticked letter IDs
 					
-					dataString = ticked.toString();
+					console.log(ticked.toString());
 					   $.ajax({
 							type: 'POST',
 							url: 'syncMassPrint.php',
-							data:{data: $(dataString)}, 
+							data:{data: $(ticked.toString())}, 
 							cache: false,
 					
 							success: function(){
