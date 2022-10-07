@@ -25,9 +25,9 @@ sql_connect();
 
 admin_verify(); # writes to $USER
 
-log_write($_POST['data']);
-
 $jobs = $_POST['data'];
+
+log_write($jobs);
 
 mass_print_letters($jobs);
 
@@ -42,7 +42,7 @@ function mass_print_letters($jobs, $upload_app=false)
     global $job_id; # set here, used by add_collect_letter()
     global $tunnel_ftp_ip;
 
-    $letter_id_list = implode(',', $ticked_jobs);
+    $letter_id_list = implode(',', $jobs);
 
     log_write("Letter id list: ",$letter_id_list);
 
