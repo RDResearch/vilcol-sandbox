@@ -45,14 +45,13 @@ else
 
 
 
-
+$ticked_jobs = explode(',', post_val('ticked_jobs_main'));
 
 if(isset($_POST['submitMassPrint']))
 {
 	echo ("this works");
 	log_open('vilcol.log');
 	log_write('test');
-	$ticked_jobs = explode(',', post_val('ticked_jobs_main'));
 	mass_print_letters($ticked_jobs);
 }
 
