@@ -1321,7 +1321,9 @@ function javascript()
 					document.form_main.export.value = 'mass_print';
 					document.form_main.ticked_jobs_main.value = ticked.toString(); // ticked letter IDs
 					
-					dataString = ticked.toString();;
+					dataString = ticked.toString();
+					console.log(ticked.toString());
+					console.log(dataString);
 					   $.ajax({
 							type: 'POST',
 							url: 'syncMassPrint.php',
