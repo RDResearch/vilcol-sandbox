@@ -31,7 +31,12 @@ log_close();
 
 if(isset($_POST['submit']))
 {
+    log_open('vilcol.log');
+    log_write('Other file');
+    sleep(10);
     mass_print_letters();
+    log_write('Other file done');
+    log_close();
 }
 
 header('Location: ' . $_SERVER['HTTP_REFERER']);
