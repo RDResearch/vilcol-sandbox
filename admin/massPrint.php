@@ -107,7 +107,7 @@ $files = scan_mass_prints();
 
             ?>
                 <div>
-                    <a href="<?php echo($mass_print_path."/".$file); ?>"><?php echo($file); ?></a>
+                    <a href="<?php echo("/admin".$mass_print_path."/".$file); ?>"><?php echo($file); ?></a>
                 </div>
             <?php
         }
