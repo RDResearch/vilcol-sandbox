@@ -66,3 +66,7 @@ function screen_content()
 
 }
 
+function screen_content_2(){
+    return;
+}
+
