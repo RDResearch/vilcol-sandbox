@@ -28,7 +28,7 @@ sql_connect();
 
 admin_verify(); # writes to $USER
 
-$letter_id_list = implode(',', $_POST['data']);
+$letter_id_list = implode(',', $_REQUEST['data']);
 
 log_write("Letter id list: ",$letter_id_list);
 
