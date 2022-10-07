@@ -3429,6 +3429,7 @@ function print_jobs()
 				'<br>' .
 				"
 				<form action='syncMassPrint.php' method='post'>
+					<input type='hidden' name='submit' >
 					<button type='submit'>Mass Print</button> 
 				</form>".
 				input_button('Mass Print', "mass_print()", $manager_x ? '' : 'disabled', 'but_mass_print') .
