@@ -41,6 +41,61 @@ if ($USER['IS_ENABLED'])
 else
 	print "<p>" . server_php_self() . ": login is not enabled</p>";
 
+function scan_mass_prints()
+{
+	global $mass_print_path;
+	global $unix_path;
+	$dir = $unix_path.$mass_print_path;
+
+	$files = scandir($dir);
+
+	// remove . and .. from the array
+	try {
+
+		array_shift($files);
+		array_shift($files);
+	}
+	catch (Exception $e){
+	}
+
+	return $files;
+}
+
+$files = scan_mass_prints();
+
+?>
+<div>
+	<h1>View massprints</h1>
+	<p>Here you can download your massprints</p>
+	<a href="<?php $_SERVER['PHP_SELF']; ?>">Refresh list</a>
+
+	<?php
+	if(isset($files)){
+		foreach($files as $file){
+
+//            $split_file_name = preg_split("[\s-]+", $file);
+//            $name_array = [8];
+//            $name_array[0] = $split_file_name[1];
+//            $name_array[1] = $split_file_name[2];
+//            $name_array[2] = $split_file_name[3];
+//            $name_array[3] = $split_file_name[4];
+//            $name_array[4] = $split_file_name[5];
+//            $name_array[5] = $split_file_name[6];
+//            $name_array[6] = $split_file_name[7];
+//            $name_array[7] = $split_file_name[8];
+//            $file_date = implode("-", $name_array);
+
+			?>
+			<div>
+				<a target="_blank" href="<?php echo("/admin".$mass_print_path."/".$file); ?>"><?php echo($file); ?></a>
+			</div>
+			<?php
+		}
+	}
+	?>
+</div>
+<?php
+
 sql_disconnect();
 log_close();
 
@@ -1324,7 +1379,7 @@ function javascript()
 							url: 'syncMassPrint.php',
 							data:{data: ticked.toString()}, 
 							cache: false,
-					
+							async: false,
 							success: function(){
 								alert('Mass Merge triggered 😊');
 							}
@@ -3477,7 +3532,7 @@ function print_jobs()
 				#REVIEW input_button('Print ticked approved letters', "print_letters()", $manager_x ? '' : 'disabled', 'but_print_letters') .
 				input_button('Mail Merge to Excel', "mail_merge_excel()", $manager_x ? '' : 'disabled', 'but_print_letters') .
 				'<br>' .
-				input_button('Mass Print', "submit_mass_print()", $manager_x ? '' : 'disabled', 'but_mass_print') .
+				input_button('Mass Print', "mass_print()", $manager_x ? '' : 'disabled', 'but_mass_print') .
 				input_select('mp_age_dd', array('0' => 'All', -1 => 'Old', 1 => 'New'), $mp_age, "title=\"All letters, or just letters with Old letterheads, or just letters with New letterheads\" onchange=\"document.form_main.mp_age_main.value=this.value;search_js(1)\"", true) .
 				"</td>
 			<td $col2>" .
