@@ -49,6 +49,9 @@ log_close();
 
 if(isset($_POST['submitMassPrint']))
 {
+	echo ("this works");
+	log_open('vilcol.log');
+	log_write('test');
 	mass_print_letters($ticked_jobs);
 }
 
