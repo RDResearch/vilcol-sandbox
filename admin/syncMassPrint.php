@@ -16,6 +16,7 @@ global $navi_1_jobs;
 global $role_agt;
 global $time_tests; # settings.php
 global $USER; # set by admin_verify()
+global $jobs;
 
 $subdir = 'search';
 
@@ -35,6 +36,7 @@ sql_disconnect();
 
 function mass_print_letters($jobs, $upload_app=false)
 {
+    global $jobs;
 
     # $ticked_jobs is an array of JOB_LETTER.JOB_LETTER_ID
 
