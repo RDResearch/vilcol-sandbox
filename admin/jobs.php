@@ -16,6 +16,7 @@ global $navi_1_jobs;
 global $role_agt;
 global $time_tests; # settings.php
 global $USER; # set by admin_verify()
+global $ticked_jobs;
 
 $subdir = 'search';
 
