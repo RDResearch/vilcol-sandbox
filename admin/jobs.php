@@ -17,6 +17,7 @@ global $role_agt;
 global $time_tests; # settings.php
 global $USER; # set by admin_verify()
 global $ticked_jobs;
+global $site_domain;
 
 global $mass_print_amount;
 $mass_print_amount = 0;
@@ -51,6 +52,7 @@ log_close();
 
 function screen_content()
 {
+    global $site_domain;
     global $mass_print_amount;
 	global $added_activity_id;
 	global $added_arrange_id;
