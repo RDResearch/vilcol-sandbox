@@ -75,7 +75,6 @@ if ($USER['IS_ENABLED']) {
 
     $navi_1_home = true; # settings.php; used by navi_1_heading()
     $onload = "onload=\"set_scroll();\"";
-    screen_layout();
 } else
     print "<p>" . server_php_self() . ": login is not enabled</p>";
 
