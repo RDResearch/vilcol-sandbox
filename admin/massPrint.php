@@ -101,7 +101,15 @@ $files = scan_mass_prints();
             $name_array[1] = $split_file_name[2]; // month
             $name_array[2] = preg_replace("/BST[0-9]+/",'',$split_file_name[3]); // day
             $file_date = implode("-", $name_array);
-            var_dump($file_date);
+
+            // now check if that matches todays date
+            $date = date('y-m-d');
+            if (strpos($file_date, $date) !== false){
+                echo("match");
+            }
+            else{
+                echo ('no match');
+            }
             ?>
                 <div>
                     <a target="_blank" href="<?php echo("/admin".$mass_print_path."/".$file); ?>"><?php echo($file); ?></a>
