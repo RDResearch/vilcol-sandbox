@@ -97,9 +97,9 @@ $files = scan_mass_prints();
             $split_file_name = preg_split("/[-]/", $file);
             $name_array = [3];
 
-            $name_array[0] = $split_file_name[2]; // year
-            $name_array[1] = $split_file_name[3]; // month
-            $name_array[2] = preg_replace("/BST[0-9]+/",'',$split_file_name[4]); // day
+            $name_array[0] = $split_file_name[1]; // year
+            $name_array[1] = $split_file_name[2]; // month
+            $name_array[2] = preg_replace("/BST[0-9]+/",'',$split_file_name[3]); // day
             $file_date = implode("-", $name_array);
             var_dump($file_date);
             ?>
