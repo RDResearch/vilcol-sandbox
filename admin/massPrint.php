@@ -1,7 +1,6 @@
 <?php
 
 ?>
-"
 <!DOCTYPE html>
 <html lang=\"en\">
 <head>
@@ -27,7 +26,7 @@
                             <td style="vertical-align: top;"> <span style="padding:2px; font-family: Arial,Helvetica,sans-serif;
 font-weight: bold;
 font-size: 16px;
-color: #a61d3b;">Vilcol Database FORGE EDITION</span>
+color: #a61d3b;">Vilcol Database FORGE EDITION - MASS PRINTING</span>
                             </td>
                         </tr>
                         </tbody></table>
