@@ -94,7 +94,7 @@ $files = scan_mass_prints();
     if(isset($files)){
         foreach($files as $file){
 
-            $split_file_name = preg_split("[\s-]+", $file);
+            $split_file_name = preg_split("/[\s-]+\s/", $file);
 //            $name_array = [8];
 //            $name_array[0] = $split_file_name[1];
 //            $name_array[1] = $split_file_name[2];
