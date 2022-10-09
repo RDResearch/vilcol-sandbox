@@ -1,5 +1,46 @@
 <?php
 
+?>
+"
+<!DOCTYPE html>
+<html lang=\"en\">
+<head>
+    <meta charset=\"utf-8\" />
+
+    <!-- Google tag (gtag.js) -->
+    <script async src=\"https://www.googletagmanager.com/gtag/js?id=G-67Q7QMKMSK\"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-67Q7QMKMSK');
+    </script>
+
+    <script src='https://code.jquery.com/jquery-3.6.1.min.js' integrity='sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=' crossorigin='anonymous'></script>
+    <div id="banner">
+        <table width="1245px" height="100px" cellspacing="0" cellpadding="0" border="0">
+            <tbody><tr>
+                <td style="text-align:left; vertical-align:bottom;">
+                    <table height="70px">
+                        <tbody><tr>
+                            <td style="vertical-align: top;"> <span style="padding:2px; font-family: Arial,Helvetica,sans-serif;
+font-weight: bold;
+font-size: 16px;
+color: #a61d3b;">Vilcol Database FORGE EDITION</span>
+                            </td>
+                        </tr>
+                        </tbody></table>
+                </td><td style="width:175px; text-align:right; vertical-align:middle;">
+                    <img style="text-align:right; vertical-align:bottom;" alt="Vilcol Logo" src="images/vilcol_logo.jpg" width="335" height="88">
+                </td>
+                <td width="20"></td>
+            </tr>
+            </tbody></table>
+    </div>
+<?php
+
+
 include_once("settings.php");
 include_once("library.php");
 global $navi_1_home;
@@ -34,6 +75,7 @@ if ($USER['IS_ENABLED']) {
 
     $navi_1_home = true; # settings.php; used by navi_1_heading()
     $onload = "onload=\"set_scroll();\"";
+    screen_layout();
 } else
     print "<p>" . server_php_self() . ": login is not enabled</p>";
 
