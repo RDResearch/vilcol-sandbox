@@ -108,7 +108,7 @@ function scan_mass_prints()
     global $unix_path;
     $dir = $unix_path.$mass_print_path;
 
-    $files = scandir($dir);
+    $files = scandir($dir, 1);
 
     // remove . and .. from the array
     try {
@@ -129,7 +129,7 @@ $files = scan_mass_prints();
     <br>
     <a href="<?php $_SERVER['PHP_SELF']; ?>">Refresh list</a>
     <br>
-    <p>Today's prints</p>
+    <p>Today's prints (Newest at the top):</p>
     <br>
     <?php
     if(isset($files)){
