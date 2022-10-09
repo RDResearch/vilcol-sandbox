@@ -129,6 +129,8 @@ $files = scan_mass_prints();
     <br>
     <a href="<?php $_SERVER['PHP_SELF']; ?>">Refresh list</a>
     <br>
+    <p>Today's prints</p>
+    <br>
     <?php
     if(isset($files)){
         foreach($files as $file){
