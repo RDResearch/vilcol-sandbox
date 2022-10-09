@@ -109,7 +109,7 @@ elseif ($site_forge)
 	$protocol = "https";
 	$root_domain = 'vilcoldb.com';
 	$admin_dir = 'admin';
-	$site_domain = "www.{$root_domain}";
+	$site_domain = "{$root_domain}";
 	$unix_subdomain = "/home/forge/$root_domain";
 	$unix_path = "$unix_subdomain/{$admin_dir}";
 	$admin_domain = "{$site_domain}/{$admin_dir}";
