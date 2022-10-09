@@ -183,7 +183,7 @@ function screen_content()
 	$files = scan_mass_prints();
 
 	?>
-        <?php echo(htmlspecialchars($mass_print_amount)) ?>
+        <?php echo('Total amount of files that are being created: '.htmlspecialchars($mass_print_amount)) ?>
     <a href="<?php echo('massPrint.php')?>" target="_blank">View mass prints</a>
 	<?php
 
