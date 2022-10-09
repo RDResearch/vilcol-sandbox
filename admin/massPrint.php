@@ -47,7 +47,7 @@ global $navi_1_home;
 global $USER; # set by admin_verify()
 global $unix_path;
 global $admin_domain;
-$mass_print_path = "/massprint";
+$mass_print_path = "/csvex/massprint";
 
 log_open("vilcol.log");
 

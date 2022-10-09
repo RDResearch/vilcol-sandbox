@@ -7827,7 +7827,7 @@ function mass_print_letters($ticked_jobs, $upload_app=false)
 	$date = new DateTime();
 	$current_time = $date->format('Y-m-dTH-i-s');
 
-	$file_name = "massprint/massPrint-".(string)$current_time;
+	$file_name = "csvex/massprint/massPrint-".(string)$current_time;
 
 	// asynchronus merging
 	$pool = Pool::create();
