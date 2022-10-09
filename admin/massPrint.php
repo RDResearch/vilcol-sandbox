@@ -126,8 +126,8 @@ $files = scan_mass_prints();
 
 ?>
 <div style="width:800px; margin:0 auto;">
-    <a href="<?php $_SERVER['PHP_SELF']; ?>">Refresh list</a>
     <br>
+    <a href="<?php $_SERVER['PHP_SELF']; ?>">Refresh list</a>
     <br>
     <?php
     if(isset($files)){
