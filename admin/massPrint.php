@@ -105,15 +105,14 @@ $files = scan_mass_prints();
             // now check if that matches todays date
             $date = date('y-m-d');
             if (strpos($file_date, $date) !== false){
-                echo("match");
-            }
-            else{
-                echo ('no match');
-            }
-            ?>
+                ?>
                 <div>
                     <a target="_blank" href="<?php echo("/admin".$mass_print_path."/".$file); ?>"><?php echo($file); ?></a>
                 </div>
+                <?php
+            }
+            ?>
+
             <?php
         }
     }
