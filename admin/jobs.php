@@ -2456,12 +2456,15 @@ function javascript()
 	function tick_all(max)
 	{
 	
-	    if (max > 100){
+	   
+	
+		if (!max){
+			max = 0;
+		}
+			
+		if (max > 100){
 	        max = 100;
 	    }
-	
-		if (!max)
-			max = 0;
 
 		var inputs = document.getElementsByTagName('input');
 		var jid = '';
