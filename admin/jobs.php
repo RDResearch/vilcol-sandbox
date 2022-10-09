@@ -2461,6 +2461,8 @@ function javascript()
 		if (!max)
 			max = 0;
 
+        max = 100;
+
 		var inputs = document.getElementsByTagName('input');
 		var jid = '';
 		var count_y = 0;
