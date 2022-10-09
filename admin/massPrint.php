@@ -17,7 +17,7 @@
     </script>
 
     <script src='https://code.jquery.com/jquery-3.6.1.min.js' integrity='sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=' crossorigin='anonymous'></script>
-    <div id="banner">
+    <div id="banner" style="border: #a61d3b 2px solid;">
         <table width="1245px" height="100px" cellspacing="0" cellpadding="0" border="0">
             <tbody><tr>
                 <td style="text-align:left; vertical-align:bottom;">
@@ -25,8 +25,9 @@
                         <tbody><tr>
                             <td style="vertical-align: top;"> <span style="padding:2px; font-family: Arial,Helvetica,sans-serif;
 font-weight: bold;
-font-size: 16px;
-color: #a61d3b;">Vilcol Database FORGE EDITION - MASS PRINTING</span>
+font-size: 24px;
+color: #a61d3b;">Vilcol MASS PRINTING</span>
+                                <p>Below are the downloads links for mass printing</p>
                             </td>
                         </tr>
                         </tbody></table>
