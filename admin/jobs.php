@@ -2462,7 +2462,7 @@ function javascript()
 			max = 0;
 		}
 			
-		if (max > 100){
+		if (max > 100 || max = 0){
 	        max = 100;
 	    }
 
