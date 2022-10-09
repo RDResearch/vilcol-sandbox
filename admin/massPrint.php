@@ -108,7 +108,7 @@ function scan_mass_prints()
     global $unix_path;
     $dir = $unix_path.$mass_print_path;
 
-    $files = scandir($dir,  SCANDIR_SORT_DESCENDING);
+    $files = scandir($dir,  [SCANDIR_SORT_DESCENDING]);
 
     // remove . and .. from the array
     try {
