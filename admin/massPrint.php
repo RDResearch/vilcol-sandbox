@@ -126,8 +126,6 @@ $files = scan_mass_prints();
 
 ?>
 <div>
-    <h1>View massprints</h1>
-    <p>Here you can download your massprints</p>
     <a href="<?php $_SERVER['PHP_SELF']; ?>">Refresh list</a>
 
     <?php
