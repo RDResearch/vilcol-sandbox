@@ -184,7 +184,7 @@ function screen_content()
 
 	?>
         <?php echo(htmlspecialchars($mass_print_amount)) ?>
-    <a href="<?php echo($site_domain.'hi/admin/massPrint.php')?>" target="_blank">View mass prints</a>
+    <a href="<?php echo('admin/massPrint.php')?>" target="_blank">View mass prints</a>
 	<?php
 
 	print "<h3>Jobs Screen</h3>";
