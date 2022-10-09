@@ -39,17 +39,17 @@ function mail_pm($mailto, $subject, $message, $from_addr, $from_name, $attachmen
 	else 
 		$bcc_list = array();
 		
-//	$pmail = new PHPMailer; //FIXME
+	$pmail = new PHPMailer;
 	
 	$mxrouting = true; # We are using mxrouting from 02/08/22
 
 	$pmail->isSMTP();
 	$pmail->Host = ($mxrouting ? 'pixel.mxrouting.net' : 'rdresearch.co.uk');
 	$pmail->SMTPAuth = true;
-	//$pmail->Username = ($mxrouting ? 'outgoing@looking.co.uk' : 'sclbykevin@rdresearch.co.uk'); // TODO - uncomment this
+	$pmail->Username = ($mxrouting ? 'outgoing@looking.co.uk' : 'sclbykevin@rdresearch.co.uk');
 	$pmail->Password = ($mxrouting ? 'tt#Ra^!dXz@g' : 'h*23YE$y1p');
 	$pmail->SMTPSecure = 'ssl';
-//	$pmail->Port = 465; // FIXME
+	$pmail->Port = 465;
 	
 	$pmail->From = $from_addr;
 	$pmail->FromName = $from_name;
