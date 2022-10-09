@@ -134,27 +134,28 @@ $files = scan_mass_prints();
     <?php
     if(isset($files)){
         foreach($files as $file){
+            try{
+                $split_file_name = preg_split("/[-]/", $file);
+                $name_array = [3];
 
-            $split_file_name = preg_split("/[-]/", $file);
-            $name_array = [3];
+                $name_array[0] = $split_file_name[1]; // year
+                $name_array[1] = $split_file_name[2]; // month
+                $name_array[2] = preg_replace("/BST[0-9]+/",'',$split_file_name[3]); // day
+                $file_date = implode("-", $name_array);
 
-            $name_array[0] = $split_file_name[1]; // year
-            $name_array[1] = $split_file_name[2]; // month
-            $name_array[2] = preg_replace("/BST[0-9]+/",'',$split_file_name[3]); // day
-            $file_date = implode("-", $name_array);
-
-            // now check if that matches todays date
-            $date = date('y-m-d');
-            if (strpos($file_date, $date) !== false){
+                // now check if that matches todays date
+                $date = date('y-m-d');
+                if (strpos($file_date, $date) !== false){
+                    ?>
+                    <div>
+                        <a target="_blank" href="<?php echo("/admin".$mass_print_path."/".$file); ?>"><?php echo($file); ?></a>
+                    </div>
+                    <?php
+                }
                 ?>
-                <div>
-                    <a target="_blank" href="<?php echo("/admin".$mass_print_path."/".$file); ?>"><?php echo($file); ?></a>
-                </div>
-                <?php
-            }
-            ?>
 
-            <?php
+                <?php
+            }catch (Exception $e){}
         }
     }
     ?>
