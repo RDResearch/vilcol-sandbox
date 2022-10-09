@@ -1253,8 +1253,8 @@ function javascript()
 		{
 			if (max < 0)
 				max = 0;
-			else if (9999 < max)
-				max = 9999;
+			else if (100 < max)
+				max = 100;
 		}
 		else
 			max = 0;
@@ -3527,7 +3527,7 @@ function print_jobs()
 		}
 		elseif ($sc_llist)
 		{
-			$tick_max = (count($_POST) ? 500 : post_val('tick_max',true));
+			$tick_max = (count($_POST) ? 100 : post_val('tick_max',true));
 			$mp_age = post_val2('mp_age_main', true);
 			print "
 			<td $col2>" . input_button('Export list to Excel', "export_xl()", $manager_x ? '' : 'disabled', 'but_export_xl') . "</td>
