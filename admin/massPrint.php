@@ -94,7 +94,7 @@ $files = scan_mass_prints();
     if(isset($files)){
         foreach($files as $file){
 
-//            $split_file_name = preg_split("[\s-]+", $file);
+            $split_file_name = preg_split("[\s-]+", $file);
 //            $name_array = [8];
 //            $name_array[0] = $split_file_name[1];
 //            $name_array[1] = $split_file_name[2];
@@ -105,7 +105,7 @@ $files = scan_mass_prints();
 //            $name_array[6] = $split_file_name[7];
 //            $name_array[7] = $split_file_name[8];
 //            $file_date = implode("-", $name_array);
-
+            var_dump($split_file_name);
             ?>
                 <div>
                     <a target="_blank" href="<?php echo("/admin".$mass_print_path."/".$file); ?>"><?php echo($file); ?></a>
