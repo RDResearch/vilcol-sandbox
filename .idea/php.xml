@@ -8,6 +8,9 @@
       <path value="$PROJECT_DIR$/admin/vendor/setasign/fpdi" />
       <path value="$PROJECT_DIR$/admin/vendor/setasign/fpdi-tcpdf" />
       <path value="$PROJECT_DIR$/admin/vendor/tecnickcom/tcpdf" />
+      <path value="$PROJECT_DIR$/admin/vendor/spatie/async" />
+      <path value="$PROJECT_DIR$/admin/vendor/symfony/process" />
+      <path value="$PROJECT_DIR$/admin/vendor/laravel/serializable-closure" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.4" />
