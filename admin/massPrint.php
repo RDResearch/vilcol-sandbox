@@ -113,6 +113,8 @@ function scan_mass_prints()
     // remove . and .. from the array
     try {
 
+        array_pop($files);
+        array_pop($files);
     }
     catch (Exception $e){
     }
