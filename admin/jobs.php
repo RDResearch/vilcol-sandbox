@@ -7748,6 +7748,9 @@ function print_one_job_collect_schpay($job)#, $editable)
 
 function mass_print_letters($ticked_jobs, $upload_app=false)
 {
+    global $mass_print_amount;
+    $mass_print_amount = 0;
+
 	# $ticked_jobs is an array of JOB_LETTER.JOB_LETTER_ID
 
 	global $csv_dir;
@@ -7833,6 +7836,7 @@ function mass_print_letters($ticked_jobs, $upload_app=false)
 	$count = 0;
 	foreach (array_chunk($pdfs, 100) as $key=>$pdf_chunk){
 		log_write("Merging ".$count);
+        $mass_print_amount++;
 		$pool->add(function () use ($pdf_chunk, $key, $file_name, $count){
 			$merger = new Merger;
 
@@ -7875,12 +7879,12 @@ function mass_print_letters($ticked_jobs, $upload_app=false)
 //	log_write('Creating button');
 //
 	// Link works - was a typo in the url
-	print("
-	<span>Mass printer - merged $count letters into 1 PDF</span>
-	<form target=\"_blank\" action=\"https://vilcoldbl.com/admin/$file_name\">
-		<input type=\"submit\" value=\"Click to open\" />
-	</form>
-	");
+//	print("
+//	<span>Mass printer - merged $count letters into 1 PDF</span>
+//	<form target=\"_blank\" action=\"https://vilcoldbl.com/admin/$file_name\">
+//		<input type=\"submit\" value=\"Click to open\" />
+//	</form>
+//	");
 //
 //	log_write('Button made');
 
