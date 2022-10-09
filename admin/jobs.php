@@ -177,7 +177,7 @@ function screen_content()
 	$files = scan_mass_prints();
 
 	?>
-    <a href="<?php echo($site_domain.'/admin/massPrint.php')?>"></a>
+    <a href="<?php echo($site_domain.'/admin/massPrint.php')?>" target="_blank">View mass prints</a>
 	<?php
 
 	print "<h3>Jobs Screen</h3>";
