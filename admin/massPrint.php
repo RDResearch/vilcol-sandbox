@@ -95,17 +95,13 @@ $files = scan_mass_prints();
         foreach($files as $file){
 
             $split_file_name = preg_split("/[-]/", $file);
-//            $name_array = [8];
-//            $name_array[0] = $split_file_name[1];
-//            $name_array[1] = $split_file_name[2];
-//            $name_array[2] = $split_file_name[3];
-//            $name_array[3] = $split_file_name[4];
-//            $name_array[4] = $split_file_name[5];
-//            $name_array[5] = $split_file_name[6];
-//            $name_array[6] = $split_file_name[7];
-//            $name_array[7] = $split_file_name[8];
-//            $file_date = implode("-", $name_array);
-            var_dump($split_file_name);
+            $name_array = [3];
+
+            $name_array[0] = $split_file_name[2]; // year
+            $name_array[1] = $split_file_name[3]; // month
+            $name_array[2] = preg_replace("/BST[0-9]+/",$split_file_name[4]); // day
+            $file_date = implode("-", $name_array);
+            var_dump($file_date);
             ?>
                 <div>
                     <a target="_blank" href="<?php echo("/admin".$mass_print_path."/".$file); ?>"><?php echo($file); ?></a>
