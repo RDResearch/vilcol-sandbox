@@ -157,31 +157,6 @@ function screen_content()
 		return;
 	}
 
-
-	$mass_print_path = "/massprint";
-	function scan_mass_prints()
-	{
-		global $mass_print_path;
-		global $unix_path;
-		$dir = "/home/forge/vilcoldbl.com/admin/massprint/";
-
-		$files = scandir($dir);
-
-		// remove . and .. from the array
-		try {
-
-			array_shift($files);
-			array_shift($files);
-		}
-		catch (Exception $e){
-		}
-
-		return $files;
-	}
-
-
-	$files = scan_mass_prints();
-
 	?>
     <a href="<?php echo('massPrint.php')?>" target="_blank">View mass prints</a>
 	<?php
