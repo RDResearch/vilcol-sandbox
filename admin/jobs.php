@@ -18,6 +18,8 @@ global $time_tests; # settings.php
 global $USER; # set by admin_verify()
 global $ticked_jobs;
 
+$mass_print_amount = 0;
+
 $subdir = 'search';
 
 log_open("vilcol.log");
