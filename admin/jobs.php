@@ -2455,6 +2455,11 @@ function javascript()
 
 	function tick_all(max)
 	{
+	
+	    if (max > 100){
+	        max = 100;
+	    }
+	
 		if (!max)
 			max = 0;
 
@@ -3577,12 +3582,12 @@ function print_jobs()
 		foreach ($headings as $hd)
 		{
 			if ($sc_llist && ($hd == 'Letter'))
-				print "<th>" . input_button('All', 'tick_all()', "style=\"width:30px;\"") . "</th>";
+				print "<th>" . input_button('100', 'tick_all()', "style=\"width:30px;\"") . "</th>";
 			print "<th>$hd</th>";
 		}
 		if ((!$sc_diary) && (!$sc_llist))
 		{
-			print "<th>" . ($manager_x ? input_button('All', 'tick_all()', "style=\"width:30px;\"") : '') . "</th>";
+			print "<th>" . ($manager_x ? input_button('100', 'tick_all()', "style=\"width:30px;\"") : '') . "</th>";
 			if ($sc_inst)
 				#if ($c_jobs_possible)
 				print "<th>Instalments</th>";
