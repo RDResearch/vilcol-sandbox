@@ -18,6 +18,7 @@ global $time_tests; # settings.php
 global $USER; # set by admin_verify()
 global $ticked_jobs;
 
+global $mass_print_amount;
 $mass_print_amount = 0;
 
 $subdir = 'search';
@@ -50,6 +51,7 @@ log_close();
 
 function screen_content()
 {
+    global $mass_print_amount;
 	global $added_activity_id;
 	global $added_arrange_id;
 	global $added_billing_id;
@@ -179,6 +181,7 @@ function screen_content()
 	$files = scan_mass_prints();
 
 	?>
+        <?php echo(htmlspecialchars($mass_print_amount)) ?>
     <a href="<?php echo($site_domain.'/admin/massPrint.php')?>" target="_blank">View mass prints</a>
 	<?php
 
