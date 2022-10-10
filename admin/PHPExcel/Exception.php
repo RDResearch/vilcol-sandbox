@@ -1,10 +1,8 @@
 <?php
-namespace PhpOffice\PhpSpreadsheet;
-
 /**
  * PHPExcel
  *
- * Copyright (c) 2006 - 2014 PHPExcel
+ * Copyright (c) 2006 - 2015 PHPExcel
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -22,18 +20,21 @@ namespace PhpOffice\PhpSpreadsheet;
  *
  * @category   PHPExcel
  * @package    PHPExcel
- * @copyright  Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
+ * @copyright  Copyright (c) 2006 - 2015 PHPExcel (http://www.codeplex.com/PHPExcel)
  * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt    LGPL
- * @version    1.8.0, 2014-03-02
+ * @version    ##VERSION##, ##DATE##
  */
+
+
 /**
  * PHPExcel_Exception
  *
  * @category   PHPExcel
  * @package    PHPExcel
- * @copyright  Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
+ * @copyright  Copyright (c) 2006 - 2015 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class Exception extends \Exception {
+class PHPExcel_Exception extends Exception
+{
     /**
      * Error handler callback
      *
@@ -43,7 +44,8 @@ class Exception extends \Exception {
      * @param mixed $line
      * @param mixed $context
      */
-    public static function errorHandlerCallback($code, $string, $file, $line, $context) {
+    public static function errorHandlerCallback($code, $string, $file, $line, $context)
+    {
         $e = new self($string, $code);
         $e->line = $line;
         $e->file = $file;

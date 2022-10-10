@@ -1,8 +1,18 @@
 <?php
+
+/** PHPExcel root directory */
+if (!defined('PHPEXCEL_ROOT')) {
+    /**
+     * @ignore
+     */
+    define('PHPEXCEL_ROOT', dirname(__FILE__) . '/../../');
+    require(PHPEXCEL_ROOT . 'PHPExcel/Autoloader.php');
+}
+
 /**
- * PHPExcel
+ * PHPExcel_Cell_DefaultValueBinder
  *
- * Copyright (c) 2006 - 2014 PHPExcel
+ * Copyright (c) 2006 - 2015 PHPExcel
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,52 +30,38 @@
  *
  * @category   PHPExcel
  * @package    PHPExcel_Cell
- * @copyright  Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
+ * @copyright  Copyright (c) 2006 - 2015 PHPExcel (http://www.codeplex.com/PHPExcel)
  * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt    LGPL
- * @version    1.8.0, 2014-03-02
+ * @version    ##VERSION##, ##DATE##
  */
-
-
-/** PHPExcel root directory */
-if (!defined('PHPEXCEL_ROOT')) {
-    /**
-     * @ignore
-     */
-    define('PHPEXCEL_ROOT', dirname(__FILE__) . '/../../');
-    require(PHPEXCEL_ROOT . 'PHPExcel/Autoloader.php');
-}
-
-
-namespace PhpOffice\PhpSpreadsheet\Cell;
-
-/**
- * PHPExcel_Cell_DefaultValueBinder
- *
- * @category   PHPExcel
- * @package    PHPExcel_Cell
- * @copyright  Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
- */
-class DefaultValueBinder implements \PhpOffice\PhpSpreadsheet\Cell\IValueBinder
+class PHPExcel_Cell_DefaultValueBinder implements PHPExcel_Cell_IValueBinder
 {
     /**
      * Bind value to a cell
      *
-     * @param \PhpOffice\PhpSpreadsheet\Cell\Cell $cell Cell to bind value to
+     * @param  PHPExcel_Cell  $cell   Cell to bind value to
      * @param  mixed          $value  Value to bind in cell
      * @return boolean
      */
-    public function bindValue(\PhpOffice\PhpSpreadsheet\Cell\Cell $cell, $value = \null)
+    public function bindValue(PHPExcel_Cell $cell, $value = null)
     {
         // sanitize UTF-8 strings
-        if (\is_string($value)) {
-            $value = \PhpOffice\PhpSpreadsheet\Shared\StringHelper::SanitizeUTF8($value);
+        if (is_string($value)) {
+            $value = PHPExcel_Shared_String::SanitizeUTF8($value);
+        } elseif (is_object($value)) {
+            // Handle any objects that might be injected
+            if ($value instanceof DateTime) {
+                $value = $value->format('Y-m-d H:i:s');
+            } elseif (!($value instanceof PHPExcel_RichText)) {
+                $value = (string) $value;
+            }
         }
 
         // Set value explicit
-        $cell->setValueExplicit( $value, self::dataTypeForValue($value) );
+        $cell->setValueExplicit($value, self::dataTypeForValue($value));
 
         // Done!
-        return \TRUE;
+        return true;
     }
 
     /**
@@ -74,35 +70,33 @@ class DefaultValueBinder implements \PhpOffice\PhpSpreadsheet\Cell\IValueBinder
      * @param   mixed  $pValue
      * @return  string
      */
-    public static function dataTypeForValue($pValue = \null) {
+    public static function dataTypeForValue($pValue = null)
+    {
         // Match the value against a few data types
-        if (\is_null($pValue)) {
-            return \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NULL;
-
+        if ($pValue === null) {
+            return PHPExcel_Cell_DataType::TYPE_NULL;
         } elseif ($pValue === '') {
-            return \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING;
-
-        } elseif ($pValue instanceof \PhpOffice\PhpSpreadsheet\RichText\RichText) {
-            return \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_INLINE;
-
-        } elseif ($pValue{0} === '=' && \strlen($pValue) > 1) {
-            return \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_FORMULA;
-
-        } elseif (\is_bool($pValue)) {
-            return \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_BOOL;
-
-        } elseif (\is_float($pValue) || \is_int($pValue)) {
-            return \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC;
-
-        } elseif (\preg_match('/^\-?([0-9]+\\.?[0-9]*|[0-9]*\\.?[0-9]+)$/', $pValue)) {
-            return \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC;
-
-        } elseif (\is_string($pValue) && \array_key_exists($pValue, \PhpOffice\PhpSpreadsheet\Cell\DataType::getErrorCodes())) {
-            return \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_ERROR;
-
-        } else {
-            return \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING;
-
+            return PHPExcel_Cell_DataType::TYPE_STRING;
+        } elseif ($pValue instanceof PHPExcel_RichText) {
+            return PHPExcel_Cell_DataType::TYPE_INLINE;
+        } elseif ($pValue{0} === '=' && strlen($pValue) > 1) {
+            return PHPExcel_Cell_DataType::TYPE_FORMULA;
+        } elseif (is_bool($pValue)) {
+            return PHPExcel_Cell_DataType::TYPE_BOOL;
+        } elseif (is_float($pValue) || is_int($pValue)) {
+            return PHPExcel_Cell_DataType::TYPE_NUMERIC;
+        } elseif (preg_match('/^[\+\-]?([0-9]+\\.?[0-9]*|[0-9]*\\.?[0-9]+)([Ee][\-\+]?[0-2]?\d{1,3})?$/', $pValue)) {
+            $tValue = ltrim($pValue, '+-');
+            if (is_string($pValue) && $tValue{0} === '0' && strlen($tValue) > 1 && $tValue{1} !== '.') {
+                return PHPExcel_Cell_DataType::TYPE_STRING;
+            } elseif ((strpos($pValue, '.') === false) && ($pValue > PHP_INT_MAX)) {
+                return PHPExcel_Cell_DataType::TYPE_STRING;
+            }
+            return PHPExcel_Cell_DataType::TYPE_NUMERIC;
+        } elseif (is_string($pValue) && array_key_exists($pValue, PHPExcel_Cell_DataType::getErrorCodes())) {
+            return PHPExcel_Cell_DataType::TYPE_ERROR;
         }
+
+        return PHPExcel_Cell_DataType::TYPE_STRING;
     }
 }

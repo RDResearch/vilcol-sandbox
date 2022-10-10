@@ -1,10 +1,9 @@
 <?php
-namespace PhpOffice\PhpSpreadsheet\Worksheet;
 
 /**
- * PHPExcel
+ * PHPExcel_WorksheetIterator
  *
- * Copyright (c) 2006 - 2014 PHPExcel
+ * Copyright (c) 2006 - 2015 PHPExcel
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -22,44 +21,35 @@ namespace PhpOffice\PhpSpreadsheet\Worksheet;
  *
  * @category   PHPExcel
  * @package    PHPExcel
- * @copyright  Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
+ * @copyright  Copyright (c) 2006 - 2015 PHPExcel (http://www.codeplex.com/PHPExcel)
  * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt    LGPL
- * @version    1.8.0, 2014-03-02
+ * @version    ##VERSION##, ##DATE##
  */
-/**
- * PHPExcel_WorksheetIterator
- *
- * Used to iterate worksheets in PHPExcel
- *
- * @category   PHPExcel
- * @package    PHPExcel
- * @copyright  Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
- */
-class Iterator implements \Iterator
+class PHPExcel_WorksheetIterator implements Iterator
 {
     /**
      * Spreadsheet to iterate
      *
-     * @var \PhpOffice\PhpSpreadsheet\Spreadsheet
+     * @var PHPExcel
      */
-    private $_subject;
+    private $subject;
 
     /**
      * Current iterator position
      *
      * @var int
      */
-    private $_position = 0;
+    private $position = 0;
 
     /**
      * Create a new worksheet iterator
      *
-     * @param \PhpOffice\PhpSpreadsheet\Spreadsheet $subject
+     * @param PHPExcel         $subject
      */
-    public function __construct(\PhpOffice\PhpSpreadsheet\Spreadsheet $subject = \null)
+    public function __construct(PHPExcel $subject = null)
     {
         // Set subject
-        $this->_subject = $subject;
+        $this->subject = $subject;
     }
 
     /**
@@ -67,7 +57,7 @@ class Iterator implements \Iterator
      */
     public function __destruct()
     {
-        unset($this->_subject);
+        unset($this->subject);
     }
 
     /**
@@ -75,17 +65,17 @@ class Iterator implements \Iterator
      */
     public function rewind()
     {
-        $this->_position = 0;
+        $this->position = 0;
     }
 
     /**
      * Current PHPExcel_Worksheet
      *
-     * @return \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet
+     * @return PHPExcel_Worksheet
      */
     public function current()
     {
-        return $this->_subject->getSheet($this->_position);
+        return $this->subject->getSheet($this->position);
     }
 
     /**
@@ -95,7 +85,7 @@ class Iterator implements \Iterator
      */
     public function key()
     {
-        return $this->_position;
+        return $this->position;
     }
 
     /**
@@ -103,7 +93,7 @@ class Iterator implements \Iterator
      */
     public function next()
     {
-        ++$this->_position;
+        ++$this->position;
     }
 
     /**
@@ -113,6 +103,6 @@ class Iterator implements \Iterator
      */
     public function valid()
     {
-        return $this->_position < $this->_subject->getSheetCount();
+        return $this->position < $this->subject->getSheetCount();
     }
 }

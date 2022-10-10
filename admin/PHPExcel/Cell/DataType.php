@@ -1,10 +1,9 @@
 <?php
-namespace PhpOffice\PhpSpreadsheet\Cell;
 
 /**
- * PHPExcel
+ * PHPExcel_Cell_DataType
  *
- * Copyright (c) 2006 - 2014 PHPExcel
+ * Copyright (c) 2006 - 2015 PHPExcel
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -22,18 +21,11 @@ namespace PhpOffice\PhpSpreadsheet\Cell;
  *
  * @category   PHPExcel
  * @package    PHPExcel_Cell
- * @copyright  Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
+ * @copyright  Copyright (c) 2006 - 2015 PHPExcel (http://www.codeplex.com/PHPExcel)
  * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt    LGPL
- * @version    1.8.0, 2014-03-02
+ * @version    ##VERSION##, ##DATE##
  */
-/**
- * PHPExcel_Cell_DataType
- *
- * @category   PHPExcel
- * @package    PHPExcel_Cell
- * @copyright  Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
- */
-class DataType
+class PHPExcel_Cell_DataType
 {
     /* Data types */
     const TYPE_STRING2  = 'str';
@@ -50,7 +42,7 @@ class DataType
      *
      * @var array
      */
-    private static $_errorCodes = array(
+    private static $errorCodes = array(
         '#NULL!'  => 0,
         '#DIV/0!' => 1,
         '#VALUE!' => 2,
@@ -65,8 +57,9 @@ class DataType
      *
      * @return array
      */
-    public static function getErrorCodes() {
-        return self::$_errorCodes;
+    public static function getErrorCodes()
+    {
+        return self::$errorCodes;
     }
 
     /**
@@ -76,8 +69,9 @@ class DataType
      * @param       mixed  $pValue
      * @return      string
      */
-    public static function dataTypeForValue($pValue = \null) {
-        return \PhpOffice\PhpSpreadsheet\Cell\DefaultValueBinder::dataTypeForValue($pValue);
+    public static function dataTypeForValue($pValue = null)
+    {
+        return PHPExcel_Cell_DefaultValueBinder::dataTypeForValue($pValue);
     }
 
     /**
@@ -86,18 +80,18 @@ class DataType
      * @param  mixed  Value to sanitize to an Excel string
      * @return mixed  Sanitized value
      */
-    public static function checkString($pValue = \null)
+    public static function checkString($pValue = null)
     {
-        if ($pValue instanceof \PhpOffice\PhpSpreadsheet\RichText\RichText) {
+        if ($pValue instanceof PHPExcel_RichText) {
             // TODO: Sanitize Rich-Text string (max. character count is 32,767)
             return $pValue;
         }
 
         // string must never be longer than 32,767 characters, truncate if necessary
-        $pValue = \PhpOffice\PhpSpreadsheet\Shared\StringHelper::Substring($pValue, 0, 32767);
+        $pValue = PHPExcel_Shared_String::Substring($pValue, 0, 32767);
 
         // we require that newline is represented as "\n" in core, not as "\r\n" or "\r"
-        $pValue = \str_replace(array("\r\n", "\r"), "\n", $pValue);
+        $pValue = str_replace(array("\r\n", "\r"), "\n", $pValue);
 
         return $pValue;
     }
@@ -108,15 +102,14 @@ class DataType
      * @param  mixed   Value to sanitize to an Excel error code
      * @return string  Sanitized value
      */
-    public static function checkErrorCode($pValue = \null)
+    public static function checkErrorCode($pValue = null)
     {
         $pValue = (string) $pValue;
 
-        if ( !\array_key_exists($pValue, self::$_errorCodes) ) {
+        if (!array_key_exists($pValue, self::$errorCodes)) {
             $pValue = '#NULL!';
         }
 
         return $pValue;
     }
-
 }
