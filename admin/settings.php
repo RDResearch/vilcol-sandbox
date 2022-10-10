@@ -83,7 +83,7 @@ elseif ($site_live)
 {
 	# Live site on RDR Linux server
 	$protocol = "http";
-	$root_domain = 'vilcoldb.com';
+	$root_domain = 'sandbox.vilcoldb.com';
 	$admin_dir = 'admin';
 	$site_domain = "www.{$root_domain}";
 	$unix_subdomain = "/var/www/vhosts/$root_domain";
