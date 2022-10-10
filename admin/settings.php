@@ -107,7 +107,7 @@ elseif ($site_forge)
 {
 	# Live site on RDR Forge server
 	$protocol = "https";
-	$root_domain = 'vilcoldb.com';
+	$root_domain = 'sandbox.vilcoldb.com';
 	$admin_dir = 'admin';
 	$site_domain = "{$root_domain}";
 	$unix_subdomain = "/home/forge/$root_domain";
