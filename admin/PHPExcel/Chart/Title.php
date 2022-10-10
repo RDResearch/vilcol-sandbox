@@ -1,4 +1,6 @@
 <?php
+namespace PhpOffice\PhpSpreadsheet\Chart;
+
 /**
  * PHPExcel
  *
@@ -24,8 +26,6 @@
  * @license		http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
  * @version		1.8.0, 2014-03-02
  */
-
-
 /**
  * PHPExcel_Chart_Title
  *
@@ -33,7 +33,7 @@
  * @package		PHPExcel_Chart
  * @copyright	Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Chart_Title
+class Title
 {
 
 	/**
@@ -41,19 +41,19 @@ class PHPExcel_Chart_Title
 	 *
 	 * @var string
 	 */
-	private $_caption = null;
+	private $_caption = \null;
 
 	/**
-	 * Title Layout
-	 *
-	 * @var PHPExcel_Chart_Layout
-	 */
-	private $_layout = null;
+  * Title Layout
+  *
+  * @var \PhpOffice\PhpSpreadsheet\Chart\Layout
+  */
+ private $_layout = \null;
 
 	/**
 	 * Create a new PHPExcel_Chart_Title
 	 */
-	public function __construct($caption = null, PHPExcel_Chart_Layout $layout = null)
+	public function __construct($caption = \null, \PhpOffice\PhpSpreadsheet\Chart\Layout $layout = \null)
 	{
 		$this->_caption = $caption;
 		$this->_layout = $layout;
@@ -69,23 +69,23 @@ class PHPExcel_Chart_Title
 	}
 
 	/**
-	 * Set caption
-	 *
-	 * @param string $caption
-     * @return PHPExcel_Chart_Title
-	 */
-	public function setCaption($caption = null) {
+  * Set caption
+  *
+  * @param string $caption
+  * @return \PhpOffice\PhpSpreadsheet\Chart\Title
+  */
+ public function setCaption($caption = \null) {
 		$this->_caption = $caption;
         
         return $this;
 	}
 
 	/**
-	 * Get Layout
-	 *
-	 * @return PHPExcel_Chart_Layout
-	 */
-	public function getLayout() {
+  * Get Layout
+  *
+  * @return \PhpOffice\PhpSpreadsheet\Chart\Layout
+  */
+ public function getLayout() {
 		return $this->_layout;
 	}
 

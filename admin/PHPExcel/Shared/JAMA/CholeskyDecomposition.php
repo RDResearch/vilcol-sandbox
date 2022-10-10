@@ -1,4 +1,6 @@
 <?php
+namespace PhpOffice\PhpSpreadsheet\Shared\JAMA;
+
 /**
  *	@package JAMA
  *
@@ -36,7 +38,7 @@ class CholeskyDecomposition {
 	 *	@var boolean
 	 *	@access private
 	 */
-	private $isspd = true;
+	private $isspd = \true;
 
 
 	/**
@@ -45,8 +47,8 @@ class CholeskyDecomposition {
 	 *	Class constructor - decomposes symmetric positive definite matrix
 	 *	@param mixed Matrix square symmetric positive definite matrix
 	 */
-	public function __construct($A = null) {
-		if ($A instanceof Matrix) {
+	public function __construct($A = \null) {
+		if ($A instanceof \Matrix) {
 			$this->L = $A->getArray();
 			$this->m = $A->getRowDimension();
 
@@ -57,9 +59,9 @@ class CholeskyDecomposition {
 					}
 					if ($i == $j) {
 						if ($sum >= 0) {
-							$this->L[$i][$i] = sqrt($sum);
+							$this->L[$i][$i] = \sqrt($sum);
 						} else {
-							$this->isspd = false;
+							$this->isspd = \false;
 						}
 					} else {
 						if ($this->L[$i][$i] != 0) {
@@ -73,7 +75,7 @@ class CholeskyDecomposition {
 				}
 			}
 		} else {
-			throw new PHPExcel_Calculation_Exception(JAMAError(ArgumentTypeException));
+			throw new \PhpOffice\PhpSpreadsheet\Calculation\Exception(\JAMAError(\ArgumentTypeException));
 		}
 	}	//	function __construct()
 
@@ -95,7 +97,7 @@ class CholeskyDecomposition {
 	 *	@return Matrix Lower triangular matrix
 	 */
 	public function getL() {
-		return new Matrix($this->L);
+		return new \Matrix($this->L);
 	}	//	function getL()
 
 
@@ -105,8 +107,8 @@ class CholeskyDecomposition {
 	 *	@param $B Row-equal matrix
 	 *	@return Matrix L * L' * X = B
 	 */
-	public function solve($B = null) {
-		if ($B instanceof Matrix) {
+	public function solve($B = \null) {
+		if ($B instanceof \Matrix) {
 			if ($B->getRowDimension() == $this->m) {
 				if ($this->isspd) {
 					$X  = $B->getArrayCopy();
@@ -134,15 +136,15 @@ class CholeskyDecomposition {
 						}
 					}
 
-					return new Matrix($X, $this->m, $nx);
+					return new \Matrix($X, $this->m, $nx);
 				} else {
-					throw new PHPExcel_Calculation_Exception(JAMAError(MatrixSPDException));
+					throw new \PhpOffice\PhpSpreadsheet\Calculation\Exception(\JAMAError(\MatrixSPDException));
 				}
 			} else {
-				throw new PHPExcel_Calculation_Exception(JAMAError(MatrixDimensionException));
+				throw new \PhpOffice\PhpSpreadsheet\Calculation\Exception(\JAMAError(\MatrixDimensionException));
 			}
 		} else {
-			throw new PHPExcel_Calculation_Exception(JAMAError(ArgumentTypeException));
+			throw new \PhpOffice\PhpSpreadsheet\Calculation\Exception(\JAMAError(\ArgumentTypeException));
 		}
 	}	//	function solve()
 

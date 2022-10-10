@@ -1,4 +1,6 @@
 <?php
+namespace PhpOffice\PhpSpreadsheet\Writer\Xls;
+
 /**
  * PHPExcel
  *
@@ -24,8 +26,6 @@
  * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
  * @version    1.8.0, 2014-03-02
  */
-
-
 /**
  * PHPExcel_Writer_Excel5_Font
  *
@@ -33,30 +33,29 @@
  * @package    PHPExcel_Writer_Excel5
  * @copyright  Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Writer_Excel5_Font
+class Font
 {
 	/**
 	 * Color index
 	 *
 	 * @var int
 	 */
-	private $_colorIndex;
+	private $_colorIndex = 0x7FFF;
 
 	/**
-	 * Font
-	 *
-	 * @var PHPExcel_Style_Font
-	 */
-	private $_font;
+  * Font
+  *
+  * @var \PhpOffice\PhpSpreadsheet\Style\Font
+  */
+ private $_font;
 
 	/**
-	 * Constructor
-	 *
-	 * @param PHPExcel_Style_Font $font
-	 */
-	public function __construct(PHPExcel_Style_Font $font = null)
+  * Constructor
+  *
+  * @param \PhpOffice\PhpSpreadsheet\Style\Font $font
+  */
+ public function __construct(\PhpOffice\PhpSpreadsheet\Style\Font $font = \null)
 	{
-		$this->_colorIndex = 0x7FFF;
 		$this->_font = $font;
 	}
 
@@ -89,7 +88,7 @@ class PHPExcel_Writer_Excel5_Font
 			$sss = 0;
 		}
 		$bFamily = 0; // Font family
-		$bCharSet = PHPExcel_Shared_Font::getCharsetFromFontName($this->_font->getName()); // Character set
+		$bCharSet = \PhpOffice\PhpSpreadsheet\Shared\Font::getCharsetFromFontName($this->_font->getName()); // Character set
 
 		$record = 0x31;		// Record identifier
 		$reserved = 0x00;	// Reserved
@@ -107,7 +106,7 @@ class PHPExcel_Writer_Excel5_Font
 			$grbit |= 0x20;
 		}
 
-		$data = pack("vvvvvCCCC",
+		$data = \pack("vvvvvCCCC",
 			$this->_font->getSize() * 20,						//	Fontsize (in twips)
 			$grbit,
 			$icv,												//	Colour
@@ -118,10 +117,10 @@ class PHPExcel_Writer_Excel5_Font
 			$bCharSet,
 			$reserved
 		);
-		$data .= PHPExcel_Shared_String::UTF8toBIFF8UnicodeShort($this->_font->getName());
+		$data .= \PhpOffice\PhpSpreadsheet\Shared\StringHelper::UTF8toBIFF8UnicodeShort($this->_font->getName());
 
-		$length = strlen($data);
-		$header = pack("vv", $record, $length);
+		$length = \strlen($data);
+		$header = \pack("vv", $record, $length);
 
 		return($header . $data);
 	}
@@ -144,11 +143,11 @@ class PHPExcel_Writer_Excel5_Font
 	 * @static	array of int
 	 *
 	 */
-	private static $_mapUnderline = array(	PHPExcel_Style_Font::UNDERLINE_NONE					=> 0x00,
-											PHPExcel_Style_Font::UNDERLINE_SINGLE				=> 0x01,
-											PHPExcel_Style_Font::UNDERLINE_DOUBLE				=> 0x02,
-											PHPExcel_Style_Font::UNDERLINE_SINGLEACCOUNTING		=> 0x21,
-											PHPExcel_Style_Font::UNDERLINE_DOUBLEACCOUNTING		=> 0x22,
+	private static $_mapUnderline = array(	\PhpOffice\PhpSpreadsheet\Style\Font::UNDERLINE_NONE					=> 0x00,
+											\PhpOffice\PhpSpreadsheet\Style\Font::UNDERLINE_SINGLE				=> 0x01,
+											\PhpOffice\PhpSpreadsheet\Style\Font::UNDERLINE_DOUBLE				=> 0x02,
+											\PhpOffice\PhpSpreadsheet\Style\Font::UNDERLINE_SINGLEACCOUNTING		=> 0x21,
+											\PhpOffice\PhpSpreadsheet\Style\Font::UNDERLINE_DOUBLEACCOUNTING		=> 0x22,
 										 );
 	/**
 	 * Map underline

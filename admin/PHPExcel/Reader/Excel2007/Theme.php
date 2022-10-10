@@ -1,4 +1,6 @@
 <?php
+namespace PhpOffice\PhpSpreadsheet\Reader\Xlsx;
+
 /**
  * PHPExcel
  *
@@ -24,8 +26,6 @@
  * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
  * @version    1.8.0, 2014-03-02
  */
-
-
 /**
  * PHPExcel_Reader_Excel2007_Theme
  *
@@ -33,7 +33,7 @@
  * @package    PHPExcel_Reader_Excel2007
  * @copyright  Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Reader_Excel2007_Theme
+class Theme
 {
 	/**
 	 * Theme Name
@@ -105,16 +105,16 @@ class PHPExcel_Reader_Excel2007_Theme
     	if (isset($this->_colourMap[$index])) {
 			return $this->_colourMap[$index];
 		}
-		return null;
+		return \null;
     }
 
 	/**
 	 * Implement PHP __clone to create a deep clone, not just a shallow copy.
 	 */
 	public function __clone() {
-		$vars = get_object_vars($this);
+		$vars = \get_object_vars($this);
 		foreach ($vars as $key => $value) {
-			if ((is_object($value)) && ($key != '_parent')) {
+			if ((\is_object($value)) && ($key != '_parent')) {
 				$this->$key = clone $value;
 			} else {
 				$this->$key = $value;

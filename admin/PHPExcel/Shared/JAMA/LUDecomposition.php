@@ -1,4 +1,6 @@
 <?php
+namespace PhpOffice\PhpSpreadsheet\Shared\JAMA;
+
 /**
  *	@package JAMA
  *
@@ -18,7 +20,7 @@
  *	@version 1.1
  *	@license PHP v3.0
  */
-class PHPExcel_Shared_JAMA_LUDecomposition {
+class LUDecomposition {
 
 	const MatrixSingularException	= "Can only perform operation on singular matrix.";
 	const MatrixSquareException		= "Mismatched Row dimension";
@@ -61,7 +63,7 @@ class PHPExcel_Shared_JAMA_LUDecomposition {
 	 *	@return Structure to access L, U and piv.
 	 */
 	public function __construct($A) {
-		if ($A instanceof PHPExcel_Shared_JAMA_Matrix) {
+		if ($A instanceof \PhpOffice\PhpSpreadsheet\Shared\JAMA\Matrix) {
 			// Use a "left-looking", dot-product, Crout/Doolittle algorithm.
 			$this->LU = $A->getArray();
 			$this->m  = $A->getRowDimension();
@@ -82,7 +84,7 @@ class PHPExcel_Shared_JAMA_LUDecomposition {
 				for ($i = 0; $i < $this->m; ++$i) {
 					$LUrowi = $this->LU[$i];
 					// Most of the time is spent in the following dot product.
-					$kmax = min($i,$j);
+					$kmax = \min($i,$j);
 					$s = 0.0;
 					for ($k = 0; $k < $kmax; ++$k) {
 						$s += $LUrowi[$k] * $LUcolj[$k];
@@ -92,7 +94,7 @@ class PHPExcel_Shared_JAMA_LUDecomposition {
 				// Find pivot and exchange if necessary.
 				$p = $j;
 				for ($i = $j+1; $i < $this->m; ++$i) {
-					if (abs($LUcolj[$i]) > abs($LUcolj[$p])) {
+					if (\abs($LUcolj[$i]) > \abs($LUcolj[$p])) {
 						$p = $i;
 					}
 				}
@@ -115,7 +117,7 @@ class PHPExcel_Shared_JAMA_LUDecomposition {
 				}
 			}
 		} else {
-			throw new PHPExcel_Calculation_Exception(PHPExcel_Shared_JAMA_Matrix::ArgumentTypeException);
+			throw new \PhpOffice\PhpSpreadsheet\Calculation\Exception(\PhpOffice\PhpSpreadsheet\Shared\JAMA\Matrix::ArgumentTypeException);
 		}
 	}	//	function __construct()
 
@@ -137,7 +139,7 @@ class PHPExcel_Shared_JAMA_LUDecomposition {
 				}
 			}
 		}
-		return new PHPExcel_Shared_JAMA_Matrix($L);
+		return new \PhpOffice\PhpSpreadsheet\Shared\JAMA\Matrix($L);
 	}	//	function getL()
 
 
@@ -156,7 +158,7 @@ class PHPExcel_Shared_JAMA_LUDecomposition {
 				}
 			}
 		}
-		return new PHPExcel_Shared_JAMA_Matrix($U);
+		return new \PhpOffice\PhpSpreadsheet\Shared\JAMA\Matrix($U);
 	}	//	function getU()
 
 
@@ -188,10 +190,10 @@ class PHPExcel_Shared_JAMA_LUDecomposition {
 	public function isNonsingular() {
 		for ($j = 0; $j < $this->n; ++$j) {
 			if ($this->LU[$j][$j] == 0) {
-				return false;
+				return \false;
 			}
 		}
-		return true;
+		return \true;
 	}	//	function isNonsingular()
 
 
@@ -208,7 +210,7 @@ class PHPExcel_Shared_JAMA_LUDecomposition {
 			}
 			return $d;
 		} else {
-			throw new PHPExcel_Calculation_Exception(PHPExcel_Shared_JAMA_Matrix::MatrixDimensionException);
+			throw new \PhpOffice\PhpSpreadsheet\Calculation\Exception(\PhpOffice\PhpSpreadsheet\Shared\JAMA\Matrix::MatrixDimensionException);
 		}
 	}	//	function det()
 
@@ -248,10 +250,10 @@ class PHPExcel_Shared_JAMA_LUDecomposition {
 				}
 				return $X;
 			} else {
-				throw new PHPExcel_Calculation_Exception(self::MatrixSingularException);
+				throw new \PhpOffice\PhpSpreadsheet\Calculation\Exception(self::MatrixSingularException);
 			}
 		} else {
-			throw new PHPExcel_Calculation_Exception(self::MatrixSquareException);
+			throw new \PhpOffice\PhpSpreadsheet\Calculation\Exception(self::MatrixSquareException);
 		}
 	}	//	function solve()
 

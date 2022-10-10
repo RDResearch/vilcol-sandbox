@@ -1,5 +1,7 @@
 <?php
 
+namespace PhpOffice\PhpSpreadsheet\Shared;
+
 /**
  * PHPExcel
  *
@@ -25,8 +27,6 @@
  * @license	http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
  * @version	1.8.0, 2014-03-02
  */
-
-
 /**
  * PHPExcel_Shared_TimeZone
  *
@@ -34,7 +34,7 @@
  * @package	PHPExcel_Shared
  * @copyright  Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Shared_TimeZone
+class TimeZone
 {
 	/*
 	 * Default Timezone used for date/time conversions
@@ -51,10 +51,10 @@ class PHPExcel_Shared_TimeZone
 	 * @return	 boolean						Success or failure
 	 */
 	public static function _validateTimeZone($timezone) {
-		if (in_array($timezone, DateTimeZone::listIdentifiers())) {
-			return TRUE;
+		if (\in_array($timezone, \DateTimeZone::listIdentifiers())) {
+			return \TRUE;
 		}
-		return FALSE;
+		return \FALSE;
 	}
 
 	/**
@@ -66,9 +66,9 @@ class PHPExcel_Shared_TimeZone
 	public static function setTimeZone($timezone) {
 		if (self::_validateTimezone($timezone)) {
 			self::$_timezone = $timezone;
-			return TRUE;
+			return \TRUE;
 		}
-		return FALSE;
+		return \FALSE;
 	}	//	function setTimezone()
 
 
@@ -98,7 +98,7 @@ class PHPExcel_Shared_TimeZone
 				break;
 			}
 			if (empty($transitions)) {
-				$transitions[] = end($allTransitions);
+				$transitions[] = \end($allTransitions);
 			}
 		}
 
@@ -106,18 +106,18 @@ class PHPExcel_Shared_TimeZone
 	}
 
 	/**
-	 *	Return the Timezone offset used for date/time conversions to/from UST
-	 *	This requires both the timezone and the calculated date/time to allow for local DST
-	 *
-	 *	@param		string	 			$timezone		The timezone for finding the adjustment to UST
-	 *	@param		integer	 			$timestamp		PHP date/time value
-	 *	@return	 	integer				Number of seconds for timezone adjustment
-	 *	@throws		PHPExcel_Exception
-	 */
-	public static function getTimeZoneAdjustment($timezone, $timestamp) {
-		if ($timezone !== NULL) {
+  *	Return the Timezone offset used for date/time conversions to/from UST
+  *	This requires both the timezone and the calculated date/time to allow for local DST
+  *
+  *	@param		string	 			$timezone		The timezone for finding the adjustment to UST
+  *	@param		integer	 			$timestamp		PHP date/time value
+  *	@return	 	integer				Number of seconds for timezone adjustment
+  * @throws \PhpOffice\PhpSpreadsheet\Exception
+  */
+ public static function getTimeZoneAdjustment($timezone, $timestamp) {
+		if ($timezone !== \NULL) {
 			if (!self::_validateTimezone($timezone)) {
-				throw new PHPExcel_Exception("Invalid timezone " . $timezone);
+				throw new \PhpOffice\PhpSpreadsheet\Exception("Invalid timezone " . $timezone);
 			}
 		} else {
 			$timezone = self::$_timezone;
@@ -127,14 +127,14 @@ class PHPExcel_Shared_TimeZone
 			return 0;
 		}
 
-		$objTimezone = new DateTimeZone($timezone);
-		if (version_compare(PHP_VERSION, '5.3.0') >= 0) {
+		$objTimezone = new \DateTimeZone($timezone);
+		if (\version_compare(\PHP_VERSION, '5.3.0') >= 0) {
 			$transitions = $objTimezone->getTransitions($timestamp,$timestamp);
 		} else {
 			$transitions = self::_getTimezoneTransitions($objTimezone, $timestamp);
 		}
 
-		return (count($transitions) > 0) ? $transitions[0]['offset'] : 0;
+		return (\count($transitions) > 0) ? $transitions[0]['offset'] : 0;
 	}
 
 }

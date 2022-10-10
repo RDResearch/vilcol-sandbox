@@ -1,4 +1,6 @@
 <?php
+namespace PhpOffice\PhpSpreadsheet\RichText;
+
 /**
  * PHPExcel
  *
@@ -22,8 +24,6 @@
  * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
  * @version    1.8.0, 2014-03-02
  */
-
-
 /**
  * PHPExcel_RichText_ITextElement
  *
@@ -31,7 +31,7 @@
  * @package    PHPExcel_RichText
  * @copyright  Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-interface PHPExcel_RichText_ITextElement
+interface ITextElement
 {
 	/**
 	 * Get text
@@ -41,19 +41,19 @@ interface PHPExcel_RichText_ITextElement
 	public function getText();
 
 	/**
-	 * Set text
-	 *
-	 * @param 	$pText string	Text
-	 * @return PHPExcel_RichText_ITextElement
-	 */
-	public function setText($pText = '');
+  * Set text
+  *
+  * @param 	$pText string	Text
+  * @return \PhpOffice\PhpSpreadsheet\RichText\ITextElement
+  */
+ public function setText($pText = '');
 
 	/**
-	 * Get font
-	 *
-	 * @return PHPExcel_Style_Font
-	 */
-	public function getFont();
+  * Get font
+  *
+  * @return \PhpOffice\PhpSpreadsheet\Style\Font
+  */
+ public function getFont();
 
 	/**
 	 * Get hash code

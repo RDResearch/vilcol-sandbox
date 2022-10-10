@@ -1,4 +1,6 @@
 <?php
+namespace PhpOffice\PhpSpreadsheet\Calculation\Token;
+
 /**
  * PHPExcel
  *
@@ -24,8 +26,6 @@
  * @license	http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
  * @version	1.8.0, 2014-03-02
  */
-
-
 /**
  * PHPExcel_Calculation_Token_Stack
  *
@@ -33,7 +33,7 @@
  * @package		PHPExcel_Calculation
  * @copyright	Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Calculation_Token_Stack {
+class Stack {
 
 	/**
 	 *  The parser stack for formulae
@@ -66,13 +66,13 @@ class PHPExcel_Calculation_Token_Stack {
 	 * @param  mixed  $value
 	 * @param  mixed  $reference
 	 */
-	public function push($type, $value, $reference = NULL) {
+	public function push($type, $value, $reference = \NULL) {
 		$this->_stack[$this->_count++] = array('type'		=> $type,
 											   'value'		=> $value,
 											   'reference'	=> $reference
 											  );
 		if ($type == 'Function') {
-			$localeFunction = PHPExcel_Calculation::_localeFunc($value);
+			$localeFunction = \PhpOffice\PhpSpreadsheet\Calculation\Calculation::_localeFunc($value);
 			if ($localeFunction != $value) {
 				$this->_stack[($this->_count - 1)]['localeValue'] = $localeFunction;
 			}
@@ -88,7 +88,7 @@ class PHPExcel_Calculation_Token_Stack {
 		if ($this->_count > 0) {
 			return $this->_stack[--$this->_count];
 		}
-		return NULL;
+		return \NULL;
 	}	//	function pop()
 
 	/**
@@ -99,7 +99,7 @@ class PHPExcel_Calculation_Token_Stack {
 	 */
 	public function last($n = 1) {
 		if ($this->_count - $n < 0) {
-			return NULL;
+			return \NULL;
 		}
 		return $this->_stack[$this->_count - $n];
 	}	//	function last()

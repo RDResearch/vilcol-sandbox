@@ -40,6 +40,8 @@ if (!defined('PHPEXCEL_ROOT')) {
 define('EULER', 2.71828182845904523536);
 
 
+namespace PhpOffice\PhpSpreadsheet\Calculation;
+
 /**
  * PHPExcel_Calculation_Engineering
  *
@@ -47,76 +49,76 @@ define('EULER', 2.71828182845904523536);
  * @package		PHPExcel_Calculation
  * @copyright	Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Calculation_Engineering {
+class Engineering {
 
 	/**
 	 * Details of the Units of measure that can be used in CONVERTUOM()
 	 *
 	 * @var mixed[]
 	 */
-	private static $_conversionUnits = array( 'g'		=> array(	'Group'	=> 'Mass',			'Unit Name'	=> 'Gram',						'AllowPrefix'	=> True		),
-											  'sg'		=> array(	'Group'	=> 'Mass',			'Unit Name'	=> 'Slug',						'AllowPrefix'	=> False	),
-											  'lbm'		=> array(	'Group'	=> 'Mass',			'Unit Name'	=> 'Pound mass (avoirdupois)',	'AllowPrefix'	=> False	),
-											  'u'		=> array(	'Group'	=> 'Mass',			'Unit Name'	=> 'U (atomic mass unit)',		'AllowPrefix'	=> True		),
-											  'ozm'		=> array(	'Group'	=> 'Mass',			'Unit Name'	=> 'Ounce mass (avoirdupois)',	'AllowPrefix'	=> False	),
-											  'm'		=> array(	'Group'	=> 'Distance',		'Unit Name'	=> 'Meter',						'AllowPrefix'	=> True		),
-											  'mi'		=> array(	'Group'	=> 'Distance',		'Unit Name'	=> 'Statute mile',				'AllowPrefix'	=> False	),
-											  'Nmi'		=> array(	'Group'	=> 'Distance',		'Unit Name'	=> 'Nautical mile',				'AllowPrefix'	=> False	),
-											  'in'		=> array(	'Group'	=> 'Distance',		'Unit Name'	=> 'Inch',						'AllowPrefix'	=> False	),
-											  'ft'		=> array(	'Group'	=> 'Distance',		'Unit Name'	=> 'Foot',						'AllowPrefix'	=> False	),
-											  'yd'		=> array(	'Group'	=> 'Distance',		'Unit Name'	=> 'Yard',						'AllowPrefix'	=> False	),
-											  'ang'		=> array(	'Group'	=> 'Distance',		'Unit Name'	=> 'Angstrom',					'AllowPrefix'	=> True		),
-											  'Pica'	=> array(	'Group'	=> 'Distance',		'Unit Name'	=> 'Pica (1/72 in)',			'AllowPrefix'	=> False	),
-											  'yr'		=> array(	'Group'	=> 'Time',			'Unit Name'	=> 'Year',						'AllowPrefix'	=> False	),
-											  'day'		=> array(	'Group'	=> 'Time',			'Unit Name'	=> 'Day',						'AllowPrefix'	=> False	),
-											  'hr'		=> array(	'Group'	=> 'Time',			'Unit Name'	=> 'Hour',						'AllowPrefix'	=> False	),
-											  'mn'		=> array(	'Group'	=> 'Time',			'Unit Name'	=> 'Minute',					'AllowPrefix'	=> False	),
-											  'sec'		=> array(	'Group'	=> 'Time',			'Unit Name'	=> 'Second',					'AllowPrefix'	=> True		),
-											  'Pa'		=> array(	'Group'	=> 'Pressure',		'Unit Name'	=> 'Pascal',					'AllowPrefix'	=> True		),
-											  'p'		=> array(	'Group'	=> 'Pressure',		'Unit Name'	=> 'Pascal',					'AllowPrefix'	=> True		),
-											  'atm'		=> array(	'Group'	=> 'Pressure',		'Unit Name'	=> 'Atmosphere',				'AllowPrefix'	=> True		),
-											  'at'		=> array(	'Group'	=> 'Pressure',		'Unit Name'	=> 'Atmosphere',				'AllowPrefix'	=> True		),
-											  'mmHg'	=> array(	'Group'	=> 'Pressure',		'Unit Name'	=> 'mm of Mercury',				'AllowPrefix'	=> True		),
-											  'N'		=> array(	'Group'	=> 'Force',			'Unit Name'	=> 'Newton',					'AllowPrefix'	=> True		),
-											  'dyn'		=> array(	'Group'	=> 'Force',			'Unit Name'	=> 'Dyne',						'AllowPrefix'	=> True		),
-											  'dy'		=> array(	'Group'	=> 'Force',			'Unit Name'	=> 'Dyne',						'AllowPrefix'	=> True		),
-											  'lbf'		=> array(	'Group'	=> 'Force',			'Unit Name'	=> 'Pound force',				'AllowPrefix'	=> False	),
-											  'J'		=> array(	'Group'	=> 'Energy',		'Unit Name'	=> 'Joule',						'AllowPrefix'	=> True		),
-											  'e'		=> array(	'Group'	=> 'Energy',		'Unit Name'	=> 'Erg',						'AllowPrefix'	=> True		),
-											  'c'		=> array(	'Group'	=> 'Energy',		'Unit Name'	=> 'Thermodynamic calorie',		'AllowPrefix'	=> True		),
-											  'cal'		=> array(	'Group'	=> 'Energy',		'Unit Name'	=> 'IT calorie',				'AllowPrefix'	=> True		),
-											  'eV'		=> array(	'Group'	=> 'Energy',		'Unit Name'	=> 'Electron volt',				'AllowPrefix'	=> True		),
-											  'ev'		=> array(	'Group'	=> 'Energy',		'Unit Name'	=> 'Electron volt',				'AllowPrefix'	=> True		),
-											  'HPh'		=> array(	'Group'	=> 'Energy',		'Unit Name'	=> 'Horsepower-hour',			'AllowPrefix'	=> False	),
-											  'hh'		=> array(	'Group'	=> 'Energy',		'Unit Name'	=> 'Horsepower-hour',			'AllowPrefix'	=> False	),
-											  'Wh'		=> array(	'Group'	=> 'Energy',		'Unit Name'	=> 'Watt-hour',					'AllowPrefix'	=> True		),
-											  'wh'		=> array(	'Group'	=> 'Energy',		'Unit Name'	=> 'Watt-hour',					'AllowPrefix'	=> True		),
-											  'flb'		=> array(	'Group'	=> 'Energy',		'Unit Name'	=> 'Foot-pound',				'AllowPrefix'	=> False	),
-											  'BTU'		=> array(	'Group'	=> 'Energy',		'Unit Name'	=> 'BTU',						'AllowPrefix'	=> False	),
-											  'btu'		=> array(	'Group'	=> 'Energy',		'Unit Name'	=> 'BTU',						'AllowPrefix'	=> False	),
-											  'HP'		=> array(	'Group'	=> 'Power',			'Unit Name'	=> 'Horsepower',				'AllowPrefix'	=> False	),
-											  'h'		=> array(	'Group'	=> 'Power',			'Unit Name'	=> 'Horsepower',				'AllowPrefix'	=> False	),
-											  'W'		=> array(	'Group'	=> 'Power',			'Unit Name'	=> 'Watt',						'AllowPrefix'	=> True		),
-											  'w'		=> array(	'Group'	=> 'Power',			'Unit Name'	=> 'Watt',						'AllowPrefix'	=> True		),
-											  'T'		=> array(	'Group'	=> 'Magnetism',		'Unit Name'	=> 'Tesla',						'AllowPrefix'	=> True		),
-											  'ga'		=> array(	'Group'	=> 'Magnetism',		'Unit Name'	=> 'Gauss',						'AllowPrefix'	=> True		),
-											  'C'		=> array(	'Group'	=> 'Temperature',	'Unit Name'	=> 'Celsius',					'AllowPrefix'	=> False	),
-											  'cel'		=> array(	'Group'	=> 'Temperature',	'Unit Name'	=> 'Celsius',					'AllowPrefix'	=> False	),
-											  'F'		=> array(	'Group'	=> 'Temperature',	'Unit Name'	=> 'Fahrenheit',				'AllowPrefix'	=> False	),
-											  'fah'		=> array(	'Group'	=> 'Temperature',	'Unit Name'	=> 'Fahrenheit',				'AllowPrefix'	=> False	),
-											  'K'		=> array(	'Group'	=> 'Temperature',	'Unit Name'	=> 'Kelvin',					'AllowPrefix'	=> False	),
-											  'kel'		=> array(	'Group'	=> 'Temperature',	'Unit Name'	=> 'Kelvin',					'AllowPrefix'	=> False	),
-											  'tsp'		=> array(	'Group'	=> 'Liquid',		'Unit Name'	=> 'Teaspoon',					'AllowPrefix'	=> False	),
-											  'tbs'		=> array(	'Group'	=> 'Liquid',		'Unit Name'	=> 'Tablespoon',				'AllowPrefix'	=> False	),
-											  'oz'		=> array(	'Group'	=> 'Liquid',		'Unit Name'	=> 'Fluid Ounce',				'AllowPrefix'	=> False	),
-											  'cup'		=> array(	'Group'	=> 'Liquid',		'Unit Name'	=> 'Cup',						'AllowPrefix'	=> False	),
-											  'pt'		=> array(	'Group'	=> 'Liquid',		'Unit Name'	=> 'U.S. Pint',					'AllowPrefix'	=> False	),
-											  'us_pt'	=> array(	'Group'	=> 'Liquid',		'Unit Name'	=> 'U.S. Pint',					'AllowPrefix'	=> False	),
-											  'uk_pt'	=> array(	'Group'	=> 'Liquid',		'Unit Name'	=> 'U.K. Pint',					'AllowPrefix'	=> False	),
-											  'qt'		=> array(	'Group'	=> 'Liquid',		'Unit Name'	=> 'Quart',						'AllowPrefix'	=> False	),
-											  'gal'		=> array(	'Group'	=> 'Liquid',		'Unit Name'	=> 'Gallon',					'AllowPrefix'	=> False	),
-											  'l'		=> array(	'Group'	=> 'Liquid',		'Unit Name'	=> 'Litre',						'AllowPrefix'	=> True		),
-											  'lt'		=> array(	'Group'	=> 'Liquid',		'Unit Name'	=> 'Litre',						'AllowPrefix'	=> True		)
+	private static $_conversionUnits = array( 'g'		=> array(	'Group'	=> 'Mass',			'Unit Name'	=> 'Gram',						'AllowPrefix'	=> \True		),
+											  'sg'		=> array(	'Group'	=> 'Mass',			'Unit Name'	=> 'Slug',						'AllowPrefix'	=> \False	),
+											  'lbm'		=> array(	'Group'	=> 'Mass',			'Unit Name'	=> 'Pound mass (avoirdupois)',	'AllowPrefix'	=> \False	),
+											  'u'		=> array(	'Group'	=> 'Mass',			'Unit Name'	=> 'U (atomic mass unit)',		'AllowPrefix'	=> \True		),
+											  'ozm'		=> array(	'Group'	=> 'Mass',			'Unit Name'	=> 'Ounce mass (avoirdupois)',	'AllowPrefix'	=> \False	),
+											  'm'		=> array(	'Group'	=> 'Distance',		'Unit Name'	=> 'Meter',						'AllowPrefix'	=> \True		),
+											  'mi'		=> array(	'Group'	=> 'Distance',		'Unit Name'	=> 'Statute mile',				'AllowPrefix'	=> \False	),
+											  'Nmi'		=> array(	'Group'	=> 'Distance',		'Unit Name'	=> 'Nautical mile',				'AllowPrefix'	=> \False	),
+											  'in'		=> array(	'Group'	=> 'Distance',		'Unit Name'	=> 'Inch',						'AllowPrefix'	=> \False	),
+											  'ft'		=> array(	'Group'	=> 'Distance',		'Unit Name'	=> 'Foot',						'AllowPrefix'	=> \False	),
+											  'yd'		=> array(	'Group'	=> 'Distance',		'Unit Name'	=> 'Yard',						'AllowPrefix'	=> \False	),
+											  'ang'		=> array(	'Group'	=> 'Distance',		'Unit Name'	=> 'Angstrom',					'AllowPrefix'	=> \True		),
+											  'Pica'	=> array(	'Group'	=> 'Distance',		'Unit Name'	=> 'Pica (1/72 in)',			'AllowPrefix'	=> \False	),
+											  'yr'		=> array(	'Group'	=> 'Time',			'Unit Name'	=> 'Year',						'AllowPrefix'	=> \False	),
+											  'day'		=> array(	'Group'	=> 'Time',			'Unit Name'	=> 'Day',						'AllowPrefix'	=> \False	),
+											  'hr'		=> array(	'Group'	=> 'Time',			'Unit Name'	=> 'Hour',						'AllowPrefix'	=> \False	),
+											  'mn'		=> array(	'Group'	=> 'Time',			'Unit Name'	=> 'Minute',					'AllowPrefix'	=> \False	),
+											  'sec'		=> array(	'Group'	=> 'Time',			'Unit Name'	=> 'Second',					'AllowPrefix'	=> \True		),
+											  'Pa'		=> array(	'Group'	=> 'Pressure',		'Unit Name'	=> 'Pascal',					'AllowPrefix'	=> \True		),
+											  'p'		=> array(	'Group'	=> 'Pressure',		'Unit Name'	=> 'Pascal',					'AllowPrefix'	=> \True		),
+											  'atm'		=> array(	'Group'	=> 'Pressure',		'Unit Name'	=> 'Atmosphere',				'AllowPrefix'	=> \True		),
+											  'at'		=> array(	'Group'	=> 'Pressure',		'Unit Name'	=> 'Atmosphere',				'AllowPrefix'	=> \True		),
+											  'mmHg'	=> array(	'Group'	=> 'Pressure',		'Unit Name'	=> 'mm of Mercury',				'AllowPrefix'	=> \True		),
+											  'N'		=> array(	'Group'	=> 'Force',			'Unit Name'	=> 'Newton',					'AllowPrefix'	=> \True		),
+											  'dyn'		=> array(	'Group'	=> 'Force',			'Unit Name'	=> 'Dyne',						'AllowPrefix'	=> \True		),
+											  'dy'		=> array(	'Group'	=> 'Force',			'Unit Name'	=> 'Dyne',						'AllowPrefix'	=> \True		),
+											  'lbf'		=> array(	'Group'	=> 'Force',			'Unit Name'	=> 'Pound force',				'AllowPrefix'	=> \False	),
+											  'J'		=> array(	'Group'	=> 'Energy',		'Unit Name'	=> 'Joule',						'AllowPrefix'	=> \True		),
+											  'e'		=> array(	'Group'	=> 'Energy',		'Unit Name'	=> 'Erg',						'AllowPrefix'	=> \True		),
+											  'c'		=> array(	'Group'	=> 'Energy',		'Unit Name'	=> 'Thermodynamic calorie',		'AllowPrefix'	=> \True		),
+											  'cal'		=> array(	'Group'	=> 'Energy',		'Unit Name'	=> 'IT calorie',				'AllowPrefix'	=> \True		),
+											  'eV'		=> array(	'Group'	=> 'Energy',		'Unit Name'	=> 'Electron volt',				'AllowPrefix'	=> \True		),
+											  'ev'		=> array(	'Group'	=> 'Energy',		'Unit Name'	=> 'Electron volt',				'AllowPrefix'	=> \True		),
+											  'HPh'		=> array(	'Group'	=> 'Energy',		'Unit Name'	=> 'Horsepower-hour',			'AllowPrefix'	=> \False	),
+											  'hh'		=> array(	'Group'	=> 'Energy',		'Unit Name'	=> 'Horsepower-hour',			'AllowPrefix'	=> \False	),
+											  'Wh'		=> array(	'Group'	=> 'Energy',		'Unit Name'	=> 'Watt-hour',					'AllowPrefix'	=> \True		),
+											  'wh'		=> array(	'Group'	=> 'Energy',		'Unit Name'	=> 'Watt-hour',					'AllowPrefix'	=> \True		),
+											  'flb'		=> array(	'Group'	=> 'Energy',		'Unit Name'	=> 'Foot-pound',				'AllowPrefix'	=> \False	),
+											  'BTU'		=> array(	'Group'	=> 'Energy',		'Unit Name'	=> 'BTU',						'AllowPrefix'	=> \False	),
+											  'btu'		=> array(	'Group'	=> 'Energy',		'Unit Name'	=> 'BTU',						'AllowPrefix'	=> \False	),
+											  'HP'		=> array(	'Group'	=> 'Power',			'Unit Name'	=> 'Horsepower',				'AllowPrefix'	=> \False	),
+											  'h'		=> array(	'Group'	=> 'Power',			'Unit Name'	=> 'Horsepower',				'AllowPrefix'	=> \False	),
+											  'W'		=> array(	'Group'	=> 'Power',			'Unit Name'	=> 'Watt',						'AllowPrefix'	=> \True		),
+											  'w'		=> array(	'Group'	=> 'Power',			'Unit Name'	=> 'Watt',						'AllowPrefix'	=> \True		),
+											  'T'		=> array(	'Group'	=> 'Magnetism',		'Unit Name'	=> 'Tesla',						'AllowPrefix'	=> \True		),
+											  'ga'		=> array(	'Group'	=> 'Magnetism',		'Unit Name'	=> 'Gauss',						'AllowPrefix'	=> \True		),
+											  'C'		=> array(	'Group'	=> 'Temperature',	'Unit Name'	=> 'Celsius',					'AllowPrefix'	=> \False	),
+											  'cel'		=> array(	'Group'	=> 'Temperature',	'Unit Name'	=> 'Celsius',					'AllowPrefix'	=> \False	),
+											  'F'		=> array(	'Group'	=> 'Temperature',	'Unit Name'	=> 'Fahrenheit',				'AllowPrefix'	=> \False	),
+											  'fah'		=> array(	'Group'	=> 'Temperature',	'Unit Name'	=> 'Fahrenheit',				'AllowPrefix'	=> \False	),
+											  'K'		=> array(	'Group'	=> 'Temperature',	'Unit Name'	=> 'Kelvin',					'AllowPrefix'	=> \False	),
+											  'kel'		=> array(	'Group'	=> 'Temperature',	'Unit Name'	=> 'Kelvin',					'AllowPrefix'	=> \False	),
+											  'tsp'		=> array(	'Group'	=> 'Liquid',		'Unit Name'	=> 'Teaspoon',					'AllowPrefix'	=> \False	),
+											  'tbs'		=> array(	'Group'	=> 'Liquid',		'Unit Name'	=> 'Tablespoon',				'AllowPrefix'	=> \False	),
+											  'oz'		=> array(	'Group'	=> 'Liquid',		'Unit Name'	=> 'Fluid Ounce',				'AllowPrefix'	=> \False	),
+											  'cup'		=> array(	'Group'	=> 'Liquid',		'Unit Name'	=> 'Cup',						'AllowPrefix'	=> \False	),
+											  'pt'		=> array(	'Group'	=> 'Liquid',		'Unit Name'	=> 'U.S. Pint',					'AllowPrefix'	=> \False	),
+											  'us_pt'	=> array(	'Group'	=> 'Liquid',		'Unit Name'	=> 'U.S. Pint',					'AllowPrefix'	=> \False	),
+											  'uk_pt'	=> array(	'Group'	=> 'Liquid',		'Unit Name'	=> 'U.K. Pint',					'AllowPrefix'	=> \False	),
+											  'qt'		=> array(	'Group'	=> 'Liquid',		'Unit Name'	=> 'Quart',						'AllowPrefix'	=> \False	),
+											  'gal'		=> array(	'Group'	=> 'Liquid',		'Unit Name'	=> 'Gallon',					'AllowPrefix'	=> \False	),
+											  'l'		=> array(	'Group'	=> 'Liquid',		'Unit Name'	=> 'Litre',						'AllowPrefix'	=> \True		),
+											  'lt'		=> array(	'Group'	=> 'Liquid',		'Unit Name'	=> 'Litre',						'AllowPrefix'	=> \True		)
 											);
 
 	/**
@@ -698,29 +700,29 @@ class PHPExcel_Calculation_Engineering {
 
 		$realNumber = $imaginary = 0;
 		//	Extract the suffix, if there is one
-		$suffix = substr($workString,-1);
-		if (!is_numeric($suffix)) {
-			$workString = substr($workString,0,-1);
+		$suffix = \substr($workString,-1);
+		if (!\is_numeric($suffix)) {
+			$workString = \substr($workString,0,-1);
 		} else {
 			$suffix = '';
 		}
 
 		//	Split the input into its Real and Imaginary components
 		$leadingSign = 0;
-		if (strlen($workString) > 0) {
+		if (\strlen($workString) > 0) {
 			$leadingSign = (($workString{0} == '+') || ($workString{0} == '-')) ? 1 : 0;
 		}
 		$power = '';
-		$realNumber = strtok($workString, '+-');
-		if (strtoupper(substr($realNumber,-1)) == 'E') {
-			$power = strtok('+-');
+		$realNumber = \strtok($workString, '+-');
+		if (\strtoupper(\substr($realNumber,-1)) == 'E') {
+			$power = \strtok('+-');
 			++$leadingSign;
 		}
 
-		$realNumber = substr($workString,0,strlen($realNumber)+strlen($power)+$leadingSign);
+		$realNumber = \substr($workString,0,\strlen($realNumber)+\strlen($power)+$leadingSign);
 
 		if ($suffix != '') {
-			$imaginary = substr($workString,strlen($realNumber));
+			$imaginary = \substr($workString,\strlen($realNumber));
 
 			if (($imaginary == '') && (($realNumber == '') || ($realNumber == '+') || ($realNumber == '-'))) {
 				$imaginary = $realNumber.'1';
@@ -747,10 +749,10 @@ class PHPExcel_Calculation_Engineering {
 	 * @return	string		The "cleaned" complex number
 	 */
 	private static function _cleanComplex($complexNumber) {
-		if ($complexNumber{0} == '+') $complexNumber = substr($complexNumber,1);
-		if ($complexNumber{0} == '0') $complexNumber = substr($complexNumber,1);
+		if ($complexNumber{0} == '+') $complexNumber = \substr($complexNumber,1);
+		if ($complexNumber{0} == '0') $complexNumber = \substr($complexNumber,1);
 		if ($complexNumber{0} == '.') $complexNumber = '0'.$complexNumber;
-		if ($complexNumber{0} == '+') $complexNumber = substr($complexNumber,1);
+		if ($complexNumber{0} == '+') $complexNumber = \substr($complexNumber,1);
 		return $complexNumber;
 	}
 
@@ -762,15 +764,15 @@ class PHPExcel_Calculation_Engineering {
 	 * @return	string		The padded "number"
 	 */
 	private static function _nbrConversionFormat($xVal, $places) {
-		if (!is_null($places)) {
-			if (strlen($xVal) <= $places) {
-				return substr(str_pad($xVal, $places, '0', STR_PAD_LEFT), -10);
+		if (!\is_null($places)) {
+			if (\strlen($xVal) <= $places) {
+				return \substr(\str_pad($xVal, $places, '0', \STR_PAD_LEFT), -10);
 			} else {
-				return PHPExcel_Calculation_Functions::NaN();
+				return \PhpOffice\PhpSpreadsheet\Calculation\Functions::NaN();
 			}
 		}
 
-		return substr($xVal, -10);
+		return \substr($xVal, -10);
 	}	//	function _nbrConversionFormat()
 
 	/**
@@ -794,36 +796,36 @@ class PHPExcel_Calculation_Engineering {
 	 *
 	 */
 	public static function BESSELI($x, $ord) {
-		$x	= (is_null($x))	? 0.0 :	PHPExcel_Calculation_Functions::flattenSingleValue($x);
-		$ord	= (is_null($ord))	? 0.0 :	PHPExcel_Calculation_Functions::flattenSingleValue($ord);
+		$x	= (\is_null($x))	? 0.0 :	\PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($x);
+		$ord	= (\is_null($ord))	? 0.0 :	\PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($ord);
 
-		if ((is_numeric($x)) && (is_numeric($ord))) {
-			$ord	= floor($ord);
+		if ((\is_numeric($x)) && (\is_numeric($ord))) {
+			$ord	= \floor($ord);
 			if ($ord < 0) {
-				return PHPExcel_Calculation_Functions::NaN();
+				return \PhpOffice\PhpSpreadsheet\Calculation\Functions::NaN();
 			}
 
-			if (abs($x) <= 30) {
-				$fResult = $fTerm = pow($x / 2, $ord) / PHPExcel_Calculation_MathTrig::FACT($ord);
+			if (\abs($x) <= 30) {
+				$fResult = $fTerm = \pow($x / 2, $ord) / \PhpOffice\PhpSpreadsheet\Calculation\MathTrig::FACT($ord);
 				$ordK = 1;
 				$fSqrX = ($x * $x) / 4;
 				do {
 					$fTerm *= $fSqrX;
 					$fTerm /= ($ordK * ($ordK + $ord));
 					$fResult += $fTerm;
-				} while ((abs($fTerm) > 1e-12) && (++$ordK < 100));
+				} while ((\abs($fTerm) > 1e-12) && (++$ordK < 100));
 			} else {
-				$f_2_PI = 2 * M_PI;
+				$f_2_PI = 2 * \M_PI;
 
-				$fXAbs = abs($x);
-				$fResult = exp($fXAbs) / sqrt($f_2_PI * $fXAbs);
+				$fXAbs = \abs($x);
+				$fResult = \exp($fXAbs) / \sqrt($f_2_PI * $fXAbs);
 				if (($ord & 1) && ($x < 0)) {
 					$fResult = -$fResult;
 				}
 			}
-			return (is_nan($fResult)) ? PHPExcel_Calculation_Functions::NaN() : $fResult;
+			return (\is_nan($fResult)) ? \PhpOffice\PhpSpreadsheet\Calculation\Functions::NaN() : $fResult;
 		}
-		return PHPExcel_Calculation_Functions::VALUE();
+		return \PhpOffice\PhpSpreadsheet\Calculation\Functions::VALUE();
 	}	//	function BESSELI()
 
 
@@ -846,38 +848,38 @@ class PHPExcel_Calculation_Engineering {
 	 *
 	 */
 	public static function BESSELJ($x, $ord) {
-		$x	= (is_null($x))	? 0.0 :	PHPExcel_Calculation_Functions::flattenSingleValue($x);
-		$ord	= (is_null($ord))	? 0.0 :	PHPExcel_Calculation_Functions::flattenSingleValue($ord);
+		$x	= (\is_null($x))	? 0.0 :	\PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($x);
+		$ord	= (\is_null($ord))	? 0.0 :	\PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($ord);
 
-		if ((is_numeric($x)) && (is_numeric($ord))) {
-			$ord	= floor($ord);
+		if ((\is_numeric($x)) && (\is_numeric($ord))) {
+			$ord	= \floor($ord);
 			if ($ord < 0) {
-				return PHPExcel_Calculation_Functions::NaN();
+				return \PhpOffice\PhpSpreadsheet\Calculation\Functions::NaN();
 			}
 
 			$fResult = 0;
-			if (abs($x) <= 30) {
-				$fResult = $fTerm = pow($x / 2, $ord) / PHPExcel_Calculation_MathTrig::FACT($ord);
+			if (\abs($x) <= 30) {
+				$fResult = $fTerm = \pow($x / 2, $ord) / \PhpOffice\PhpSpreadsheet\Calculation\MathTrig::FACT($ord);
 				$ordK = 1;
 				$fSqrX = ($x * $x) / -4;
 				do {
 					$fTerm *= $fSqrX;
 					$fTerm /= ($ordK * ($ordK + $ord));
 					$fResult += $fTerm;
-				} while ((abs($fTerm) > 1e-12) && (++$ordK < 100));
+				} while ((\abs($fTerm) > 1e-12) && (++$ordK < 100));
 			} else {
-				$f_PI_DIV_2 = M_PI / 2;
-				$f_PI_DIV_4 = M_PI / 4;
+				$f_PI_DIV_2 = \M_PI / 2;
+				$f_PI_DIV_4 = \M_PI / 4;
 
-				$fXAbs = abs($x);
-				$fResult = sqrt(M_2DIVPI / $fXAbs) * cos($fXAbs - $ord * $f_PI_DIV_2 - $f_PI_DIV_4);
+				$fXAbs = \abs($x);
+				$fResult = \sqrt(\M_2DIVPI / $fXAbs) * \cos($fXAbs - $ord * $f_PI_DIV_2 - $f_PI_DIV_4);
 				if (($ord & 1) && ($x < 0)) {
 					$fResult = -$fResult;
 				}
 			}
-			return (is_nan($fResult)) ? PHPExcel_Calculation_Functions::NaN() : $fResult;
+			return (\is_nan($fResult)) ? \PhpOffice\PhpSpreadsheet\Calculation\Functions::NaN() : $fResult;
 		}
-		return PHPExcel_Calculation_Functions::VALUE();
+		return \PhpOffice\PhpSpreadsheet\Calculation\Functions::VALUE();
 	}	//	function BESSELJ()
 
 
@@ -885,12 +887,12 @@ class PHPExcel_Calculation_Engineering {
 		if ($fNum <= 2) {
 			$fNum2 = $fNum * 0.5;
 			$y = ($fNum2 * $fNum2);
-			$fRet = -log($fNum2) * self::BESSELI($fNum, 0) +
+			$fRet = -\log($fNum2) * self::BESSELI($fNum, 0) +
 					(-0.57721566 + $y * (0.42278420 + $y * (0.23069756 + $y * (0.3488590e-1 + $y * (0.262698e-2 + $y *
 					(0.10750e-3 + $y * 0.74e-5))))));
 		} else {
 			$y = 2 / $fNum;
-			$fRet = exp(-$fNum) / sqrt($fNum) *
+			$fRet = \exp(-$fNum) / \sqrt($fNum) *
 					(1.25331414 + $y * (-0.7832358e-1 + $y * (0.2189568e-1 + $y * (-0.1062446e-1 + $y *
 					(0.587872e-2 + $y * (-0.251540e-2 + $y * 0.53208e-3))))));
 		}
@@ -902,12 +904,12 @@ class PHPExcel_Calculation_Engineering {
 		if ($fNum <= 2) {
 			$fNum2 = $fNum * 0.5;
 			$y = ($fNum2 * $fNum2);
-			$fRet = log($fNum2) * self::BESSELI($fNum, 1) +
+			$fRet = \log($fNum2) * self::BESSELI($fNum, 1) +
 					(1 + $y * (0.15443144 + $y * (-0.67278579 + $y * (-0.18156897 + $y * (-0.1919402e-1 + $y *
 					(-0.110404e-2 + $y * (-0.4686e-4))))))) / $fNum;
 		} else {
 			$y = 2 / $fNum;
-			$fRet = exp(-$fNum) / sqrt($fNum) *
+			$fRet = \exp(-$fNum) / \sqrt($fNum) *
 					(1.25331414 + $y * (0.23498619 + $y * (-0.3655620e-1 + $y * (0.1504268e-1 + $y * (-0.780353e-2 + $y *
 					(0.325614e-2 + $y * (-0.68245e-3)))))));
 		}
@@ -935,15 +937,15 @@ class PHPExcel_Calculation_Engineering {
 	 *
 	 */
 	public static function BESSELK($x, $ord) {
-		$x		= (is_null($x))		? 0.0 :	PHPExcel_Calculation_Functions::flattenSingleValue($x);
-		$ord	= (is_null($ord))	? 0.0 :	PHPExcel_Calculation_Functions::flattenSingleValue($ord);
+		$x		= (\is_null($x))		? 0.0 :	\PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($x);
+		$ord	= (\is_null($ord))	? 0.0 :	\PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($ord);
 
-		if ((is_numeric($x)) && (is_numeric($ord))) {
+		if ((\is_numeric($x)) && (\is_numeric($ord))) {
 			if (($ord < 0) || ($x == 0.0)) {
-				return PHPExcel_Calculation_Functions::NaN();
+				return \PhpOffice\PhpSpreadsheet\Calculation\Functions::NaN();
 			}
 
-			switch(floor($ord)) {
+			switch(\floor($ord)) {
 				case 0 :	return self::_Besselk0($x);
 							break;
 				case 1 :	return self::_Besselk1($x);
@@ -957,9 +959,9 @@ class PHPExcel_Calculation_Engineering {
 								$fBk	= $fBkp;
 							}
 			}
-			return (is_nan($fBk)) ? PHPExcel_Calculation_Functions::NaN() : $fBk;
+			return (\is_nan($fBk)) ? \PhpOffice\PhpSpreadsheet\Calculation\Functions::NaN() : $fBk;
 		}
-		return PHPExcel_Calculation_Functions::VALUE();
+		return \PhpOffice\PhpSpreadsheet\Calculation\Functions::VALUE();
 	}	//	function BESSELK()
 
 
@@ -968,14 +970,14 @@ class PHPExcel_Calculation_Engineering {
 			$y = ($fNum * $fNum);
 			$f1 = -2957821389.0 + $y * (7062834065.0 + $y * (-512359803.6 + $y * (10879881.29 + $y * (-86327.92757 + $y * 228.4622733))));
 			$f2 = 40076544269.0 + $y * (745249964.8 + $y * (7189466.438 + $y * (47447.26470 + $y * (226.1030244 + $y))));
-			$fRet = $f1 / $f2 + 0.636619772 * self::BESSELJ($fNum, 0) * log($fNum);
+			$fRet = $f1 / $f2 + 0.636619772 * self::BESSELJ($fNum, 0) * \log($fNum);
 		} else {
 			$z = 8.0 / $fNum;
 			$y = ($z * $z);
 			$xx = $fNum - 0.785398164;
 			$f1 = 1 + $y * (-0.1098628627e-2 + $y * (0.2734510407e-4 + $y * (-0.2073370639e-5 + $y * 0.2093887211e-6)));
 			$f2 = -0.1562499995e-1 + $y * (0.1430488765e-3 + $y * (-0.6911147651e-5 + $y * (0.7621095161e-6 + $y * (-0.934945152e-7))));
-			$fRet = sqrt(0.636619772 / $fNum) * (sin($xx) * $f1 + $z * cos($xx) * $f2);
+			$fRet = \sqrt(0.636619772 / $fNum) * (\sin($xx) * $f1 + $z * \cos($xx) * $f2);
 		}
 		return $fRet;
 	}	//	function _Bessely0()
@@ -988,9 +990,9 @@ class PHPExcel_Calculation_Engineering {
 				(-0.4237922726e7 + $y * 0.8511937935e4)))));
 			$f2 = 0.2499580570e14 + $y * (0.4244419664e12 + $y * (0.3733650367e10 + $y * (0.2245904002e8 + $y *
 				(0.1020426050e6 + $y * (0.3549632885e3 + $y)))));
-			$fRet = $f1 / $f2 + 0.636619772 * ( self::BESSELJ($fNum, 1) * log($fNum) - 1 / $fNum);
+			$fRet = $f1 / $f2 + 0.636619772 * ( self::BESSELJ($fNum, 1) * \log($fNum) - 1 / $fNum);
 		} else {
-			$fRet = sqrt(0.636619772 / $fNum) * sin($fNum - 2.356194491);
+			$fRet = \sqrt(0.636619772 / $fNum) * \sin($fNum - 2.356194491);
 		}
 		return $fRet;
 	}	//	function _Bessely1()
@@ -1015,15 +1017,15 @@ class PHPExcel_Calculation_Engineering {
 	 *	@return	float
 	 */
 	public static function BESSELY($x, $ord) {
-		$x		= (is_null($x))		? 0.0 :	PHPExcel_Calculation_Functions::flattenSingleValue($x);
-		$ord	= (is_null($ord))	? 0.0 :	PHPExcel_Calculation_Functions::flattenSingleValue($ord);
+		$x		= (\is_null($x))		? 0.0 :	\PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($x);
+		$ord	= (\is_null($ord))	? 0.0 :	\PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($ord);
 
-		if ((is_numeric($x)) && (is_numeric($ord))) {
+		if ((\is_numeric($x)) && (\is_numeric($ord))) {
 			if (($ord < 0) || ($x == 0.0)) {
-				return PHPExcel_Calculation_Functions::NaN();
+				return \PhpOffice\PhpSpreadsheet\Calculation\Functions::NaN();
 			}
 
-			switch(floor($ord)) {
+			switch(\floor($ord)) {
 				case 0 :	return self::_Bessely0($x);
 							break;
 				case 1 :	return self::_Bessely1($x);
@@ -1037,9 +1039,9 @@ class PHPExcel_Calculation_Engineering {
 								$fBy	= $fByp;
 							}
 			}
-			return (is_nan($fBy)) ? PHPExcel_Calculation_Functions::NaN() : $fBy;
+			return (\is_nan($fBy)) ? \PhpOffice\PhpSpreadsheet\Calculation\Functions::NaN() : $fBy;
 		}
-		return PHPExcel_Calculation_Functions::VALUE();
+		return \PhpOffice\PhpSpreadsheet\Calculation\Functions::VALUE();
 	}	//	function BESSELY()
 
 
@@ -1062,30 +1064,30 @@ class PHPExcel_Calculation_Engineering {
 	 * @return	string
 	 */
 	public static function BINTODEC($x) {
-		$x	= PHPExcel_Calculation_Functions::flattenSingleValue($x);
+		$x	= \PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($x);
 
-		if (is_bool($x)) {
-			if (PHPExcel_Calculation_Functions::getCompatibilityMode() == PHPExcel_Calculation_Functions::COMPATIBILITY_OPENOFFICE) {
+		if (\is_bool($x)) {
+			if (\PhpOffice\PhpSpreadsheet\Calculation\Functions::getCompatibilityMode() == \PhpOffice\PhpSpreadsheet\Calculation\Functions::COMPATIBILITY_OPENOFFICE) {
 				$x = (int) $x;
 			} else {
-				return PHPExcel_Calculation_Functions::VALUE();
+				return \PhpOffice\PhpSpreadsheet\Calculation\Functions::VALUE();
 			}
 		}
-		if (PHPExcel_Calculation_Functions::getCompatibilityMode() == PHPExcel_Calculation_Functions::COMPATIBILITY_GNUMERIC) {
-			$x = floor($x);
+		if (\PhpOffice\PhpSpreadsheet\Calculation\Functions::getCompatibilityMode() == \PhpOffice\PhpSpreadsheet\Calculation\Functions::COMPATIBILITY_GNUMERIC) {
+			$x = \floor($x);
 		}
 		$x = (string) $x;
-		if (strlen($x) > preg_match_all('/[01]/',$x,$out)) {
-			return PHPExcel_Calculation_Functions::NaN();
+		if (\strlen($x) > \preg_match_all('/[01]/',$x,$out)) {
+			return \PhpOffice\PhpSpreadsheet\Calculation\Functions::NaN();
 		}
-		if (strlen($x) > 10) {
-			return PHPExcel_Calculation_Functions::NaN();
-		} elseif (strlen($x) == 10) {
+		if (\strlen($x) > 10) {
+			return \PhpOffice\PhpSpreadsheet\Calculation\Functions::NaN();
+		} elseif (\strlen($x) == 10) {
 			//	Two's Complement
-			$x = substr($x,-9);
-			return '-'.(512-bindec($x));
+			$x = \substr($x,-9);
+			return '-'.(512-\bindec($x));
 		}
-		return bindec($x);
+		return \bindec($x);
 	}	//	function BINTODEC()
 
 
@@ -1113,31 +1115,31 @@ class PHPExcel_Calculation_Engineering {
 	 *								If places is negative, BIN2HEX returns the #NUM! error value.
 	 * @return	string
 	 */
-	public static function BINTOHEX($x, $places=NULL) {
-		$x	= PHPExcel_Calculation_Functions::flattenSingleValue($x);
-		$places	= PHPExcel_Calculation_Functions::flattenSingleValue($places);
+	public static function BINTOHEX($x, $places=\NULL) {
+		$x	= \PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($x);
+		$places	= \PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($places);
 
-		if (is_bool($x)) {
-			if (PHPExcel_Calculation_Functions::getCompatibilityMode() == PHPExcel_Calculation_Functions::COMPATIBILITY_OPENOFFICE) {
+		if (\is_bool($x)) {
+			if (\PhpOffice\PhpSpreadsheet\Calculation\Functions::getCompatibilityMode() == \PhpOffice\PhpSpreadsheet\Calculation\Functions::COMPATIBILITY_OPENOFFICE) {
 				$x = (int) $x;
 			} else {
-				return PHPExcel_Calculation_Functions::VALUE();
+				return \PhpOffice\PhpSpreadsheet\Calculation\Functions::VALUE();
 			}
 		}
-		if (PHPExcel_Calculation_Functions::getCompatibilityMode() == PHPExcel_Calculation_Functions::COMPATIBILITY_GNUMERIC) {
-			$x = floor($x);
+		if (\PhpOffice\PhpSpreadsheet\Calculation\Functions::getCompatibilityMode() == \PhpOffice\PhpSpreadsheet\Calculation\Functions::COMPATIBILITY_GNUMERIC) {
+			$x = \floor($x);
 		}
 		$x = (string) $x;
-		if (strlen($x) > preg_match_all('/[01]/',$x,$out)) {
-			return PHPExcel_Calculation_Functions::NaN();
+		if (\strlen($x) > \preg_match_all('/[01]/',$x,$out)) {
+			return \PhpOffice\PhpSpreadsheet\Calculation\Functions::NaN();
 		}
-		if (strlen($x) > 10) {
-			return PHPExcel_Calculation_Functions::NaN();
-		} elseif (strlen($x) == 10) {
+		if (\strlen($x) > 10) {
+			return \PhpOffice\PhpSpreadsheet\Calculation\Functions::NaN();
+		} elseif (\strlen($x) == 10) {
 			//	Two's Complement
-			return str_repeat('F',8).substr(strtoupper(dechex(bindec(substr($x,-9)))),-2);
+			return \str_repeat('F',8).\substr(\strtoupper(\dechex(\bindec(\substr($x,-9)))),-2);
 		}
-		$hexVal = (string) strtoupper(dechex(bindec($x)));
+		$hexVal = (string) \strtoupper(\dechex(\bindec($x)));
 
 		return self::_nbrConversionFormat($hexVal,$places);
 	}	//	function BINTOHEX()
@@ -1167,31 +1169,31 @@ class PHPExcel_Calculation_Engineering {
 	 *								If places is negative, BIN2OCT returns the #NUM! error value.
 	 * @return	string
 	 */
-	public static function BINTOOCT($x, $places=NULL) {
-		$x	= PHPExcel_Calculation_Functions::flattenSingleValue($x);
-		$places	= PHPExcel_Calculation_Functions::flattenSingleValue($places);
+	public static function BINTOOCT($x, $places=\NULL) {
+		$x	= \PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($x);
+		$places	= \PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($places);
 
-		if (is_bool($x)) {
-			if (PHPExcel_Calculation_Functions::getCompatibilityMode() == PHPExcel_Calculation_Functions::COMPATIBILITY_OPENOFFICE) {
+		if (\is_bool($x)) {
+			if (\PhpOffice\PhpSpreadsheet\Calculation\Functions::getCompatibilityMode() == \PhpOffice\PhpSpreadsheet\Calculation\Functions::COMPATIBILITY_OPENOFFICE) {
 				$x = (int) $x;
 			} else {
-				return PHPExcel_Calculation_Functions::VALUE();
+				return \PhpOffice\PhpSpreadsheet\Calculation\Functions::VALUE();
 			}
 		}
-		if (PHPExcel_Calculation_Functions::getCompatibilityMode() == PHPExcel_Calculation_Functions::COMPATIBILITY_GNUMERIC) {
-			$x = floor($x);
+		if (\PhpOffice\PhpSpreadsheet\Calculation\Functions::getCompatibilityMode() == \PhpOffice\PhpSpreadsheet\Calculation\Functions::COMPATIBILITY_GNUMERIC) {
+			$x = \floor($x);
 		}
 		$x = (string) $x;
-		if (strlen($x) > preg_match_all('/[01]/',$x,$out)) {
-			return PHPExcel_Calculation_Functions::NaN();
+		if (\strlen($x) > \preg_match_all('/[01]/',$x,$out)) {
+			return \PhpOffice\PhpSpreadsheet\Calculation\Functions::NaN();
 		}
-		if (strlen($x) > 10) {
-			return PHPExcel_Calculation_Functions::NaN();
-		} elseif (strlen($x) == 10) {
+		if (\strlen($x) > 10) {
+			return \PhpOffice\PhpSpreadsheet\Calculation\Functions::NaN();
+		} elseif (\strlen($x) == 10) {
 			//	Two's Complement
-			return str_repeat('7',7).substr(strtoupper(decoct(bindec(substr($x,-9)))),-3);
+			return \str_repeat('7',7).\substr(\strtoupper(\decoct(\bindec(\substr($x,-9)))),-3);
 		}
-		$octVal = (string) decoct(bindec($x));
+		$octVal = (string) \decoct(\bindec($x));
 
 		return self::_nbrConversionFormat($octVal,$places);
 	}	//	function BINTOOCT()
@@ -1225,28 +1227,28 @@ class PHPExcel_Calculation_Engineering {
 	 *								If places is zero or negative, DEC2BIN returns the #NUM! error value.
 	 * @return	string
 	 */
-	public static function DECTOBIN($x, $places=NULL) {
-		$x	= PHPExcel_Calculation_Functions::flattenSingleValue($x);
-		$places	= PHPExcel_Calculation_Functions::flattenSingleValue($places);
+	public static function DECTOBIN($x, $places=\NULL) {
+		$x	= \PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($x);
+		$places	= \PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($places);
 
-		if (is_bool($x)) {
-			if (PHPExcel_Calculation_Functions::getCompatibilityMode() == PHPExcel_Calculation_Functions::COMPATIBILITY_OPENOFFICE) {
+		if (\is_bool($x)) {
+			if (\PhpOffice\PhpSpreadsheet\Calculation\Functions::getCompatibilityMode() == \PhpOffice\PhpSpreadsheet\Calculation\Functions::COMPATIBILITY_OPENOFFICE) {
 				$x = (int) $x;
 			} else {
-				return PHPExcel_Calculation_Functions::VALUE();
+				return \PhpOffice\PhpSpreadsheet\Calculation\Functions::VALUE();
 			}
 		}
 		$x = (string) $x;
-		if (strlen($x) > preg_match_all('/[-0123456789.]/',$x,$out)) {
-			return PHPExcel_Calculation_Functions::VALUE();
+		if (\strlen($x) > \preg_match_all('/[-0123456789.]/',$x,$out)) {
+			return \PhpOffice\PhpSpreadsheet\Calculation\Functions::VALUE();
 		}
-		$x = (string) floor($x);
-		$r = decbin($x);
-		if (strlen($r) == 32) {
+		$x = (string) \floor($x);
+		$r = \decbin($x);
+		if (\strlen($r) == 32) {
 			//	Two's Complement
-			$r = substr($r,-10);
-		} elseif (strlen($r) > 11) {
-			return PHPExcel_Calculation_Functions::NaN();
+			$r = \substr($r,-10);
+		} elseif (\strlen($r) > 11) {
+			return \PhpOffice\PhpSpreadsheet\Calculation\Functions::NaN();
 		}
 
 		return self::_nbrConversionFormat($r,$places);
@@ -1281,24 +1283,24 @@ class PHPExcel_Calculation_Engineering {
 	 *								If places is zero or negative, DEC2HEX returns the #NUM! error value.
 	 * @return	string
 	 */
-	public static function DECTOHEX($x, $places=null) {
-		$x	= PHPExcel_Calculation_Functions::flattenSingleValue($x);
-		$places	= PHPExcel_Calculation_Functions::flattenSingleValue($places);
+	public static function DECTOHEX($x, $places=\null) {
+		$x	= \PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($x);
+		$places	= \PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($places);
 
-		if (is_bool($x)) {
-			if (PHPExcel_Calculation_Functions::getCompatibilityMode() == PHPExcel_Calculation_Functions::COMPATIBILITY_OPENOFFICE) {
+		if (\is_bool($x)) {
+			if (\PhpOffice\PhpSpreadsheet\Calculation\Functions::getCompatibilityMode() == \PhpOffice\PhpSpreadsheet\Calculation\Functions::COMPATIBILITY_OPENOFFICE) {
 				$x = (int) $x;
 			} else {
-				return PHPExcel_Calculation_Functions::VALUE();
+				return \PhpOffice\PhpSpreadsheet\Calculation\Functions::VALUE();
 			}
 		}
 		$x = (string) $x;
-		if (strlen($x) > preg_match_all('/[-0123456789.]/',$x,$out)) {
-			return PHPExcel_Calculation_Functions::VALUE();
+		if (\strlen($x) > \preg_match_all('/[-0123456789.]/',$x,$out)) {
+			return \PhpOffice\PhpSpreadsheet\Calculation\Functions::VALUE();
 		}
-		$x = (string) floor($x);
-		$r = strtoupper(dechex($x));
-		if (strlen($r) == 8) {
+		$x = (string) \floor($x);
+		$r = \strtoupper(\dechex($x));
+		if (\strlen($r) == 8) {
 			//	Two's Complement
 			$r = 'FF'.$r;
 		}
@@ -1335,26 +1337,26 @@ class PHPExcel_Calculation_Engineering {
 	 *								If places is zero or negative, DEC2OCT returns the #NUM! error value.
 	 * @return	string
 	 */
-	public static function DECTOOCT($x, $places=null) {
-		$x	= PHPExcel_Calculation_Functions::flattenSingleValue($x);
-		$places	= PHPExcel_Calculation_Functions::flattenSingleValue($places);
+	public static function DECTOOCT($x, $places=\null) {
+		$x	= \PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($x);
+		$places	= \PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($places);
 
-		if (is_bool($x)) {
-			if (PHPExcel_Calculation_Functions::getCompatibilityMode() == PHPExcel_Calculation_Functions::COMPATIBILITY_OPENOFFICE) {
+		if (\is_bool($x)) {
+			if (\PhpOffice\PhpSpreadsheet\Calculation\Functions::getCompatibilityMode() == \PhpOffice\PhpSpreadsheet\Calculation\Functions::COMPATIBILITY_OPENOFFICE) {
 				$x = (int) $x;
 			} else {
-				return PHPExcel_Calculation_Functions::VALUE();
+				return \PhpOffice\PhpSpreadsheet\Calculation\Functions::VALUE();
 			}
 		}
 		$x = (string) $x;
-		if (strlen($x) > preg_match_all('/[-0123456789.]/',$x,$out)) {
-			return PHPExcel_Calculation_Functions::VALUE();
+		if (\strlen($x) > \preg_match_all('/[-0123456789.]/',$x,$out)) {
+			return \PhpOffice\PhpSpreadsheet\Calculation\Functions::VALUE();
 		}
-		$x = (string) floor($x);
-		$r = decoct($x);
-		if (strlen($r) == 11) {
+		$x = (string) \floor($x);
+		$r = \decoct($x);
+		if (\strlen($r) == 11) {
 			//	Two's Complement
-			$r = substr($r,-10);
+			$r = \substr($r,-10);
 		}
 
 		return self::_nbrConversionFormat($r,$places);
@@ -1392,20 +1394,20 @@ class PHPExcel_Calculation_Engineering {
 	 *									If places is negative, HEX2BIN returns the #NUM! error value.
 	 * @return	string
 	 */
-	public static function HEXTOBIN($x, $places=null) {
-		$x	= PHPExcel_Calculation_Functions::flattenSingleValue($x);
-		$places	= PHPExcel_Calculation_Functions::flattenSingleValue($places);
+	public static function HEXTOBIN($x, $places=\null) {
+		$x	= \PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($x);
+		$places	= \PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($places);
 
-		if (is_bool($x)) {
-			return PHPExcel_Calculation_Functions::VALUE();
+		if (\is_bool($x)) {
+			return \PhpOffice\PhpSpreadsheet\Calculation\Functions::VALUE();
 		}
 		$x = (string) $x;
-		if (strlen($x) > preg_match_all('/[0123456789ABCDEF]/',strtoupper($x),$out)) {
-			return PHPExcel_Calculation_Functions::NaN();
+		if (\strlen($x) > \preg_match_all('/[0123456789ABCDEF]/',\strtoupper($x),$out)) {
+			return \PhpOffice\PhpSpreadsheet\Calculation\Functions::NaN();
 		}
-		$binVal = decbin(hexdec($x));
+		$binVal = \decbin(\hexdec($x));
 
-		return substr(self::_nbrConversionFormat($binVal,$places),-10);
+		return \substr(self::_nbrConversionFormat($binVal,$places),-10);
 	}	//	function HEXTOBIN()
 
 
@@ -1429,16 +1431,16 @@ class PHPExcel_Calculation_Engineering {
 	 * @return	string
 	 */
 	public static function HEXTODEC($x) {
-		$x	= PHPExcel_Calculation_Functions::flattenSingleValue($x);
+		$x	= \PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($x);
 
-		if (is_bool($x)) {
-			return PHPExcel_Calculation_Functions::VALUE();
+		if (\is_bool($x)) {
+			return \PhpOffice\PhpSpreadsheet\Calculation\Functions::VALUE();
 		}
 		$x = (string) $x;
-		if (strlen($x) > preg_match_all('/[0123456789ABCDEF]/',strtoupper($x),$out)) {
-			return PHPExcel_Calculation_Functions::NaN();
+		if (\strlen($x) > \preg_match_all('/[0123456789ABCDEF]/',\strtoupper($x),$out)) {
+			return \PhpOffice\PhpSpreadsheet\Calculation\Functions::NaN();
 		}
-		return hexdec($x);
+		return \hexdec($x);
 	}	//	function HEXTODEC()
 
 
@@ -1474,18 +1476,18 @@ class PHPExcel_Calculation_Engineering {
 	 *									If places is negative, HEX2OCT returns the #NUM! error value.
 	 * @return	string
 	 */
-	public static function HEXTOOCT($x, $places=null) {
-		$x	= PHPExcel_Calculation_Functions::flattenSingleValue($x);
-		$places	= PHPExcel_Calculation_Functions::flattenSingleValue($places);
+	public static function HEXTOOCT($x, $places=\null) {
+		$x	= \PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($x);
+		$places	= \PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($places);
 
-		if (is_bool($x)) {
-			return PHPExcel_Calculation_Functions::VALUE();
+		if (\is_bool($x)) {
+			return \PhpOffice\PhpSpreadsheet\Calculation\Functions::VALUE();
 		}
 		$x = (string) $x;
-		if (strlen($x) > preg_match_all('/[0123456789ABCDEF]/',strtoupper($x),$out)) {
-			return PHPExcel_Calculation_Functions::NaN();
+		if (\strlen($x) > \preg_match_all('/[0123456789ABCDEF]/',\strtoupper($x),$out)) {
+			return \PhpOffice\PhpSpreadsheet\Calculation\Functions::NaN();
 		}
-		$octVal = decoct(hexdec($x));
+		$octVal = \decoct(\hexdec($x));
 
 		return self::_nbrConversionFormat($octVal,$places);
 	}	//	function HEXTOOCT()
@@ -1525,18 +1527,18 @@ class PHPExcel_Calculation_Engineering {
 	 *									value.
 	 * @return	string
 	 */
-	public static function OCTTOBIN($x, $places=null) {
-		$x	= PHPExcel_Calculation_Functions::flattenSingleValue($x);
-		$places	= PHPExcel_Calculation_Functions::flattenSingleValue($places);
+	public static function OCTTOBIN($x, $places=\null) {
+		$x	= \PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($x);
+		$places	= \PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($places);
 
-		if (is_bool($x)) {
-			return PHPExcel_Calculation_Functions::VALUE();
+		if (\is_bool($x)) {
+			return \PhpOffice\PhpSpreadsheet\Calculation\Functions::VALUE();
 		}
 		$x = (string) $x;
-		if (preg_match_all('/[01234567]/',$x,$out) != strlen($x)) {
-			return PHPExcel_Calculation_Functions::NaN();
+		if (\preg_match_all('/[01234567]/',$x,$out) != \strlen($x)) {
+			return \PhpOffice\PhpSpreadsheet\Calculation\Functions::NaN();
 		}
-		$r = decbin(octdec($x));
+		$r = \decbin(\octdec($x));
 
 		return self::_nbrConversionFormat($r,$places);
 	}	//	function OCTTOBIN()
@@ -1562,16 +1564,16 @@ class PHPExcel_Calculation_Engineering {
 	 * @return	string
 	 */
 	public static function OCTTODEC($x) {
-		$x	= PHPExcel_Calculation_Functions::flattenSingleValue($x);
+		$x	= \PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($x);
 
-		if (is_bool($x)) {
-			return PHPExcel_Calculation_Functions::VALUE();
+		if (\is_bool($x)) {
+			return \PhpOffice\PhpSpreadsheet\Calculation\Functions::VALUE();
 		}
 		$x = (string) $x;
-		if (preg_match_all('/[01234567]/',$x,$out) != strlen($x)) {
-			return PHPExcel_Calculation_Functions::NaN();
+		if (\preg_match_all('/[01234567]/',$x,$out) != \strlen($x)) {
+			return \PhpOffice\PhpSpreadsheet\Calculation\Functions::NaN();
 		}
-		return octdec($x);
+		return \octdec($x);
 	}	//	function OCTTODEC()
 
 
@@ -1604,18 +1606,18 @@ class PHPExcel_Calculation_Engineering {
 	 *									If places is negative, OCT2HEX returns the #NUM! error value.
 	 * @return	string
 	 */
-	public static function OCTTOHEX($x, $places=null) {
-		$x	= PHPExcel_Calculation_Functions::flattenSingleValue($x);
-		$places	= PHPExcel_Calculation_Functions::flattenSingleValue($places);
+	public static function OCTTOHEX($x, $places=\null) {
+		$x	= \PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($x);
+		$places	= \PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($places);
 
-		if (is_bool($x)) {
-			return PHPExcel_Calculation_Functions::VALUE();
+		if (\is_bool($x)) {
+			return \PhpOffice\PhpSpreadsheet\Calculation\Functions::VALUE();
 		}
 		$x = (string) $x;
-		if (preg_match_all('/[01234567]/',$x,$out) != strlen($x)) {
-			return PHPExcel_Calculation_Functions::NaN();
+		if (\preg_match_all('/[01234567]/',$x,$out) != \strlen($x)) {
+			return \PhpOffice\PhpSpreadsheet\Calculation\Functions::NaN();
 		}
-		$hexVal = strtoupper(dechex(octdec($x)));
+		$hexVal = \strtoupper(\dechex(\octdec($x)));
 
 		return self::_nbrConversionFormat($hexVal,$places);
 	}	//	function OCTTOHEX()
@@ -1638,11 +1640,11 @@ class PHPExcel_Calculation_Engineering {
 	 * @return	string
 	 */
 	public static function COMPLEX($realNumber=0.0, $imaginary=0.0, $suffix='i') {
-		$realNumber	= (is_null($realNumber))	? 0.0 :	PHPExcel_Calculation_Functions::flattenSingleValue($realNumber);
-		$imaginary	= (is_null($imaginary))		? 0.0 :	PHPExcel_Calculation_Functions::flattenSingleValue($imaginary);
-		$suffix		= (is_null($suffix))		? 'i' :	PHPExcel_Calculation_Functions::flattenSingleValue($suffix);
+		$realNumber	= (\is_null($realNumber))	? 0.0 :	\PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($realNumber);
+		$imaginary	= (\is_null($imaginary))		? 0.0 :	\PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($imaginary);
+		$suffix		= (\is_null($suffix))		? 'i' :	\PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($suffix);
 
-		if (((is_numeric($realNumber)) && (is_numeric($imaginary))) &&
+		if (((\is_numeric($realNumber)) && (\is_numeric($imaginary))) &&
 			(($suffix == 'i') || ($suffix == 'j') || ($suffix == ''))) {
 			$realNumber	= (float) $realNumber;
 			$imaginary	= (float) $imaginary;
@@ -1668,7 +1670,7 @@ class PHPExcel_Calculation_Engineering {
 			return (string) $realNumber.$imaginary.$suffix;
 		}
 
-		return PHPExcel_Calculation_Functions::VALUE();
+		return \PhpOffice\PhpSpreadsheet\Calculation\Functions::VALUE();
 	}	//	function COMPLEX()
 
 
@@ -1687,7 +1689,7 @@ class PHPExcel_Calculation_Engineering {
 	 * @return	float
 	 */
 	public static function IMAGINARY($complexNumber) {
-		$complexNumber	= PHPExcel_Calculation_Functions::flattenSingleValue($complexNumber);
+		$complexNumber	= \PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($complexNumber);
 
 		$parsedComplex = self::_parseComplex($complexNumber);
 		return $parsedComplex['imaginary'];
@@ -1708,7 +1710,7 @@ class PHPExcel_Calculation_Engineering {
 	 * @return	float
 	 */
 	public static function IMREAL($complexNumber) {
-		$complexNumber	= PHPExcel_Calculation_Functions::flattenSingleValue($complexNumber);
+		$complexNumber	= \PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($complexNumber);
 
 		$parsedComplex = self::_parseComplex($complexNumber);
 		return $parsedComplex['real'];
@@ -1727,11 +1729,11 @@ class PHPExcel_Calculation_Engineering {
 	 * @return	float
 	 */
 	public static function IMABS($complexNumber) {
-		$complexNumber	= PHPExcel_Calculation_Functions::flattenSingleValue($complexNumber);
+		$complexNumber	= \PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($complexNumber);
 
 		$parsedComplex = self::_parseComplex($complexNumber);
 
-		return sqrt(($parsedComplex['real'] * $parsedComplex['real']) + ($parsedComplex['imaginary'] * $parsedComplex['imaginary']));
+		return \sqrt(($parsedComplex['real'] * $parsedComplex['real']) + ($parsedComplex['imaginary'] * $parsedComplex['imaginary']));
 	}	//	function IMABS()
 
 
@@ -1748,7 +1750,7 @@ class PHPExcel_Calculation_Engineering {
 	 * @return	float
 	 */
 	public static function IMARGUMENT($complexNumber) {
-		$complexNumber	= PHPExcel_Calculation_Functions::flattenSingleValue($complexNumber);
+		$complexNumber	= \PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($complexNumber);
 
 		$parsedComplex = self::_parseComplex($complexNumber);
 
@@ -1756,16 +1758,16 @@ class PHPExcel_Calculation_Engineering {
 			if ($parsedComplex['imaginary'] == 0.0) {
 				return 0.0;
 			} elseif($parsedComplex['imaginary'] < 0.0) {
-				return M_PI / -2;
+				return \M_PI / -2;
 			} else {
-				return M_PI / 2;
+				return \M_PI / 2;
 			}
 		} elseif ($parsedComplex['real'] > 0.0) {
-			return atan($parsedComplex['imaginary'] / $parsedComplex['real']);
+			return \atan($parsedComplex['imaginary'] / $parsedComplex['real']);
 		} elseif ($parsedComplex['imaginary'] < 0.0) {
-			return 0 - (M_PI - atan(abs($parsedComplex['imaginary']) / abs($parsedComplex['real'])));
+			return 0 - (\M_PI - \atan(\abs($parsedComplex['imaginary']) / \abs($parsedComplex['real'])));
 		} else {
-			return M_PI - atan($parsedComplex['imaginary'] / abs($parsedComplex['real']));
+			return \M_PI - \atan($parsedComplex['imaginary'] / \abs($parsedComplex['real']));
 		}
 	}	//	function IMARGUMENT()
 
@@ -1782,7 +1784,7 @@ class PHPExcel_Calculation_Engineering {
 	 * @return	string
 	 */
 	public static function IMCONJUGATE($complexNumber) {
-		$complexNumber	= PHPExcel_Calculation_Functions::flattenSingleValue($complexNumber);
+		$complexNumber	= \PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($complexNumber);
 
 		$parsedComplex = self::_parseComplex($complexNumber);
 
@@ -1810,14 +1812,14 @@ class PHPExcel_Calculation_Engineering {
 	 * @return	string|float
 	 */
 	public static function IMCOS($complexNumber) {
-		$complexNumber	= PHPExcel_Calculation_Functions::flattenSingleValue($complexNumber);
+		$complexNumber	= \PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($complexNumber);
 
 		$parsedComplex = self::_parseComplex($complexNumber);
 
 		if ($parsedComplex['imaginary'] == 0.0) {
-			return cos($parsedComplex['real']);
+			return \cos($parsedComplex['real']);
 		} else {
-			return self::IMCONJUGATE(self::COMPLEX(cos($parsedComplex['real']) * cosh($parsedComplex['imaginary']),sin($parsedComplex['real']) * sinh($parsedComplex['imaginary']),$parsedComplex['suffix']));
+			return self::IMCONJUGATE(self::COMPLEX(\cos($parsedComplex['real']) * \cosh($parsedComplex['imaginary']),\sin($parsedComplex['real']) * \sinh($parsedComplex['imaginary']),$parsedComplex['suffix']));
 		}
 	}	//	function IMCOS()
 
@@ -1834,14 +1836,14 @@ class PHPExcel_Calculation_Engineering {
 	 * @return	string|float
 	 */
 	public static function IMSIN($complexNumber) {
-		$complexNumber	= PHPExcel_Calculation_Functions::flattenSingleValue($complexNumber);
+		$complexNumber	= \PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($complexNumber);
 
 		$parsedComplex = self::_parseComplex($complexNumber);
 
 		if ($parsedComplex['imaginary'] == 0.0) {
-			return sin($parsedComplex['real']);
+			return \sin($parsedComplex['real']);
 		} else {
-			return self::COMPLEX(sin($parsedComplex['real']) * cosh($parsedComplex['imaginary']),cos($parsedComplex['real']) * sinh($parsedComplex['imaginary']),$parsedComplex['suffix']);
+			return self::COMPLEX(\sin($parsedComplex['real']) * \cosh($parsedComplex['imaginary']),\cos($parsedComplex['real']) * \sinh($parsedComplex['imaginary']),$parsedComplex['suffix']);
 		}
 	}	//	function IMSIN()
 
@@ -1858,14 +1860,14 @@ class PHPExcel_Calculation_Engineering {
 	 * @return	string
 	 */
 	public static function IMSQRT($complexNumber) {
-		$complexNumber	= PHPExcel_Calculation_Functions::flattenSingleValue($complexNumber);
+		$complexNumber	= \PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($complexNumber);
 
 		$parsedComplex = self::_parseComplex($complexNumber);
 
 		$theta = self::IMARGUMENT($complexNumber);
-		$d1 = cos($theta / 2);
-		$d2 = sin($theta / 2);
-		$r = sqrt(sqrt(($parsedComplex['real'] * $parsedComplex['real']) + ($parsedComplex['imaginary'] * $parsedComplex['imaginary'])));
+		$d1 = \cos($theta / 2);
+		$d2 = \sin($theta / 2);
+		$r = \sqrt(\sqrt(($parsedComplex['real'] * $parsedComplex['real']) + ($parsedComplex['imaginary'] * $parsedComplex['imaginary'])));
 
 		if ($parsedComplex['suffix'] == '') {
 			return self::COMPLEX($d1 * $r,$d2 * $r);
@@ -1887,15 +1889,15 @@ class PHPExcel_Calculation_Engineering {
 	 * @return	string
 	 */
 	public static function IMLN($complexNumber) {
-		$complexNumber	= PHPExcel_Calculation_Functions::flattenSingleValue($complexNumber);
+		$complexNumber	= \PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($complexNumber);
 
 		$parsedComplex = self::_parseComplex($complexNumber);
 
 		if (($parsedComplex['real'] == 0.0) && ($parsedComplex['imaginary'] == 0.0)) {
-			return PHPExcel_Calculation_Functions::NaN();
+			return \PhpOffice\PhpSpreadsheet\Calculation\Functions::NaN();
 		}
 
-		$logR = log(sqrt(($parsedComplex['real'] * $parsedComplex['real']) + ($parsedComplex['imaginary'] * $parsedComplex['imaginary'])));
+		$logR = \log(\sqrt(($parsedComplex['real'] * $parsedComplex['real']) + ($parsedComplex['imaginary'] * $parsedComplex['imaginary'])));
 		$t = self::IMARGUMENT($complexNumber);
 
 		if ($parsedComplex['suffix'] == '') {
@@ -1918,17 +1920,17 @@ class PHPExcel_Calculation_Engineering {
 	 * @return	string
 	 */
 	public static function IMLOG10($complexNumber) {
-		$complexNumber	= PHPExcel_Calculation_Functions::flattenSingleValue($complexNumber);
+		$complexNumber	= \PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($complexNumber);
 
 		$parsedComplex = self::_parseComplex($complexNumber);
 
 		if (($parsedComplex['real'] == 0.0) && ($parsedComplex['imaginary'] == 0.0)) {
-			return PHPExcel_Calculation_Functions::NaN();
+			return \PhpOffice\PhpSpreadsheet\Calculation\Functions::NaN();
 		} elseif (($parsedComplex['real'] > 0.0) && ($parsedComplex['imaginary'] == 0.0)) {
-			return log10($parsedComplex['real']);
+			return \log10($parsedComplex['real']);
 		}
 
-		return self::IMPRODUCT(log10(EULER),self::IMLN($complexNumber));
+		return self::IMPRODUCT(\log10(\EULER),self::IMLN($complexNumber));
 	}	//	function IMLOG10()
 
 
@@ -1944,17 +1946,17 @@ class PHPExcel_Calculation_Engineering {
 	 * @return	string
 	 */
 	public static function IMLOG2($complexNumber) {
-		$complexNumber	= PHPExcel_Calculation_Functions::flattenSingleValue($complexNumber);
+		$complexNumber	= \PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($complexNumber);
 
 		$parsedComplex = self::_parseComplex($complexNumber);
 
 		if (($parsedComplex['real'] == 0.0) && ($parsedComplex['imaginary'] == 0.0)) {
-			return PHPExcel_Calculation_Functions::NaN();
+			return \PhpOffice\PhpSpreadsheet\Calculation\Functions::NaN();
 		} elseif (($parsedComplex['real'] > 0.0) && ($parsedComplex['imaginary'] == 0.0)) {
-			return log($parsedComplex['real'],2);
+			return \log($parsedComplex['real'],2);
 		}
 
-		return self::IMPRODUCT(log(EULER,2),self::IMLN($complexNumber));
+		return self::IMPRODUCT(\log(\EULER,2),self::IMLN($complexNumber));
 	}	//	function IMLOG2()
 
 
@@ -1970,7 +1972,7 @@ class PHPExcel_Calculation_Engineering {
 	 * @return	string
 	 */
 	public static function IMEXP($complexNumber) {
-		$complexNumber	= PHPExcel_Calculation_Functions::flattenSingleValue($complexNumber);
+		$complexNumber	= \PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($complexNumber);
 
 		$parsedComplex = self::_parseComplex($complexNumber);
 
@@ -1978,9 +1980,9 @@ class PHPExcel_Calculation_Engineering {
 			return '1';
 		}
 
-		$e = exp($parsedComplex['real']);
-		$eX = $e * cos($parsedComplex['imaginary']);
-		$eY = $e * sin($parsedComplex['imaginary']);
+		$e = \exp($parsedComplex['real']);
+		$eX = $e * \cos($parsedComplex['imaginary']);
+		$eY = $e * \sin($parsedComplex['imaginary']);
 
 		if ($parsedComplex['suffix'] == '') {
 			return self::COMPLEX($eX,$eY);
@@ -2003,24 +2005,24 @@ class PHPExcel_Calculation_Engineering {
 	 * @return	string
 	 */
 	public static function IMPOWER($complexNumber,$realNumber) {
-		$complexNumber	= PHPExcel_Calculation_Functions::flattenSingleValue($complexNumber);
-		$realNumber		= PHPExcel_Calculation_Functions::flattenSingleValue($realNumber);
+		$complexNumber	= \PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($complexNumber);
+		$realNumber		= \PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($realNumber);
 
-		if (!is_numeric($realNumber)) {
-			return PHPExcel_Calculation_Functions::VALUE();
+		if (!\is_numeric($realNumber)) {
+			return \PhpOffice\PhpSpreadsheet\Calculation\Functions::VALUE();
 		}
 
 		$parsedComplex = self::_parseComplex($complexNumber);
 
-		$r = sqrt(($parsedComplex['real'] * $parsedComplex['real']) + ($parsedComplex['imaginary'] * $parsedComplex['imaginary']));
-		$rPower = pow($r,$realNumber);
+		$r = \sqrt(($parsedComplex['real'] * $parsedComplex['real']) + ($parsedComplex['imaginary'] * $parsedComplex['imaginary']));
+		$rPower = \pow($r,$realNumber);
 		$theta = self::IMARGUMENT($complexNumber) * $realNumber;
 		if ($theta == 0) {
 			return 1;
 		} elseif ($parsedComplex['imaginary'] == 0.0) {
-			return self::COMPLEX($rPower * cos($theta),$rPower * sin($theta),$parsedComplex['suffix']);
+			return self::COMPLEX($rPower * \cos($theta),$rPower * \sin($theta),$parsedComplex['suffix']);
 		} else {
-			return self::COMPLEX($rPower * cos($theta),$rPower * sin($theta),$parsedComplex['suffix']);
+			return self::COMPLEX($rPower * \cos($theta),$rPower * \sin($theta),$parsedComplex['suffix']);
 		}
 	}	//	function IMPOWER()
 
@@ -2038,15 +2040,15 @@ class PHPExcel_Calculation_Engineering {
 	 * @return	string
 	 */
 	public static function IMDIV($complexDividend,$complexDivisor) {
-		$complexDividend	= PHPExcel_Calculation_Functions::flattenSingleValue($complexDividend);
-		$complexDivisor	= PHPExcel_Calculation_Functions::flattenSingleValue($complexDivisor);
+		$complexDividend	= \PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($complexDividend);
+		$complexDivisor	= \PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($complexDivisor);
 
 		$parsedComplexDividend = self::_parseComplex($complexDividend);
 		$parsedComplexDivisor = self::_parseComplex($complexDivisor);
 
 		if (($parsedComplexDividend['suffix'] != '') && ($parsedComplexDivisor['suffix'] != '') &&
 			($parsedComplexDividend['suffix'] != $parsedComplexDivisor['suffix'])) {
-			return PHPExcel_Calculation_Functions::NaN();
+			return \PhpOffice\PhpSpreadsheet\Calculation\Functions::NaN();
 		}
 		if (($parsedComplexDividend['suffix'] != '') && ($parsedComplexDivisor['suffix'] == '')) {
 			$parsedComplexDivisor['suffix'] = $parsedComplexDividend['suffix'];
@@ -2082,15 +2084,15 @@ class PHPExcel_Calculation_Engineering {
 	 * @return	string
 	 */
 	public static function IMSUB($complexNumber1,$complexNumber2) {
-		$complexNumber1	= PHPExcel_Calculation_Functions::flattenSingleValue($complexNumber1);
-		$complexNumber2	= PHPExcel_Calculation_Functions::flattenSingleValue($complexNumber2);
+		$complexNumber1	= \PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($complexNumber1);
+		$complexNumber2	= \PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($complexNumber2);
 
 		$parsedComplex1 = self::_parseComplex($complexNumber1);
 		$parsedComplex2 = self::_parseComplex($complexNumber2);
 
 		if ((($parsedComplex1['suffix'] != '') && ($parsedComplex2['suffix'] != '')) &&
 			($parsedComplex1['suffix'] != $parsedComplex2['suffix'])) {
-			return PHPExcel_Calculation_Functions::NaN();
+			return \PhpOffice\PhpSpreadsheet\Calculation\Functions::NaN();
 		} elseif (($parsedComplex1['suffix'] == '') && ($parsedComplex2['suffix'] != '')) {
 			$parsedComplex1['suffix'] = $parsedComplex2['suffix'];
 		}
@@ -2119,14 +2121,14 @@ class PHPExcel_Calculation_Engineering {
 		$activeSuffix = '';
 
 		// Loop through the arguments
-		$aArgs = PHPExcel_Calculation_Functions::flattenArray(func_get_args());
+		$aArgs = \PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenArray(\func_get_args());
 		foreach ($aArgs as $arg) {
 			$parsedComplex = self::_parseComplex($arg);
 
 			if ($activeSuffix == '') {
 				$activeSuffix = $parsedComplex['suffix'];
 			} elseif (($parsedComplex['suffix'] != '') && ($activeSuffix != $parsedComplex['suffix'])) {
-				return PHPExcel_Calculation_Functions::VALUE();
+				return \PhpOffice\PhpSpreadsheet\Calculation\Functions::VALUE();
 			}
 
 			$returnValue['real'] += $parsedComplex['real'];
@@ -2155,7 +2157,7 @@ class PHPExcel_Calculation_Engineering {
 		$activeSuffix = '';
 
 		// Loop through the arguments
-		$aArgs = PHPExcel_Calculation_Functions::flattenArray(func_get_args());
+		$aArgs = \PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenArray(\func_get_args());
 		foreach ($aArgs as $arg) {
 			$parsedComplex = self::_parseComplex($arg);
 
@@ -2163,7 +2165,7 @@ class PHPExcel_Calculation_Engineering {
 			if (($parsedComplex['suffix'] != '') && ($activeSuffix == '')) {
 				$activeSuffix = $parsedComplex['suffix'];
 			} elseif (($parsedComplex['suffix'] != '') && ($activeSuffix != $parsedComplex['suffix'])) {
-				return PHPExcel_Calculation_Functions::NaN();
+				return \PhpOffice\PhpSpreadsheet\Calculation\Functions::NaN();
 			}
 			$returnValue['real'] = ($workValue['real'] * $parsedComplex['real']) - ($workValue['imaginary'] * $parsedComplex['imaginary']);
 			$returnValue['imaginary'] = ($workValue['real'] * $parsedComplex['imaginary']) + ($workValue['imaginary'] * $parsedComplex['real']);
@@ -2190,8 +2192,8 @@ class PHPExcel_Calculation_Engineering {
 	 *	@return	int
 	 */
 	public static function DELTA($a, $b=0) {
-		$a	= PHPExcel_Calculation_Functions::flattenSingleValue($a);
-		$b	= PHPExcel_Calculation_Functions::flattenSingleValue($b);
+		$a	= \PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($a);
+		$b	= \PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($b);
 
 		return (int) ($a == $b);
 	}	//	function DELTA()
@@ -2213,8 +2215,8 @@ class PHPExcel_Calculation_Engineering {
 	 *	@return	int
 	 */
 	public static function GESTEP($number, $step=0) {
-		$number	= PHPExcel_Calculation_Functions::flattenSingleValue($number);
-		$step	= PHPExcel_Calculation_Functions::flattenSingleValue($step);
+		$number	= \PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($number);
+		$step	= \PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($step);
 
 		return (int) ($number >= $step);
 	}	//	function GESTEP()
@@ -2226,7 +2228,7 @@ class PHPExcel_Calculation_Engineering {
 	private static $_two_sqrtpi = 1.128379167095512574;
 
 	public static function _erfVal($x) {
-		if (abs($x) > 2.2) {
+		if (\abs($x) > 2.2) {
 			return 1 - self::_erfcVal($x);
 		}
 		$sum = $term = $x;
@@ -2242,7 +2244,7 @@ class PHPExcel_Calculation_Engineering {
 			if ($sum == 0.0) {
 				break;
 			}
-		} while (abs($term / $sum) > PRECISION);
+		} while (\abs($term / $sum) > \PRECISION);
 		return self::$_two_sqrtpi * $sum;
 	}	//	function _erfVal()
 
@@ -2265,19 +2267,19 @@ class PHPExcel_Calculation_Engineering {
 	 *								If omitted, ERF integrates between zero and lower_limit
 	 *	@return	float
 	 */
-	public static function ERF($lower, $upper = NULL) {
-		$lower	= PHPExcel_Calculation_Functions::flattenSingleValue($lower);
-		$upper	= PHPExcel_Calculation_Functions::flattenSingleValue($upper);
+	public static function ERF($lower, $upper = \NULL) {
+		$lower	= \PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($lower);
+		$upper	= \PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($upper);
 
-		if (is_numeric($lower)) {
-			if (is_null($upper)) {
+		if (\is_numeric($lower)) {
+			if (\is_null($upper)) {
 				return self::_erfVal($lower);
 			}
-			if (is_numeric($upper)) {
+			if (\is_numeric($upper)) {
 				return self::_erfVal($upper) - self::_erfVal($lower);
 			}
 		}
-		return PHPExcel_Calculation_Functions::VALUE();
+		return \PhpOffice\PhpSpreadsheet\Calculation\Functions::VALUE();
 	}	//	function ERF()
 
 
@@ -2287,7 +2289,7 @@ class PHPExcel_Calculation_Engineering {
 	private static $_one_sqrtpi = 0.564189583547756287;
 
 	private static function _erfcVal($x) {
-		if (abs($x) < 2.2) {
+		if (\abs($x) < 2.2) {
 			return 1 - self::_erfVal($x);
 		}
 		if ($x < 0) {
@@ -2308,8 +2310,8 @@ class PHPExcel_Calculation_Engineering {
 			$n += 0.5;
 			$q1 = $q2;
 			$q2 = $b / $d;
-		} while ((abs($q1 - $q2) / $q2) > PRECISION);
-		return self::$_one_sqrtpi * exp(-$x * $x) * $q2;
+		} while ((\abs($q1 - $q2) / $q2) > \PRECISION);
+		return self::$_one_sqrtpi * \exp(-$x * $x) * $q2;
 	}	//	function _erfcVal()
 
 
@@ -2330,12 +2332,12 @@ class PHPExcel_Calculation_Engineering {
 	 *	@return	float
 	 */
 	public static function ERFC($x) {
-		$x = PHPExcel_Calculation_Functions::flattenSingleValue($x);
+		$x = \PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($x);
 
-		if (is_numeric($x)) {
+		if (\is_numeric($x)) {
 			return self::_erfcVal($x);
 		}
-		return PHPExcel_Calculation_Functions::VALUE();
+		return \PhpOffice\PhpSpreadsheet\Calculation\Functions::VALUE();
 	}	//	function ERFC()
 
 
@@ -2350,7 +2352,7 @@ class PHPExcel_Calculation_Engineering {
 		foreach(self::$_conversionUnits as $conversionUnit) {
 			$conversionGroups[] = $conversionUnit['Group'];
 		}
-		return array_merge(array_unique($conversionGroups));
+		return \array_merge(\array_unique($conversionGroups));
 	}	//	function getConversionGroups()
 
 
@@ -2361,10 +2363,10 @@ class PHPExcel_Calculation_Engineering {
 	 *	@param	string	$group	The group whose units of measure you want to retrieve
 	 *	@return	array
 	 */
-	public static function getConversionGroupUnits($group = NULL) {
+	public static function getConversionGroupUnits($group = \NULL) {
 		$conversionGroups = array();
 		foreach(self::$_conversionUnits as $conversionUnit => $conversionGroup) {
-			if ((is_null($group)) || ($conversionGroup['Group'] == $group)) {
+			if ((\is_null($group)) || ($conversionGroup['Group'] == $group)) {
 				$conversionGroups[$conversionGroup['Group']][] = $conversionUnit;
 			}
 		}
@@ -2378,10 +2380,10 @@ class PHPExcel_Calculation_Engineering {
 	 *	@param	string	$group	The group whose units of measure you want to retrieve
 	 *	@return	array
 	 */
-	public static function getConversionGroupUnitDetails($group = NULL) {
+	public static function getConversionGroupUnitDetails($group = \NULL) {
 		$conversionGroups = array();
 		foreach(self::$_conversionUnits as $conversionUnit => $conversionGroup) {
-			if ((is_null($group)) || ($conversionGroup['Group'] == $group)) {
+			if ((\is_null($group)) || ($conversionGroup['Group'] == $group)) {
 				$conversionGroups[$conversionGroup['Group']][] = array(	'unit'			=> $conversionUnit,
 																		'description'	=> $conversionGroup['Unit Name']
 																	  );
@@ -2419,28 +2421,28 @@ class PHPExcel_Calculation_Engineering {
 	 *	@return	float
 	 */
 	public static function CONVERTUOM($value, $fromUOM, $toUOM) {
-		$value		= PHPExcel_Calculation_Functions::flattenSingleValue($value);
-		$fromUOM	= PHPExcel_Calculation_Functions::flattenSingleValue($fromUOM);
-		$toUOM		= PHPExcel_Calculation_Functions::flattenSingleValue($toUOM);
+		$value		= \PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($value);
+		$fromUOM	= \PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($fromUOM);
+		$toUOM		= \PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenSingleValue($toUOM);
 
-		if (!is_numeric($value)) {
-			return PHPExcel_Calculation_Functions::VALUE();
+		if (!\is_numeric($value)) {
+			return \PhpOffice\PhpSpreadsheet\Calculation\Functions::VALUE();
 		}
 		$fromMultiplier = 1.0;
 		if (isset(self::$_conversionUnits[$fromUOM])) {
 			$unitGroup1 = self::$_conversionUnits[$fromUOM]['Group'];
 		} else {
-			$fromMultiplier = substr($fromUOM,0,1);
-			$fromUOM = substr($fromUOM,1);
+			$fromMultiplier = \substr($fromUOM,0,1);
+			$fromUOM = \substr($fromUOM,1);
 			if (isset(self::$_conversionMultipliers[$fromMultiplier])) {
 				$fromMultiplier = self::$_conversionMultipliers[$fromMultiplier]['multiplier'];
 			} else {
-				return PHPExcel_Calculation_Functions::NA();
+				return \PhpOffice\PhpSpreadsheet\Calculation\Functions::NA();
 			}
 			if ((isset(self::$_conversionUnits[$fromUOM])) && (self::$_conversionUnits[$fromUOM]['AllowPrefix'])) {
 				$unitGroup1 = self::$_conversionUnits[$fromUOM]['Group'];
 			} else {
-				return PHPExcel_Calculation_Functions::NA();
+				return \PhpOffice\PhpSpreadsheet\Calculation\Functions::NA();
 			}
 		}
 		$value *= $fromMultiplier;
@@ -2449,21 +2451,21 @@ class PHPExcel_Calculation_Engineering {
 		if (isset(self::$_conversionUnits[$toUOM])) {
 			$unitGroup2 = self::$_conversionUnits[$toUOM]['Group'];
 		} else {
-			$toMultiplier = substr($toUOM,0,1);
-			$toUOM = substr($toUOM,1);
+			$toMultiplier = \substr($toUOM,0,1);
+			$toUOM = \substr($toUOM,1);
 			if (isset(self::$_conversionMultipliers[$toMultiplier])) {
 				$toMultiplier = self::$_conversionMultipliers[$toMultiplier]['multiplier'];
 			} else {
-				return PHPExcel_Calculation_Functions::NA();
+				return \PhpOffice\PhpSpreadsheet\Calculation\Functions::NA();
 			}
 			if ((isset(self::$_conversionUnits[$toUOM])) && (self::$_conversionUnits[$toUOM]['AllowPrefix'])) {
 				$unitGroup2 = self::$_conversionUnits[$toUOM]['Group'];
 			} else {
-				return PHPExcel_Calculation_Functions::NA();
+				return \PhpOffice\PhpSpreadsheet\Calculation\Functions::NA();
 			}
 		}
 		if ($unitGroup1 != $unitGroup2) {
-			return PHPExcel_Calculation_Functions::NA();
+			return \PhpOffice\PhpSpreadsheet\Calculation\Functions::NA();
 		}
 
 		if (($fromUOM == $toUOM) && ($fromMultiplier == $toMultiplier)) {

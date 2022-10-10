@@ -1,4 +1,6 @@
 <?php
+namespace PhpOffice\PhpSpreadsheet\Worksheet;
+
 /**
  * PHPExcel
  *
@@ -24,8 +26,6 @@
  * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
  * @version    1.8.0, 2014-03-02
  */
-
-
 /**
  * PHPExcel_Worksheet_CellIterator
  *
@@ -35,14 +35,14 @@
  * @package    PHPExcel_Worksheet
  * @copyright  Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Worksheet_CellIterator implements Iterator
+class CellIterator implements \Iterator
 {
 	/**
-	 * PHPExcel_Worksheet to iterate
-	 *
-	 * @var PHPExcel_Worksheet
-	 */
-	private $_subject;
+  * PHPExcel_Worksheet to iterate
+  *
+  * @var \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet
+  */
+ private $_subject;
 
 	/**
 	 * Row index
@@ -63,15 +63,15 @@ class PHPExcel_Worksheet_CellIterator implements Iterator
 	 *
 	 * @var boolean
 	 */
-	private $_onlyExistingCells = true;
+	private $_onlyExistingCells = \true;
 
 	/**
-	 * Create a new cell iterator
-	 *
-	 * @param PHPExcel_Worksheet 		$subject
-	 * @param int						$rowIndex
-	 */
-	public function __construct(PHPExcel_Worksheet $subject = null, $rowIndex = 1) {
+  * Create a new cell iterator
+  *
+  * @param \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $subject
+  * @param int						$rowIndex
+  */
+ public function __construct(\PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $subject = \null, $rowIndex = 1) {
 		// Set subject and row index
 		$this->_subject 	= $subject;
 		$this->_rowIndex 	= $rowIndex;
@@ -94,7 +94,7 @@ class PHPExcel_Worksheet_CellIterator implements Iterator
     /**
      * Current PHPExcel_Cell
      *
-     * @return PHPExcel_Cell
+     * @return \PhpOffice\PhpSpreadsheet\Cell\Cell
      */
     public function current() {
 		return $this->_subject->getCellByColumnAndRow($this->_position, $this->_rowIndex);
@@ -125,7 +125,7 @@ class PHPExcel_Worksheet_CellIterator implements Iterator
         // columnIndexFromString() returns an index based at one,
         // treat it as a count when comparing it to the base zero
         // position.
-        $columnCount = PHPExcel_Cell::columnIndexFromString($this->_subject->getHighestColumn());
+        $columnCount = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString($this->_subject->getHighestColumn());
 
         if ($this->_onlyExistingCells) {
             // If we aren't looking at an existing cell, either
@@ -155,7 +155,7 @@ class PHPExcel_Worksheet_CellIterator implements Iterator
 	 *
 	 * @param	boolean		$value
 	 */
-    public function setIterateOnlyExistingCells($value = true) {
+    public function setIterateOnlyExistingCells($value = \true) {
     	$this->_onlyExistingCells = $value;
     }
 }

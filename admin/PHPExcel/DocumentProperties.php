@@ -1,4 +1,6 @@
 <?php
+namespace PhpOffice\PhpSpreadsheet\Document;
+
 /**
  * PHPExcel
  *
@@ -24,8 +26,6 @@
  * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt    LGPL
  * @version    1.8.0, 2014-03-02
  */
-
-
 /**
  * PHPExcel_DocumentProperties
  *
@@ -33,7 +33,7 @@
  * @package        PHPExcel
  * @copyright    Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_DocumentProperties
+class Properties
 {
     /** constants */
     const PROPERTY_TYPE_BOOLEAN	= 'b';
@@ -135,8 +135,8 @@ class PHPExcel_DocumentProperties
     {
         // Initialise values
         $this->_lastModifiedBy    = $this->_creator;
-        $this->_created        = time();
-        $this->_modified    = time();
+        $this->_created        = \time();
+        $this->_modified    = \time();
     }
 
     /**
@@ -152,7 +152,7 @@ class PHPExcel_DocumentProperties
      * Set Creator
      *
      * @param string $pValue
-     * @return PHPExcel_DocumentProperties
+     * @return \PhpOffice\PhpSpreadsheet\Document\Properties
      */
     public function setCreator($pValue = '') {
         $this->_creator = $pValue;
@@ -172,7 +172,7 @@ class PHPExcel_DocumentProperties
      * Set Last Modified By
      *
      * @param string $pValue
-     * @return PHPExcel_DocumentProperties
+     * @return \PhpOffice\PhpSpreadsheet\Document\Properties
      */
     public function setLastModifiedBy($pValue = '') {
         $this->_lastModifiedBy = $pValue;
@@ -192,16 +192,16 @@ class PHPExcel_DocumentProperties
      * Set Created
      *
      * @param datetime $pValue
-     * @return PHPExcel_DocumentProperties
+     * @return \PhpOffice\PhpSpreadsheet\Document\Properties
      */
-    public function setCreated($pValue = null) {
-        if ($pValue === NULL) {
-            $pValue = time();
-        } elseif (is_string($pValue)) {
-            if (is_numeric($pValue)) {
-                $pValue = intval($pValue);
+    public function setCreated($pValue = \null) {
+        if ($pValue === \NULL) {
+            $pValue = \time();
+        } elseif (\is_string($pValue)) {
+            if (\is_numeric($pValue)) {
+                $pValue = \intval($pValue);
             } else {
-                $pValue = strtotime($pValue);
+                $pValue = \strtotime($pValue);
             }
         }
 
@@ -222,16 +222,16 @@ class PHPExcel_DocumentProperties
      * Set Modified
      *
      * @param datetime $pValue
-     * @return PHPExcel_DocumentProperties
+     * @return \PhpOffice\PhpSpreadsheet\Document\Properties
      */
-    public function setModified($pValue = null) {
-        if ($pValue === NULL) {
-            $pValue = time();
-        } elseif (is_string($pValue)) {
-            if (is_numeric($pValue)) {
-                $pValue = intval($pValue);
+    public function setModified($pValue = \null) {
+        if ($pValue === \NULL) {
+            $pValue = \time();
+        } elseif (\is_string($pValue)) {
+            if (\is_numeric($pValue)) {
+                $pValue = \intval($pValue);
             } else {
-                $pValue = strtotime($pValue);
+                $pValue = \strtotime($pValue);
             }
         }
 
@@ -252,7 +252,7 @@ class PHPExcel_DocumentProperties
      * Set Title
      *
      * @param string $pValue
-     * @return PHPExcel_DocumentProperties
+     * @return \PhpOffice\PhpSpreadsheet\Document\Properties
      */
     public function setTitle($pValue = '') {
         $this->_title = $pValue;
@@ -272,7 +272,7 @@ class PHPExcel_DocumentProperties
      * Set Description
      *
      * @param string $pValue
-     * @return PHPExcel_DocumentProperties
+     * @return \PhpOffice\PhpSpreadsheet\Document\Properties
      */
     public function setDescription($pValue = '') {
         $this->_description = $pValue;
@@ -292,7 +292,7 @@ class PHPExcel_DocumentProperties
      * Set Subject
      *
      * @param string $pValue
-     * @return PHPExcel_DocumentProperties
+     * @return \PhpOffice\PhpSpreadsheet\Document\Properties
      */
     public function setSubject($pValue = '') {
         $this->_subject = $pValue;
@@ -312,7 +312,7 @@ class PHPExcel_DocumentProperties
      * Set Keywords
      *
      * @param string $pValue
-     * @return PHPExcel_DocumentProperties
+     * @return \PhpOffice\PhpSpreadsheet\Document\Properties
      */
     public function setKeywords($pValue = '') {
         $this->_keywords = $pValue;
@@ -332,7 +332,7 @@ class PHPExcel_DocumentProperties
      * Set Category
      *
      * @param string $pValue
-     * @return PHPExcel_DocumentProperties
+     * @return \PhpOffice\PhpSpreadsheet\Document\Properties
      */
     public function setCategory($pValue = '') {
         $this->_category = $pValue;
@@ -352,7 +352,7 @@ class PHPExcel_DocumentProperties
      * Set Company
      *
      * @param string $pValue
-     * @return PHPExcel_DocumentProperties
+     * @return \PhpOffice\PhpSpreadsheet\Document\Properties
      */
     public function setCompany($pValue = '') {
         $this->_company = $pValue;
@@ -372,7 +372,7 @@ class PHPExcel_DocumentProperties
      * Set Manager
      *
      * @param string $pValue
-     * @return PHPExcel_DocumentProperties
+     * @return \PhpOffice\PhpSpreadsheet\Document\Properties
      */
     public function setManager($pValue = '') {
         $this->_manager = $pValue;
@@ -385,7 +385,7 @@ class PHPExcel_DocumentProperties
      * @return array of string
      */
     public function getCustomProperties() {
-        return array_keys($this->_customProperties);
+        return \array_keys($this->_customProperties);
     }
 
     /**
@@ -435,21 +435,21 @@ class PHPExcel_DocumentProperties
      *   's' : String
      *   'd' : Date/Time
      *   'b' : Boolean
-     * @return PHPExcel_DocumentProperties
+     * @return \PhpOffice\PhpSpreadsheet\Document\Properties
      */
-    public function setCustomProperty($propertyName,$propertyValue='',$propertyType=NULL) {
-        if (($propertyType === NULL) || (!in_array($propertyType,array(self::PROPERTY_TYPE_INTEGER,
+    public function setCustomProperty($propertyName,$propertyValue='',$propertyType=\NULL) {
+        if (($propertyType === \NULL) || (!\in_array($propertyType,array(self::PROPERTY_TYPE_INTEGER,
                                                                        self::PROPERTY_TYPE_FLOAT,
                                                                        self::PROPERTY_TYPE_STRING,
                                                                        self::PROPERTY_TYPE_DATE,
                                                                        self::PROPERTY_TYPE_BOOLEAN)))) {
-            if ($propertyValue === NULL) {
+            if ($propertyValue === \NULL) {
                 $propertyType = self::PROPERTY_TYPE_STRING;
-            } elseif (is_float($propertyValue)) {
+            } elseif (\is_float($propertyValue)) {
                 $propertyType = self::PROPERTY_TYPE_FLOAT;
-            } elseif(is_int($propertyValue)) {
+            } elseif(\is_int($propertyValue)) {
                 $propertyType = self::PROPERTY_TYPE_INTEGER;
-            } elseif (is_bool($propertyValue)) {
+            } elseif (\is_bool($propertyValue)) {
                 $propertyType = self::PROPERTY_TYPE_BOOLEAN;
             } else {
                 $propertyType = self::PROPERTY_TYPE_STRING;
@@ -464,9 +464,9 @@ class PHPExcel_DocumentProperties
      * Implement PHP __clone to create a deep clone, not just a shallow copy.
      */
     public function __clone() {
-        $vars = get_object_vars($this);
+        $vars = \get_object_vars($this);
         foreach ($vars as $key => $value) {
-            if (is_object($value)) {
+            if (\is_object($value)) {
                 $this->$key = clone $value;
             } else {
                 $this->$key = $value;
@@ -480,7 +480,7 @@ class PHPExcel_DocumentProperties
                 return '';
                 break;
             case 'null'        :    //    Null
-                return NULL;
+                return \NULL;
                 break;
             case 'i1'        :    //    1-Byte Signed Integer
             case 'i2'        :    //    2-Byte Signed Integer
@@ -494,7 +494,7 @@ class PHPExcel_DocumentProperties
             case 'ui4'        :    //    4-Byte Unsigned Integer
             case 'ui8'        :    //    8-Byte Unsigned Integer
             case 'uint'        :    //    Unsigned Integer
-                return abs((int) $propertyValue);
+                return \abs((int) $propertyValue);
                 break;
             case 'r4'        :    //    4-Byte Real Number
             case 'r8'        :    //    8-Byte Real Number
@@ -508,10 +508,10 @@ class PHPExcel_DocumentProperties
                 break;
             case 'date'        :    //    Date and Time
             case 'filetime'    :    //    File Time
-                return strtotime($propertyValue);
+                return \strtotime($propertyValue);
                 break;
             case 'bool'        :    //    Boolean
-                return ($propertyValue == 'true') ? True : False;
+                return ($propertyValue == 'true') ? \True : \False;
                 break;
             case 'cy'        :    //    Currency
             case 'error'    :    //    Error Status Code

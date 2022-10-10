@@ -29,6 +29,8 @@
 require_once(PHPEXCEL_ROOT . 'PHPExcel/Shared/trend/bestFitClass.php');
 
 
+namespace PhpOffice\PhpSpreadsheet\Shared\Trend;
+
 /**
  * PHPExcel_Logarithmic_Best_Fit
  *
@@ -36,7 +38,7 @@ require_once(PHPEXCEL_ROOT . 'PHPExcel/Shared/trend/bestFitClass.php');
  * @package    PHPExcel_Shared_Trend
  * @copyright  Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Logarithmic_Best_Fit extends PHPExcel_Best_Fit
+class LogarithmicBestFit extends \PhpOffice\PhpSpreadsheet\Shared\Trend\BestFit
 {
 	/**
 	 * Algorithm type to use for best-fit
@@ -54,7 +56,7 @@ class PHPExcel_Logarithmic_Best_Fit extends PHPExcel_Best_Fit
 	 * @return	 float						Y-Value
 	 **/
 	public function getValueOfYForX($xValue) {
-		return $this->getIntersect() + $this->getSlope() * log($xValue - $this->_Xoffset);
+		return $this->getIntersect() + $this->getSlope() * \log($xValue - $this->_Xoffset);
 	}	//	function getValueOfYForX()
 
 
@@ -65,7 +67,7 @@ class PHPExcel_Logarithmic_Best_Fit extends PHPExcel_Best_Fit
 	 * @return	 float						X-Value
 	 **/
 	public function getValueOfXForY($yValue) {
-		return exp(($yValue - $this->getIntersect()) / $this->getSlope());
+		return \exp(($yValue - $this->getIntersect()) / $this->getSlope());
 	}	//	function getValueOfXForY()
 
 
@@ -93,9 +95,9 @@ class PHPExcel_Logarithmic_Best_Fit extends PHPExcel_Best_Fit
 	private function _logarithmic_regression($yValues, $xValues, $const) {
 		foreach($xValues as &$value) {
 			if ($value < 0.0) {
-				$value = 0 - log(abs($value));
+				$value = 0 - \log(\abs($value));
 			} elseif ($value > 0.0) {
-				$value = log($value);
+				$value = \log($value);
 			}
 		}
 		unset($value);
@@ -111,8 +113,8 @@ class PHPExcel_Logarithmic_Best_Fit extends PHPExcel_Best_Fit
 	 * @param	float[]		$xValues	The set of X-values for this regression
 	 * @param	boolean		$const
 	 */
-	function __construct($yValues, $xValues=array(), $const=True) {
-		if (parent::__construct($yValues, $xValues) !== False) {
+	function __construct($yValues, $xValues=array(), $const=\True) {
+		if (parent::__construct($yValues, $xValues) !== \False) {
 			$this->_logarithmic_regression($yValues, $xValues, $const);
 		}
 	}	//	function __construct()

@@ -1,4 +1,6 @@
 <?php
+namespace PhpOffice\PhpSpreadsheet\Calculation;
+
 /**
  * PHPExcel
  *
@@ -24,8 +26,6 @@
  * @license	http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
  * @version	1.8.0, 2014-03-02
  */
-
-
 /**
  * PHPExcel_Calculation_Exception
  *
@@ -33,7 +33,7 @@
  * @package    PHPExcel_Calculation
  * @copyright  Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Calculation_Exception extends PHPExcel_Exception {
+class Exception extends \PhpOffice\PhpSpreadsheet\Exception {
 	/**
 	 * Error handler callback
 	 *

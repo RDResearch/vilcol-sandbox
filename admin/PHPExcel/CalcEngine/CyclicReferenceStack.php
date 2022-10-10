@@ -1,4 +1,6 @@
 <?php
+namespace PhpOffice\PhpSpreadsheet\Calculation\Engine;
+
 /**
  * PHPExcel
  *
@@ -24,8 +26,6 @@
  * @license	http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
  * @version	1.8.0, 2014-03-02
  */
-
-
 /**
  * PHPExcel_CalcEngine_CyclicReferenceStack
  *
@@ -33,7 +33,7 @@
  * @package		PHPExcel_Calculation
  * @copyright	Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_CalcEngine_CyclicReferenceStack {
+class CyclicReferenceStack {
 
 	/**
 	 *  The call stack for calculated cells
@@ -49,7 +49,7 @@ class PHPExcel_CalcEngine_CyclicReferenceStack {
 	 * @return  integer
 	 */
 	public function count() {
-		return count($this->_stack);
+		return \count($this->_stack);
 	}
 
 	/**
@@ -67,7 +67,7 @@ class PHPExcel_CalcEngine_CyclicReferenceStack {
 	 * @return  mixed
 	 */
 	public function pop() {
-		return array_pop($this->_stack);
+		return \array_pop($this->_stack);
 	}	//	function pop()
 
 	/**
@@ -76,7 +76,7 @@ class PHPExcel_CalcEngine_CyclicReferenceStack {
 	 * @param  mixed  $value  The value to test
 	 */
 	public function onStack($value) {
-		return in_array($value, $this->_stack);
+		return \in_array($value, $this->_stack);
 	}
 
 	/**

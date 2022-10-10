@@ -1,4 +1,6 @@
 <?php
+namespace PhpOffice\PhpSpreadsheet\Writer\Xls;
+
 /**
  * PHPExcel
  *
@@ -24,7 +26,6 @@
  * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
  * @version    1.8.0, 2014-03-02
  */
-
 // Original file header of PEAR::Spreadsheet_Excel_Writer_BIFFwriter (used as the base for this class):
 // -----------------------------------------------------------------------------------------
 // *  Module written/ported by Xavier Noguer <xnoguer@rezebra.com>
@@ -58,8 +59,6 @@
 // *    License along with this library; if not, write to the Free Software
 // *    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 // */
-
-
 /**
  * PHPExcel_Writer_Excel5_BIFFwriter
  *
@@ -67,7 +66,7 @@
  * @package    PHPExcel_Writer_Excel5
  * @copyright  Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Writer_Excel5_BIFFwriter
+class BIFFwriter
 {
 	/**
 	 * The byte order of this architecture. 0 => little endian, 1 => big endian
@@ -79,13 +78,13 @@ class PHPExcel_Writer_Excel5_BIFFwriter
 	 * The string containing the data of the BIFF stream
 	 * @var string
 	 */
-	public $_data;
+	public $_data = '';
 
 	/**
 	 * The size of the data in bytes. Should be the same as strlen($this->_data)
 	 * @var integer
 	 */
-	public $_datasize;
+	public $_datasize = 0;
 
 	/**
 	 * The maximum length for a BIFF record (excluding record header and length field). See _addContinue()
@@ -99,9 +98,7 @@ class PHPExcel_Writer_Excel5_BIFFwriter
 	 */
 	public function __construct()
 	{
-		$this->_data       = '';
-		$this->_datasize   = 0;
-//		$this->_limit      = 8224;
+		//		$this->_limit      = 8224;
 	}
 
 	/**
@@ -114,15 +111,15 @@ class PHPExcel_Writer_Excel5_BIFFwriter
 	{
 		if (!isset(self::$_byte_order)) {
 			// Check if "pack" gives the required IEEE 64bit float
-			$teststr = pack("d", 1.2345);
-			$number  = pack("C8", 0x8D, 0x97, 0x6E, 0x12, 0x83, 0xC0, 0xF3, 0x3F);
+			$teststr = \pack("d", 1.2345);
+			$number  = \pack("C8", 0x8D, 0x97, 0x6E, 0x12, 0x83, 0xC0, 0xF3, 0x3F);
 			if ($number == $teststr) {
 				$byte_order = 0;    // Little Endian
-			} elseif ($number == strrev($teststr)){
+			} elseif ($number == \strrev($teststr)){
 				$byte_order = 1;    // Big Endian
 			} else {
 				// Give up. I'll fix this in a later version.
-				throw new PHPExcel_Writer_Exception("Required floating point format not supported on this platform.");
+				throw new \PhpOffice\PhpSpreadsheet\Writer\Exception("Required floating point format not supported on this platform.");
 			}
 			self::$_byte_order = $byte_order;
 		}
@@ -138,11 +135,11 @@ class PHPExcel_Writer_Excel5_BIFFwriter
 	 */
 	function _append($data)
 	{
-		if (strlen($data) - 4 > $this->_limit) {
+		if (\strlen($data) - 4 > $this->_limit) {
 			$data = $this->_addContinue($data);
 		}
 		$this->_data		.= $data;
-		$this->_datasize	+= strlen($data);
+		$this->_datasize	+= \strlen($data);
 	}
 
 	/**
@@ -153,10 +150,10 @@ class PHPExcel_Writer_Excel5_BIFFwriter
 	 */
 	public function writeData($data)
 	{
-		if (strlen($data) - 4 > $this->_limit) {
+		if (\strlen($data) - 4 > $this->_limit) {
 			$data = $this->_addContinue($data);
 		}
-		$this->_datasize += strlen($data);
+		$this->_datasize += \strlen($data);
 
 		return $data;
 	}
@@ -175,15 +172,15 @@ class PHPExcel_Writer_Excel5_BIFFwriter
 		$length  = 0x0010;
 
 		// by inspection of real files, MS Office Excel 2007 writes the following
-		$unknown = pack("VV", 0x000100D1, 0x00000406);
+		$unknown = \pack("VV", 0x000100D1, 0x00000406);
 
 		$build   = 0x0DBB;			//	Excel 97
 		$year    = 0x07CC;			//	Excel 97
 
 		$version = 0x0600;			//	BIFF8
 
-		$header  = pack("vv",   $record, $length);
-		$data    = pack("vvvv", $version, $type, $build, $year);
+		$header  = \pack("vv",   $record, $length);
+		$data    = \pack("vvvv", $version, $type, $build, $year);
 		$this->_append($header . $data . $unknown);
 	}
 
@@ -197,7 +194,7 @@ class PHPExcel_Writer_Excel5_BIFFwriter
 		$record    = 0x000A;   // Record identifier
 		$length    = 0x0000;   // Number of bytes to follow
 
-		$header    = pack("vv", $record, $length);
+		$header    = \pack("vv", $record, $length);
 		$this->_append($header);
 	}
 
@@ -210,7 +207,7 @@ class PHPExcel_Writer_Excel5_BIFFwriter
 	{
 		$record    = 0x000A;   // Record identifier
 		$length    = 0x0000;   // Number of bytes to follow
-		$header    = pack("vv", $record, $length);
+		$header    = \pack("vv", $record, $length);
 		return $this->writeData($header);
 	}
 
@@ -233,21 +230,21 @@ class PHPExcel_Writer_Excel5_BIFFwriter
 
 		// The first 2080/8224 bytes remain intact. However, we have to change
 		// the length field of the record.
-		$tmp = substr($data, 0, 2) . pack("v", $limit) . substr($data, 4, $limit);
+		$tmp = \substr($data, 0, 2) . \pack("v", $limit) . \substr($data, 4, $limit);
 
-		$header = pack("vv", $record, $limit);  // Headers for continue records
+		$header = \pack("vv", $record, $limit);  // Headers for continue records
 
 		// Retrieve chunks of 2080/8224 bytes +4 for the header.
-		$data_length = strlen($data);
+		$data_length = \strlen($data);
 		for ($i = $limit + 4; $i < ($data_length - $limit); $i += $limit) {
 			$tmp .= $header;
-			$tmp .= substr($data, $i, $limit);
+			$tmp .= \substr($data, $i, $limit);
 		}
 
 		// Retrieve the last chunk of data
-		$header  = pack("vv", $record, strlen($data) - $i);
+		$header  = \pack("vv", $record, \strlen($data) - $i);
 		$tmp    .= $header;
-		$tmp    .= substr($data, $i, strlen($data) - $i);
+		$tmp    .= \substr($data, $i, \strlen($data) - $i);
 
 		return $tmp;
 	}

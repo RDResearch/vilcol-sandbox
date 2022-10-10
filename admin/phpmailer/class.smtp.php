@@ -114,19 +114,19 @@ class SMTP
      * The socket for the server connection.
      * @type resource
      */
-    protected $smtp_conn;
+    protected $smtp_conn = 0;
 
     /**
      * Error message, if any, for the last call.
      * @type string
      */
-    protected $error = '';
+    protected $error = null;
 
     /**
      * The reply the server sent to us for HELO.
      * @type string
      */
-    protected $helo_rply = '';
+    protected $helo_rply = null;
 
     /**
      * The most recent reply received from the server.
@@ -140,11 +140,6 @@ class SMTP
      */
     public function __construct()
     {
-        $this->smtp_conn = 0;
-        $this->error = null;
-        $this->helo_rply = null;
-
-        $this->do_debug = 0;
     }
 
     /**

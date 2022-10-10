@@ -1,4 +1,6 @@
 <?php
+namespace PhpOffice\PhpSpreadsheet\RichText;
+
 /**
  * PHPExcel
  *
@@ -22,8 +24,6 @@
  * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
  * @version    1.8.0, 2014-03-02
  */
-
-
 /**
  * PHPExcel_RichText_TextElement
  *
@@ -31,7 +31,7 @@
  * @package    PHPExcel_RichText
  * @copyright  Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_RichText_TextElement implements PHPExcel_RichText_ITextElement
+class TextElement implements \PhpOffice\PhpSpreadsheet\RichText\ITextElement
 {
 	/**
 	 * Text
@@ -61,23 +61,23 @@ class PHPExcel_RichText_TextElement implements PHPExcel_RichText_ITextElement
 	}
 
 	/**
-	 * Set text
-	 *
-	 * @param 	$pText string	Text
-	 * @return PHPExcel_RichText_ITextElement
-	 */
-	public function setText($pText = '') {
+  * Set text
+  *
+  * @param 	$pText string	Text
+  * @return \PhpOffice\PhpSpreadsheet\RichText\ITextElement
+  */
+ public function setText($pText = '') {
 		$this->_text = $pText;
 		return $this;
 	}
 
 	/**
-	 * Get font
-	 *
-	 * @return PHPExcel_Style_Font
-	 */
-	public function getFont() {
-		return null;
+  * Get font
+  *
+  * @return \PhpOffice\PhpSpreadsheet\Style\Font
+  */
+ public function getFont() {
+		return \null;
 	}
 
 	/**
@@ -86,7 +86,7 @@ class PHPExcel_RichText_TextElement implements PHPExcel_RichText_ITextElement
 	 * @return string	Hash code
 	 */
 	public function getHashCode() {
-    	return md5(
+    	return \md5(
     		  $this->_text
     		. __CLASS__
     	);
@@ -96,9 +96,9 @@ class PHPExcel_RichText_TextElement implements PHPExcel_RichText_ITextElement
 	 * Implement PHP __clone to create a deep clone, not just a shallow copy.
 	 */
 	public function __clone() {
-		$vars = get_object_vars($this);
+		$vars = \get_object_vars($this);
 		foreach ($vars as $key => $value) {
-			if (is_object($value)) {
+			if (\is_object($value)) {
 				$this->$key = clone $value;
 			} else {
 				$this->$key = $value;

@@ -1,4 +1,6 @@
 <?php
+namespace PhpOffice\PhpSpreadsheet\Worksheet;
+
 /**
  * PHPExcel
  *
@@ -24,8 +26,6 @@
  * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
  * @version    1.8.0, 2014-03-02
  */
-
-
 /**
  * PHPExcel_Worksheet_ColumnDimension
  *
@@ -33,7 +33,7 @@
  * @package    PHPExcel_Worksheet
  * @copyright  Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Worksheet_ColumnDimension
+class ColumnDimension
 {
 	/**
 	 * Column index
@@ -56,14 +56,14 @@ class PHPExcel_Worksheet_ColumnDimension
 	 *
 	 * @var bool
 	 */
-	private $_autoSize		= false;
+	private $_autoSize		= \false;
 
 	/**
 	 * Visible?
 	 *
 	 * @var bool
 	 */
-	private $_visible		= true;
+	private $_visible		= \true;
 
 	/**
 	 * Outline level
@@ -77,14 +77,14 @@ class PHPExcel_Worksheet_ColumnDimension
 	 *
 	 * @var bool
 	 */
-	private $_collapsed		= false;
+	private $_collapsed		= \false;
 
 	/**
 	 * Index to cellXf
 	 *
 	 * @var int
 	 */
-	private $_xfIndex;
+	private $_xfIndex = 0;
 
     /**
      * Create a new PHPExcel_Worksheet_ColumnDimension
@@ -95,9 +95,6 @@ class PHPExcel_Worksheet_ColumnDimension
     {
     	// Initialise values
     	$this->_columnIndex		= $pIndex;
-
-		// set default index to cellXf
-		$this->_xfIndex = 0;
     }
 
     /**
@@ -113,7 +110,7 @@ class PHPExcel_Worksheet_ColumnDimension
      * Set ColumnIndex
      *
      * @param string $pValue
-     * @return PHPExcel_Worksheet_ColumnDimension
+     * @return \PhpOffice\PhpSpreadsheet\Worksheet\ColumnDimension
      */
     public function setColumnIndex($pValue) {
     	$this->_columnIndex = $pValue;
@@ -133,7 +130,7 @@ class PHPExcel_Worksheet_ColumnDimension
      * Set Width
      *
      * @param double $pValue
-     * @return PHPExcel_Worksheet_ColumnDimension
+     * @return \PhpOffice\PhpSpreadsheet\Worksheet\ColumnDimension
      */
     public function setWidth($pValue = -1) {
     	$this->_width = $pValue;
@@ -153,9 +150,9 @@ class PHPExcel_Worksheet_ColumnDimension
      * Set Auto Size
      *
      * @param bool $pValue
-     * @return PHPExcel_Worksheet_ColumnDimension
+     * @return \PhpOffice\PhpSpreadsheet\Worksheet\ColumnDimension
      */
-    public function setAutoSize($pValue = false) {
+    public function setAutoSize($pValue = \false) {
     	$this->_autoSize = $pValue;
     	return $this;
     }
@@ -173,9 +170,9 @@ class PHPExcel_Worksheet_ColumnDimension
      * Set Visible
      *
      * @param bool $pValue
-     * @return PHPExcel_Worksheet_ColumnDimension
+     * @return \PhpOffice\PhpSpreadsheet\Worksheet\ColumnDimension
      */
-    public function setVisible($pValue = true) {
+    public function setVisible($pValue = \true) {
     	$this->_visible = $pValue;
     	return $this;
     }
@@ -195,12 +192,12 @@ class PHPExcel_Worksheet_ColumnDimension
      * Value must be between 0 and 7
      *
      * @param int $pValue
-     * @throws PHPExcel_Exception
-     * @return PHPExcel_Worksheet_ColumnDimension
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @return \PhpOffice\PhpSpreadsheet\Worksheet\ColumnDimension
      */
     public function setOutlineLevel($pValue) {
     	if ($pValue < 0 || $pValue > 7) {
-    		throw new PHPExcel_Exception("Outline level must range between 0 and 7.");
+    		throw new \PhpOffice\PhpSpreadsheet\Exception("Outline level must range between 0 and 7.");
     	}
 
     	$this->_outlineLevel = $pValue;
@@ -220,9 +217,9 @@ class PHPExcel_Worksheet_ColumnDimension
      * Set Collapsed
      *
      * @param bool $pValue
-     * @return PHPExcel_Worksheet_ColumnDimension
+     * @return \PhpOffice\PhpSpreadsheet\Worksheet\ColumnDimension
      */
-    public function setCollapsed($pValue = true) {
+    public function setCollapsed($pValue = \true) {
     	$this->_collapsed = $pValue;
     	return $this;
     }
@@ -238,12 +235,12 @@ class PHPExcel_Worksheet_ColumnDimension
 	}
 
 	/**
-	 * Set index to cellXf
-	 *
-	 * @param int $pValue
-	 * @return PHPExcel_Worksheet_ColumnDimension
-	 */
-	public function setXfIndex($pValue = 0)
+  * Set index to cellXf
+  *
+  * @param int $pValue
+  * @return \PhpOffice\PhpSpreadsheet\Worksheet\ColumnDimension
+  */
+ public function setXfIndex($pValue = 0)
 	{
 		$this->_xfIndex = $pValue;
 		return $this;
@@ -253,9 +250,9 @@ class PHPExcel_Worksheet_ColumnDimension
 	 * Implement PHP __clone to create a deep clone, not just a shallow copy.
 	 */
 	public function __clone() {
-		$vars = get_object_vars($this);
+		$vars = \get_object_vars($this);
 		foreach ($vars as $key => $value) {
-			if (is_object($value)) {
+			if (\is_object($value)) {
 				$this->$key = clone $value;
 			} else {
 				$this->$key = $value;

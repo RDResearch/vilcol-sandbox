@@ -1,4 +1,6 @@
 <?php
+namespace PhpOffice\PhpSpreadsheet\Calculation;
+
 /**
  * PHPExcel
  *
@@ -24,8 +26,6 @@
  * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
  * @version    1.8.0, 2014-03-02
  */
-
-
 /*
 PARTLY BASED ON:
 	Copyright (c) 2007 E. W. Bachtal, Inc.
@@ -48,7 +48,6 @@ PARTLY BASED ON:
 	http://ewbi.blogs.com/develops/2007/03/excel_formula_p.html
 	http://ewbi.blogs.com/develops/2004/12/excel_formula_p.html
 */
-
 /**
  * PHPExcel_Calculation_FormulaParser
  *
@@ -56,7 +55,7 @@ PARTLY BASED ON:
  * @package    PHPExcel_Calculation
  * @copyright  Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Calculation_FormulaParser {
+class FormulaParser {
 	/* Character constants */
 	const QUOTE_DOUBLE  = '"';
 	const QUOTE_SINGLE  = '\'';
@@ -83,27 +82,27 @@ class PHPExcel_Calculation_FormulaParser {
 	private $_formula;
 
 	/**
-	 * Tokens
-	 *
-	 * @var PHPExcel_Calculation_FormulaToken[]
-	 */
-	private $_tokens = array();
+  * Tokens
+  *
+  * @var \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken[]
+  */
+ private $_tokens = array();
 
     /**
      * Create a new PHPExcel_Calculation_FormulaParser
      *
      * @param 	string		$pFormula	Formula to parse
-     * @throws 	PHPExcel_Calculation_Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Calculation\Exception
      */
     public function __construct($pFormula = '')
     {
     	// Check parameters
-    	if (is_null($pFormula)) {
-    		throw new PHPExcel_Calculation_Exception("Invalid parameter passed: formula");
+    	if (\is_null($pFormula)) {
+    		throw new \PhpOffice\PhpSpreadsheet\Calculation\Exception("Invalid parameter passed: formula");
     	}
 
     	// Initialise values
-    	$this->_formula = trim($pFormula);
+    	$this->_formula = \trim($pFormula);
     	// Parse!
     	$this->_parseToTokens();
     }
@@ -122,13 +121,13 @@ class PHPExcel_Calculation_FormulaParser {
      *
      * @param 	int		$pId	Token id
      * @return	string
-     * @throws  PHPExcel_Calculation_Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Calculation\Exception
      */
     public function getToken($pId = 0) {
     	if (isset($this->_tokens[$pId])) {
     		return $this->_tokens[$pId];
     	} else {
-    		throw new PHPExcel_Calculation_Exception("Token with id $pId does not exist.");
+    		throw new \PhpOffice\PhpSpreadsheet\Calculation\Exception("Token with id $pId does not exist.");
     	}
     }
 
@@ -138,13 +137,13 @@ class PHPExcel_Calculation_FormulaParser {
      * @return string
      */
     public function getTokenCount() {
-    	return count($this->_tokens);
+    	return \count($this->_tokens);
     }
 
     /**
      * Get Tokens
      *
-     * @return PHPExcel_Calculation_FormulaToken[]
+     * @return \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken[]
      */
     public function getTokens() {
     	return $this->_tokens;
@@ -158,13 +157,13 @@ class PHPExcel_Calculation_FormulaParser {
 		// they can only exist if valid; stack overflows/underflows sunk as nulls without exceptions.
 
 		// Check if the formula has a valid starting =
-		$formulaLength = strlen($this->_formula);
+		$formulaLength = \strlen($this->_formula);
 		if ($formulaLength < 2 || $this->_formula{0} != '=') return;
 
 		// Helper variables
 		$tokens1	= $tokens2 	= $stack = array();
-		$inString	= $inPath 	= $inRange 	= $inError = false;
-		$token		= $previousToken	= $nextToken	= null;
+		$inString	= $inPath 	= $inRange 	= $inError = \false;
+		$token		= $previousToken	= $nextToken	= \null;
 
 		$index	= 1;
 		$value	= '';
@@ -179,13 +178,13 @@ class PHPExcel_Calculation_FormulaParser {
 			// embeds are doubled
 			// end marks token
 			if ($inString) {
-				if ($this->_formula{$index} == PHPExcel_Calculation_FormulaParser::QUOTE_DOUBLE) {
-					if ((($index + 2) <= $formulaLength) && ($this->_formula{$index + 1} == PHPExcel_Calculation_FormulaParser::QUOTE_DOUBLE)) {
-						$value .= PHPExcel_Calculation_FormulaParser::QUOTE_DOUBLE;
+				if ($this->_formula{$index} == \PhpOffice\PhpSpreadsheet\Calculation\FormulaParser::QUOTE_DOUBLE) {
+					if ((($index + 2) <= $formulaLength) && ($this->_formula{$index + 1} == \PhpOffice\PhpSpreadsheet\Calculation\FormulaParser::QUOTE_DOUBLE)) {
+						$value .= \PhpOffice\PhpSpreadsheet\Calculation\FormulaParser::QUOTE_DOUBLE;
 						++$index;
 					} else {
-						$inString = false;
-						$tokens1[] = new PHPExcel_Calculation_FormulaToken($value, PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_OPERAND, PHPExcel_Calculation_FormulaToken::TOKEN_SUBTYPE_TEXT);
+						$inString = \false;
+						$tokens1[] = new \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken($value, \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_TYPE_OPERAND, \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_SUBTYPE_TEXT);
 						$value = "";
 					}
 				} else {
@@ -199,12 +198,12 @@ class PHPExcel_Calculation_FormulaParser {
 			// embeds are double
 			// end does not mark a token
 			if ($inPath) {
-				if ($this->_formula{$index} == PHPExcel_Calculation_FormulaParser::QUOTE_SINGLE) {
-					if ((($index + 2) <= $formulaLength) && ($this->_formula{$index + 1} == PHPExcel_Calculation_FormulaParser::QUOTE_SINGLE)) {
-						$value .= PHPExcel_Calculation_FormulaParser::QUOTE_SINGLE;
+				if ($this->_formula{$index} == \PhpOffice\PhpSpreadsheet\Calculation\FormulaParser::QUOTE_SINGLE) {
+					if ((($index + 2) <= $formulaLength) && ($this->_formula{$index + 1} == \PhpOffice\PhpSpreadsheet\Calculation\FormulaParser::QUOTE_SINGLE)) {
+						$value .= \PhpOffice\PhpSpreadsheet\Calculation\FormulaParser::QUOTE_SINGLE;
 						++$index;
 					} else {
-						$inPath = false;
+						$inPath = \false;
 					}
 				} else {
 					$value .= $this->_formula{$index};
@@ -217,8 +216,8 @@ class PHPExcel_Calculation_FormulaParser {
 			// no embeds (changed to "()" by Excel)
 			// end does not mark a token
 			if ($inRange) {
-				if ($this->_formula{$index} == PHPExcel_Calculation_FormulaParser::BRACKET_CLOSE) {
-					$inRange = false;
+				if ($this->_formula{$index} == \PhpOffice\PhpSpreadsheet\Calculation\FormulaParser::BRACKET_CLOSE) {
+					$inRange = \false;
 				}
 				$value .= $this->_formula{$index};
 				++$index;
@@ -230,18 +229,18 @@ class PHPExcel_Calculation_FormulaParser {
 			if ($inError) {
 				$value .= $this->_formula{$index};
 				++$index;
-				if (in_array($value, $ERRORS)) {
-					$inError = false;
-					$tokens1[] = new PHPExcel_Calculation_FormulaToken($value, PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_OPERAND, PHPExcel_Calculation_FormulaToken::TOKEN_SUBTYPE_ERROR);
+				if (\in_array($value, $ERRORS)) {
+					$inError = \false;
+					$tokens1[] = new \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken($value, \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_TYPE_OPERAND, \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_SUBTYPE_ERROR);
 					$value = "";
 				}
 				continue;
 			}
 
 			// scientific notation check
-			if (strpos(PHPExcel_Calculation_FormulaParser::OPERATORS_SN, $this->_formula{$index}) !== false) {
-				if (strlen($value) > 1) {
-					if (preg_match("/^[1-9]{1}(\.[0-9]+)?E{1}$/", $this->_formula{$index}) != 0) {
+			if (\strpos(\PhpOffice\PhpSpreadsheet\Calculation\FormulaParser::OPERATORS_SN, $this->_formula{$index}) !== \false) {
+				if (\strlen($value) > 1) {
+					if (\preg_match("/^[1-9]{1}(\.[0-9]+)?E{1}$/", $this->_formula{$index}) != 0) {
 						$value .= $this->_formula{$index};
 						++$index;
 						continue;
@@ -252,78 +251,56 @@ class PHPExcel_Calculation_FormulaParser {
 			// independent character evaluation (order not important)
 
 			// establish state-dependent character evaluations
-			if ($this->_formula{$index} == PHPExcel_Calculation_FormulaParser::QUOTE_DOUBLE) {
-				if (strlen($value > 0)) {  // unexpected
-					$tokens1[] = new PHPExcel_Calculation_FormulaToken($value, PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_UNKNOWN);
+			if ($this->_formula{$index} == \PhpOffice\PhpSpreadsheet\Calculation\FormulaParser::QUOTE_DOUBLE) {
+				if (\strlen($value > 0)) {  // unexpected
+					$tokens1[] = new \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken($value, \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_TYPE_UNKNOWN);
 					$value = "";
 				}
-				$inString = true;
+				$inString = \true;
 				++$index;
 				continue;
  			}
 
-			if ($this->_formula{$index} == PHPExcel_Calculation_FormulaParser::QUOTE_SINGLE) {
-				if (strlen($value) > 0) { // unexpected
-					$tokens1[] = new PHPExcel_Calculation_FormulaToken($value, PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_UNKNOWN);
+			if ($this->_formula{$index} == \PhpOffice\PhpSpreadsheet\Calculation\FormulaParser::QUOTE_SINGLE) {
+				if (\strlen($value) > 0) { // unexpected
+					$tokens1[] = new \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken($value, \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_TYPE_UNKNOWN);
 					$value = "";
 				}
-				$inPath = true;
+				$inPath = \true;
 				++$index;
 				continue;
 			}
 
-			if ($this->_formula{$index} == PHPExcel_Calculation_FormulaParser::BRACKET_OPEN) {
-				$inRange = true;
-				$value .= PHPExcel_Calculation_FormulaParser::BRACKET_OPEN;
+			if ($this->_formula{$index} == \PhpOffice\PhpSpreadsheet\Calculation\FormulaParser::BRACKET_OPEN) {
+				$inRange = \true;
+				$value .= \PhpOffice\PhpSpreadsheet\Calculation\FormulaParser::BRACKET_OPEN;
 				++$index;
 				continue;
 			}
 
-			if ($this->_formula{$index} == PHPExcel_Calculation_FormulaParser::ERROR_START) {
-				if (strlen($value) > 0) { // unexpected
-					$tokens1[] = new PHPExcel_Calculation_FormulaToken($value, PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_UNKNOWN);
+			if ($this->_formula{$index} == \PhpOffice\PhpSpreadsheet\Calculation\FormulaParser::ERROR_START) {
+				if (\strlen($value) > 0) { // unexpected
+					$tokens1[] = new \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken($value, \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_TYPE_UNKNOWN);
 					$value = "";
 				}
-				$inError = true;
-				$value .= PHPExcel_Calculation_FormulaParser::ERROR_START;
+				$inError = \true;
+				$value .= \PhpOffice\PhpSpreadsheet\Calculation\FormulaParser::ERROR_START;
 				++$index;
 				continue;
 			}
 
 			// mark start and end of arrays and array rows
-			if ($this->_formula{$index} == PHPExcel_Calculation_FormulaParser::BRACE_OPEN) {
-				if (strlen($value) > 0) { // unexpected
-					$tokens1[] = new PHPExcel_Calculation_FormulaToken($value, PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_UNKNOWN);
+			if ($this->_formula{$index} == \PhpOffice\PhpSpreadsheet\Calculation\FormulaParser::BRACE_OPEN) {
+				if (\strlen($value) > 0) { // unexpected
+					$tokens1[] = new \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken($value, \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_TYPE_UNKNOWN);
 					$value = "";
 				}
 
-				$tmp = new PHPExcel_Calculation_FormulaToken("ARRAY", PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_FUNCTION, PHPExcel_Calculation_FormulaToken::TOKEN_SUBTYPE_START);
+				$tmp = new \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken("ARRAY", \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_TYPE_FUNCTION, \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_SUBTYPE_START);
 				$tokens1[] = $tmp;
 				$stack[] = clone $tmp;
 
-				$tmp = new PHPExcel_Calculation_FormulaToken("ARRAYROW", PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_FUNCTION, PHPExcel_Calculation_FormulaToken::TOKEN_SUBTYPE_START);
-				$tokens1[] = $tmp;
-				$stack[] = clone $tmp;
-
-				++$index;
-				continue;
-			}
-
-			if ($this->_formula{$index} == PHPExcel_Calculation_FormulaParser::SEMICOLON) {
-				if (strlen($value) > 0) {
-					$tokens1[] = new PHPExcel_Calculation_FormulaToken($value, PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_OPERAND);
-					$value = "";
-				}
-
-				$tmp = array_pop($stack);
-				$tmp->setValue("");
-				$tmp->setTokenSubType(PHPExcel_Calculation_FormulaToken::TOKEN_SUBTYPE_STOP);
-				$tokens1[] = $tmp;
-
-				$tmp = new PHPExcel_Calculation_FormulaToken(",", PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_ARGUMENT);
-				$tokens1[] = $tmp;
-
-				$tmp = new PHPExcel_Calculation_FormulaToken("ARRAYROW", PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_FUNCTION, PHPExcel_Calculation_FormulaToken::TOKEN_SUBTYPE_START);
+				$tmp = new \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken("ARRAYROW", \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_TYPE_FUNCTION, \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_SUBTYPE_START);
 				$tokens1[] = $tmp;
 				$stack[] = clone $tmp;
 
@@ -331,20 +308,42 @@ class PHPExcel_Calculation_FormulaParser {
 				continue;
 			}
 
-			if ($this->_formula{$index} == PHPExcel_Calculation_FormulaParser::BRACE_CLOSE) {
-				if (strlen($value) > 0) {
-					$tokens1[] = new PHPExcel_Calculation_FormulaToken($value, PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_OPERAND);
+			if ($this->_formula{$index} == \PhpOffice\PhpSpreadsheet\Calculation\FormulaParser::SEMICOLON) {
+				if (\strlen($value) > 0) {
+					$tokens1[] = new \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken($value, \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_TYPE_OPERAND);
 					$value = "";
 				}
 
-				$tmp = array_pop($stack);
+				$tmp = \array_pop($stack);
 				$tmp->setValue("");
-				$tmp->setTokenSubType(PHPExcel_Calculation_FormulaToken::TOKEN_SUBTYPE_STOP);
+				$tmp->setTokenSubType(\PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_SUBTYPE_STOP);
 				$tokens1[] = $tmp;
 
-				$tmp = array_pop($stack);
+				$tmp = new \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken(",", \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_TYPE_ARGUMENT);
+				$tokens1[] = $tmp;
+
+				$tmp = new \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken("ARRAYROW", \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_TYPE_FUNCTION, \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_SUBTYPE_START);
+				$tokens1[] = $tmp;
+				$stack[] = clone $tmp;
+
+				++$index;
+				continue;
+			}
+
+			if ($this->_formula{$index} == \PhpOffice\PhpSpreadsheet\Calculation\FormulaParser::BRACE_CLOSE) {
+				if (\strlen($value) > 0) {
+					$tokens1[] = new \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken($value, \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_TYPE_OPERAND);
+					$value = "";
+				}
+
+				$tmp = \array_pop($stack);
 				$tmp->setValue("");
-				$tmp->setTokenSubType(PHPExcel_Calculation_FormulaToken::TOKEN_SUBTYPE_STOP);
+				$tmp->setTokenSubType(\PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_SUBTYPE_STOP);
+				$tokens1[] = $tmp;
+
+				$tmp = \array_pop($stack);
+				$tmp->setValue("");
+				$tmp->setTokenSubType(\PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_SUBTYPE_STOP);
 				$tokens1[] = $tmp;
 
 				++$index;
@@ -352,14 +351,14 @@ class PHPExcel_Calculation_FormulaParser {
 			}
 
 			// trim white-space
-			if ($this->_formula{$index} == PHPExcel_Calculation_FormulaParser::WHITESPACE) {
-				if (strlen($value) > 0) {
-					$tokens1[] = new PHPExcel_Calculation_FormulaToken($value, PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_OPERAND);
+			if ($this->_formula{$index} == \PhpOffice\PhpSpreadsheet\Calculation\FormulaParser::WHITESPACE) {
+				if (\strlen($value) > 0) {
+					$tokens1[] = new \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken($value, \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_TYPE_OPERAND);
 					$value = "";
 				}
-				$tokens1[] = new PHPExcel_Calculation_FormulaToken("", PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_WHITESPACE);
+				$tokens1[] = new \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken("", \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_TYPE_WHITESPACE);
 				++$index;
-				while (($this->_formula{$index} == PHPExcel_Calculation_FormulaParser::WHITESPACE) && ($index < $formulaLength)) {
+				while (($this->_formula{$index} == \PhpOffice\PhpSpreadsheet\Calculation\FormulaParser::WHITESPACE) && ($index < $formulaLength)) {
 					++$index;
 				}
 				continue;
@@ -367,48 +366,48 @@ class PHPExcel_Calculation_FormulaParser {
 
 			// multi-character comparators
 			if (($index + 2) <= $formulaLength) {
-				if (in_array(substr($this->_formula, $index, 2), $COMPARATORS_MULTI)) {
-					if (strlen($value) > 0) {
-						$tokens1[] = new PHPExcel_Calculation_FormulaToken($value, PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_OPERAND);
+				if (\in_array(\substr($this->_formula, $index, 2), $COMPARATORS_MULTI)) {
+					if (\strlen($value) > 0) {
+						$tokens1[] = new \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken($value, \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_TYPE_OPERAND);
 						$value = "";
 					}
-					$tokens1[] = new PHPExcel_Calculation_FormulaToken(substr($this->_formula, $index, 2), PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_OPERATORINFIX, PHPExcel_Calculation_FormulaToken::TOKEN_SUBTYPE_LOGICAL);
+					$tokens1[] = new \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken(\substr($this->_formula, $index, 2), \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_TYPE_OPERATORINFIX, \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_SUBTYPE_LOGICAL);
 					$index += 2;
 					continue;
 				}
 			}
 
 			// standard infix operators
-			if (strpos(PHPExcel_Calculation_FormulaParser::OPERATORS_INFIX, $this->_formula{$index}) !== false) {
-				if (strlen($value) > 0) {
-					$tokens1[] =new PHPExcel_Calculation_FormulaToken($value, PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_OPERAND);
+			if (\strpos(\PhpOffice\PhpSpreadsheet\Calculation\FormulaParser::OPERATORS_INFIX, $this->_formula{$index}) !== \false) {
+				if (\strlen($value) > 0) {
+					$tokens1[] =new \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken($value, \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_TYPE_OPERAND);
 					$value = "";
 				}
-				$tokens1[] = new PHPExcel_Calculation_FormulaToken($this->_formula{$index}, PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_OPERATORINFIX);
+				$tokens1[] = new \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken($this->_formula{$index}, \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_TYPE_OPERATORINFIX);
 				++$index;
 				continue;
 			}
 
 			// standard postfix operators (only one)
-			if (strpos(PHPExcel_Calculation_FormulaParser::OPERATORS_POSTFIX, $this->_formula{$index}) !== false) {
-				if (strlen($value) > 0) {
-					$tokens1[] = new PHPExcel_Calculation_FormulaToken($value, PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_OPERAND);
+			if (\strpos(\PhpOffice\PhpSpreadsheet\Calculation\FormulaParser::OPERATORS_POSTFIX, $this->_formula{$index}) !== \false) {
+				if (\strlen($value) > 0) {
+					$tokens1[] = new \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken($value, \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_TYPE_OPERAND);
 					$value = "";
 				}
-				$tokens1[] = new PHPExcel_Calculation_FormulaToken($this->_formula{$index}, PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_OPERATORPOSTFIX);
+				$tokens1[] = new \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken($this->_formula{$index}, \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_TYPE_OPERATORPOSTFIX);
 				++$index;
 				continue;
 			}
 
 			// start subexpression or function
-			if ($this->_formula{$index} == PHPExcel_Calculation_FormulaParser::PAREN_OPEN) {
-				if (strlen($value) > 0) {
-					$tmp = new PHPExcel_Calculation_FormulaToken($value, PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_FUNCTION, PHPExcel_Calculation_FormulaToken::TOKEN_SUBTYPE_START);
+			if ($this->_formula{$index} == \PhpOffice\PhpSpreadsheet\Calculation\FormulaParser::PAREN_OPEN) {
+				if (\strlen($value) > 0) {
+					$tmp = new \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken($value, \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_TYPE_FUNCTION, \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_SUBTYPE_START);
 					$tokens1[] = $tmp;
 					$stack[] = clone $tmp;
 					$value = "";
 				} else {
-					$tmp = new PHPExcel_Calculation_FormulaToken("", PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_SUBEXPRESSION, PHPExcel_Calculation_FormulaToken::TOKEN_SUBTYPE_START);
+					$tmp = new \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken("", \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_TYPE_SUBEXPRESSION, \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_SUBTYPE_START);
 					$tokens1[] = $tmp;
 					$stack[] = clone $tmp;
 				}
@@ -417,36 +416,36 @@ class PHPExcel_Calculation_FormulaParser {
 			}
 
 			// function, subexpression, or array parameters, or operand unions
-			if ($this->_formula{$index} == PHPExcel_Calculation_FormulaParser::COMMA) {
-				if (strlen($value) > 0) {
-					$tokens1[] = new PHPExcel_Calculation_FormulaToken($value, PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_OPERAND);
+			if ($this->_formula{$index} == \PhpOffice\PhpSpreadsheet\Calculation\FormulaParser::COMMA) {
+				if (\strlen($value) > 0) {
+					$tokens1[] = new \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken($value, \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_TYPE_OPERAND);
 					$value = "";
 				}
 
-				$tmp = array_pop($stack);
+				$tmp = \array_pop($stack);
 				$tmp->setValue("");
-				$tmp->setTokenSubType(PHPExcel_Calculation_FormulaToken::TOKEN_SUBTYPE_STOP);
+				$tmp->setTokenSubType(\PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_SUBTYPE_STOP);
 				$stack[] = $tmp;
 
-				if ($tmp->getTokenType() == PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_FUNCTION) {
-					$tokens1[] = new PHPExcel_Calculation_FormulaToken(",", PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_OPERATORINFIX, PHPExcel_Calculation_FormulaToken::TOKEN_SUBTYPE_UNION);
+				if ($tmp->getTokenType() == \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_TYPE_FUNCTION) {
+					$tokens1[] = new \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken(",", \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_TYPE_OPERATORINFIX, \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_SUBTYPE_UNION);
 				} else {
-					$tokens1[] = new PHPExcel_Calculation_FormulaToken(",", PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_ARGUMENT);
+					$tokens1[] = new \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken(",", \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_TYPE_ARGUMENT);
 				}
 				++$index;
 				continue;
 			}
 
 			// stop subexpression
-			if ($this->_formula{$index} == PHPExcel_Calculation_FormulaParser::PAREN_CLOSE) {
-				if (strlen($value) > 0) {
-					$tokens1[] = new PHPExcel_Calculation_FormulaToken($value, PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_OPERAND);
+			if ($this->_formula{$index} == \PhpOffice\PhpSpreadsheet\Calculation\FormulaParser::PAREN_CLOSE) {
+				if (\strlen($value) > 0) {
+					$tokens1[] = new \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken($value, \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_TYPE_OPERAND);
 					$value = "";
 				}
 
-				$tmp = array_pop($stack);
+				$tmp = \array_pop($stack);
 				$tmp->setValue("");
-				$tmp->setTokenSubType(PHPExcel_Calculation_FormulaToken::TOKEN_SUBTYPE_STOP);
+				$tmp->setTokenSubType(\PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_SUBTYPE_STOP);
 				$tokens1[] = $tmp;
 
 				++$index;
@@ -459,111 +458,111 @@ class PHPExcel_Calculation_FormulaParser {
 		}
 
 		// dump remaining accumulation
-		if (strlen($value) > 0) {
-			$tokens1[] = new PHPExcel_Calculation_FormulaToken($value, PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_OPERAND);
+		if (\strlen($value) > 0) {
+			$tokens1[] = new \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken($value, \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_TYPE_OPERAND);
 		}
 
 		// move tokenList to new set, excluding unnecessary white-space tokens and converting necessary ones to intersections
-		$tokenCount = count($tokens1);
+		$tokenCount = \count($tokens1);
 		for ($i = 0; $i < $tokenCount; ++$i) {
 			$token = $tokens1[$i];
 			if (isset($tokens1[$i - 1])) {
 				$previousToken = $tokens1[$i - 1];
 			} else {
-				$previousToken = null;
+				$previousToken = \null;
 			}
 			if (isset($tokens1[$i + 1])) {
 				$nextToken = $tokens1[$i + 1];
 			} else {
-				$nextToken = null;
+				$nextToken = \null;
 			}
 
-			if (is_null($token)) {
+			if (\is_null($token)) {
 				continue;
 			}
 
-			if ($token->getTokenType() != PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_WHITESPACE) {
+			if ($token->getTokenType() != \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_TYPE_WHITESPACE) {
 				$tokens2[] = $token;
 				continue;
 			}
 
-			if (is_null($previousToken)) {
+			if (\is_null($previousToken)) {
 				continue;
 			}
 
 			if (! (
-					(($previousToken->getTokenType() == PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_FUNCTION) && ($previousToken->getTokenSubType() == PHPExcel_Calculation_FormulaToken::TOKEN_SUBTYPE_STOP)) ||
-					(($previousToken->getTokenType() == PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_SUBEXPRESSION) && ($previousToken->getTokenSubType() == PHPExcel_Calculation_FormulaToken::TOKEN_SUBTYPE_STOP)) ||
-					($previousToken->getTokenType() == PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_OPERAND)
+					(($previousToken->getTokenType() == \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_TYPE_FUNCTION) && ($previousToken->getTokenSubType() == \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_SUBTYPE_STOP)) ||
+					(($previousToken->getTokenType() == \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_TYPE_SUBEXPRESSION) && ($previousToken->getTokenSubType() == \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_SUBTYPE_STOP)) ||
+					($previousToken->getTokenType() == \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_TYPE_OPERAND)
 				  ) ) {
 				continue;
 			}
 
-			if (is_null($nextToken)) {
+			if (\is_null($nextToken)) {
 				continue;
 			}
 
 			if (! (
-					(($nextToken->getTokenType() == PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_FUNCTION) && ($nextToken->getTokenSubType() == PHPExcel_Calculation_FormulaToken::TOKEN_SUBTYPE_START)) ||
-					(($nextToken->getTokenType() == PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_SUBEXPRESSION) && ($nextToken->getTokenSubType() == PHPExcel_Calculation_FormulaToken::TOKEN_SUBTYPE_START)) ||
-					($nextToken->getTokenType() == PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_OPERAND)
+					(($nextToken->getTokenType() == \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_TYPE_FUNCTION) && ($nextToken->getTokenSubType() == \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_SUBTYPE_START)) ||
+					(($nextToken->getTokenType() == \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_TYPE_SUBEXPRESSION) && ($nextToken->getTokenSubType() == \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_SUBTYPE_START)) ||
+					($nextToken->getTokenType() == \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_TYPE_OPERAND)
 				  ) ) {
 				continue;
 			}
 
-			$tokens2[] = new PHPExcel_Calculation_FormulaToken($value, PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_OPERATORINFIX, PHPExcel_Calculation_FormulaToken::TOKEN_SUBTYPE_INTERSECTION);
+			$tokens2[] = new \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken($value, \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_TYPE_OPERATORINFIX, \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_SUBTYPE_INTERSECTION);
 		}
 
 		// move tokens to final list, switching infix "-" operators to prefix when appropriate, switching infix "+" operators
 		// to noop when appropriate, identifying operand and infix-operator subtypes, and pulling "@" from function names
 		$this->_tokens = array();
 
-		$tokenCount = count($tokens2);
+		$tokenCount = \count($tokens2);
 		for ($i = 0; $i < $tokenCount; ++$i) {
 			$token = $tokens2[$i];
 			if (isset($tokens2[$i - 1])) {
 				$previousToken = $tokens2[$i - 1];
 			} else {
-				$previousToken = null;
+				$previousToken = \null;
 			}
 			if (isset($tokens2[$i + 1])) {
 				$nextToken = $tokens2[$i + 1];
 			} else {
-				$nextToken = null;
+				$nextToken = \null;
 			}
 
-			if (is_null($token)) {
+			if (\is_null($token)) {
 				continue;
 			}
 
-			if ($token->getTokenType() == PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_OPERATORINFIX && $token->getValue() == "-") {
+			if ($token->getTokenType() == \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_TYPE_OPERATORINFIX && $token->getValue() == "-") {
 				if ($i == 0) {
-					$token->setTokenType(PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_OPERATORPREFIX);
+					$token->setTokenType(\PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_TYPE_OPERATORPREFIX);
 				} else if (
-							(($previousToken->getTokenType() == PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_FUNCTION) && ($previousToken->getTokenSubType() == PHPExcel_Calculation_FormulaToken::TOKEN_SUBTYPE_STOP)) ||
-							(($previousToken->getTokenType() == PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_SUBEXPRESSION) && ($previousToken->getTokenSubType() == PHPExcel_Calculation_FormulaToken::TOKEN_SUBTYPE_STOP)) ||
-							($previousToken->getTokenType() == PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_OPERATORPOSTFIX) ||
-							($previousToken->getTokenType() == PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_OPERAND)
+							(($previousToken->getTokenType() == \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_TYPE_FUNCTION) && ($previousToken->getTokenSubType() == \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_SUBTYPE_STOP)) ||
+							(($previousToken->getTokenType() == \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_TYPE_SUBEXPRESSION) && ($previousToken->getTokenSubType() == \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_SUBTYPE_STOP)) ||
+							($previousToken->getTokenType() == \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_TYPE_OPERATORPOSTFIX) ||
+							($previousToken->getTokenType() == \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_TYPE_OPERAND)
 						) {
-					$token->setTokenSubType(PHPExcel_Calculation_FormulaToken::TOKEN_SUBTYPE_MATH);
+					$token->setTokenSubType(\PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_SUBTYPE_MATH);
 				} else {
-					$token->setTokenType(PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_OPERATORPREFIX);
+					$token->setTokenType(\PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_TYPE_OPERATORPREFIX);
 				}
 
 				$this->_tokens[] = $token;
 				continue;
 			}
 
-			if ($token->getTokenType() == PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_OPERATORINFIX && $token->getValue() == "+") {
+			if ($token->getTokenType() == \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_TYPE_OPERATORINFIX && $token->getValue() == "+") {
 				if ($i == 0) {
 					continue;
 				} else if (
-							(($previousToken->getTokenType() == PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_FUNCTION) && ($previousToken->getTokenSubType() == PHPExcel_Calculation_FormulaToken::TOKEN_SUBTYPE_STOP)) ||
-							(($previousToken->getTokenType() == PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_SUBEXPRESSION) && ($previousToken->getTokenSubType() == PHPExcel_Calculation_FormulaToken::TOKEN_SUBTYPE_STOP)) ||
-							($previousToken->getTokenType() == PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_OPERATORPOSTFIX) ||
-							($previousToken->getTokenType() == PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_OPERAND)
+							(($previousToken->getTokenType() == \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_TYPE_FUNCTION) && ($previousToken->getTokenSubType() == \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_SUBTYPE_STOP)) ||
+							(($previousToken->getTokenType() == \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_TYPE_SUBEXPRESSION) && ($previousToken->getTokenSubType() == \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_SUBTYPE_STOP)) ||
+							($previousToken->getTokenType() == \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_TYPE_OPERATORPOSTFIX) ||
+							($previousToken->getTokenType() == \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_TYPE_OPERAND)
 						) {
-					$token->setTokenSubType(PHPExcel_Calculation_FormulaToken::TOKEN_SUBTYPE_MATH);
+					$token->setTokenSubType(\PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_SUBTYPE_MATH);
 				} else {
 					continue;
 				}
@@ -572,38 +571,38 @@ class PHPExcel_Calculation_FormulaParser {
 				continue;
 			}
 
-			if ($token->getTokenType() == PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_OPERATORINFIX && $token->getTokenSubType() == PHPExcel_Calculation_FormulaToken::TOKEN_SUBTYPE_NOTHING) {
-				if (strpos("<>=", substr($token->getValue(), 0, 1)) !== false) {
-					$token->setTokenSubType(PHPExcel_Calculation_FormulaToken::TOKEN_SUBTYPE_LOGICAL);
+			if ($token->getTokenType() == \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_TYPE_OPERATORINFIX && $token->getTokenSubType() == \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_SUBTYPE_NOTHING) {
+				if (\strpos("<>=", \substr($token->getValue(), 0, 1)) !== \false) {
+					$token->setTokenSubType(\PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_SUBTYPE_LOGICAL);
 				} else if ($token->getValue() == "&") {
-					$token->setTokenSubType(PHPExcel_Calculation_FormulaToken::TOKEN_SUBTYPE_CONCATENATION);
+					$token->setTokenSubType(\PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_SUBTYPE_CONCATENATION);
 				} else {
-					$token->setTokenSubType(PHPExcel_Calculation_FormulaToken::TOKEN_SUBTYPE_MATH);
+					$token->setTokenSubType(\PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_SUBTYPE_MATH);
 				}
 
 				$this->_tokens[] = $token;
 				continue;
 			}
 
-			if ($token->getTokenType() == PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_OPERAND && $token->getTokenSubType() == PHPExcel_Calculation_FormulaToken::TOKEN_SUBTYPE_NOTHING) {
-				if (!is_numeric($token->getValue())) {
-					if (strtoupper($token->getValue()) == "TRUE" || strtoupper($token->getValue() == "FALSE")) {
-						$token->setTokenSubType(PHPExcel_Calculation_FormulaToken::TOKEN_SUBTYPE_LOGICAL);
+			if ($token->getTokenType() == \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_TYPE_OPERAND && $token->getTokenSubType() == \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_SUBTYPE_NOTHING) {
+				if (!\is_numeric($token->getValue())) {
+					if (\strtoupper($token->getValue()) == "TRUE" || \strtoupper($token->getValue() == "FALSE")) {
+						$token->setTokenSubType(\PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_SUBTYPE_LOGICAL);
 					} else {
-						$token->setTokenSubType(PHPExcel_Calculation_FormulaToken::TOKEN_SUBTYPE_RANGE);
+						$token->setTokenSubType(\PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_SUBTYPE_RANGE);
 					}
 				} else {
-					$token->setTokenSubType(PHPExcel_Calculation_FormulaToken::TOKEN_SUBTYPE_NUMBER);
+					$token->setTokenSubType(\PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_SUBTYPE_NUMBER);
 				}
 
 				$this->_tokens[] = $token;
 				continue;
 			}
 
-			if ($token->getTokenType() == PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_FUNCTION) {
-				if (strlen($token->getValue() > 0)) {
-					if (substr($token->getValue(), 0, 1) == "@") {
-						$token->setValue(substr($token->getValue(), 1));
+			if ($token->getTokenType() == \PhpOffice\PhpSpreadsheet\Calculation\FormulaToken::TOKEN_TYPE_FUNCTION) {
+				if (\strlen($token->getValue() > 0)) {
+					if (\substr($token->getValue(), 0, 1) == "@") {
+						$token->setValue(\substr($token->getValue(), 1));
 					}
 				}
 			}

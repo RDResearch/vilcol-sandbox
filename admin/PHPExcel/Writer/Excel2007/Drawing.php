@@ -1,4 +1,6 @@
 <?php
+namespace PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 /**
  * PHPExcel
  *
@@ -24,8 +26,6 @@
  * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
  * @version    1.8.0, 2014-03-02
  */
-
-
 /**
  * PHPExcel_Writer_Excel2007_Drawing
  *
@@ -33,25 +33,25 @@
  * @package    PHPExcel_Writer_Excel2007
  * @copyright  Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Writer_Excel2007_Drawing extends PHPExcel_Writer_Excel2007_WriterPart
+class Drawing extends \PhpOffice\PhpSpreadsheet\Writer\Xlsx\WriterPart
 {
 	/**
-	 * Write drawings to XML format
-	 *
-	 * @param 	PHPExcel_Worksheet	$pWorksheet
-	 * @param	int					&$chartRef		Chart ID
-	 * @param	boolean				$includeCharts	Flag indicating if we should include drawing details for charts
-	 * @return 	string 				XML Output
-	 * @throws 	PHPExcel_Writer_Exception
-	 */
-	public function writeDrawings(PHPExcel_Worksheet $pWorksheet = null, &$chartRef, $includeCharts = FALSE)
+  * Write drawings to XML format
+  *
+  * @param \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $pWorksheet
+  * @param	int					&$chartRef		Chart ID
+  * @param	boolean				$includeCharts	Flag indicating if we should include drawing details for charts
+  * @return 	string 				XML Output
+  * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+  */
+ public function writeDrawings(\PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $pWorksheet = \null, &$chartRef, $includeCharts = \FALSE)
 	{
 		// Create XML writer
-		$objWriter = null;
+		$objWriter = \null;
 		if ($this->getParentWriter()->getUseDiskCaching()) {
-			$objWriter = new PHPExcel_Shared_XMLWriter(PHPExcel_Shared_XMLWriter::STORAGE_DISK, $this->getParentWriter()->getDiskCachingDirectory());
+			$objWriter = new \PhpOffice\PhpSpreadsheet\Shared\XMLWriter(\PhpOffice\PhpSpreadsheet\Shared\XMLWriter::STORAGE_DISK, $this->getParentWriter()->getDiskCachingDirectory());
 		} else {
-			$objWriter = new PHPExcel_Shared_XMLWriter(PHPExcel_Shared_XMLWriter::STORAGE_MEMORY);
+			$objWriter = new \PhpOffice\PhpSpreadsheet\Shared\XMLWriter(\PhpOffice\PhpSpreadsheet\Shared\XMLWriter::STORAGE_MEMORY);
 		}
 
 		// XML header
@@ -90,33 +90,33 @@ class PHPExcel_Writer_Excel2007_Drawing extends PHPExcel_Writer_Excel2007_Writer
 	}
 
 	/**
-	 * Write drawings to XML format
-	 *
-	 * @param 	PHPExcel_Shared_XMLWriter	$objWriter 		XML Writer
-	 * @param 	PHPExcel_Chart				$pChart
-	 * @param 	int							$pRelationId
-	 * @throws 	PHPExcel_Writer_Exception
-	 */
-	public function _writeChart(PHPExcel_Shared_XMLWriter $objWriter = null, PHPExcel_Chart $pChart = null, $pRelationId = -1)
+  * Write drawings to XML format
+  *
+  * @param \PhpOffice\PhpSpreadsheet\Shared\XMLWriter $objWriter XML Writer
+  * @param \PhpOffice\PhpSpreadsheet\Chart\Chart $pChart
+  * @param 	int							$pRelationId
+  * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+  */
+ public function _writeChart(\PhpOffice\PhpSpreadsheet\Shared\XMLWriter $objWriter = \null, \PhpOffice\PhpSpreadsheet\Chart\Chart $pChart = \null, $pRelationId = -1)
 	{
 		$tl = $pChart->getTopLeftPosition();
-		$tl['colRow'] = PHPExcel_Cell::coordinateFromString($tl['cell']);
+		$tl['colRow'] = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::coordinateFromString($tl['cell']);
 		$br = $pChart->getBottomRightPosition();
-		$br['colRow'] = PHPExcel_Cell::coordinateFromString($br['cell']);
+		$br['colRow'] = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::coordinateFromString($br['cell']);
 
 		$objWriter->startElement('xdr:twoCellAnchor');
 
 			$objWriter->startElement('xdr:from');
-				$objWriter->writeElement('xdr:col', PHPExcel_Cell::columnIndexFromString($tl['colRow'][0]) - 1);
-				$objWriter->writeElement('xdr:colOff', PHPExcel_Shared_Drawing::pixelsToEMU($tl['xOffset']));
+				$objWriter->writeElement('xdr:col', \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString($tl['colRow'][0]) - 1);
+				$objWriter->writeElement('xdr:colOff', \PhpOffice\PhpSpreadsheet\Shared\Drawing::pixelsToEMU($tl['xOffset']));
 				$objWriter->writeElement('xdr:row', $tl['colRow'][1] - 1);
-				$objWriter->writeElement('xdr:rowOff', PHPExcel_Shared_Drawing::pixelsToEMU($tl['yOffset']));
+				$objWriter->writeElement('xdr:rowOff', \PhpOffice\PhpSpreadsheet\Shared\Drawing::pixelsToEMU($tl['yOffset']));
 			$objWriter->endElement();
 			$objWriter->startElement('xdr:to');
-				$objWriter->writeElement('xdr:col', PHPExcel_Cell::columnIndexFromString($br['colRow'][0]) - 1);
-				$objWriter->writeElement('xdr:colOff', PHPExcel_Shared_Drawing::pixelsToEMU($br['xOffset']));
+				$objWriter->writeElement('xdr:col', \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString($br['colRow'][0]) - 1);
+				$objWriter->writeElement('xdr:colOff', \PhpOffice\PhpSpreadsheet\Shared\Drawing::pixelsToEMU($br['xOffset']));
 				$objWriter->writeElement('xdr:row', $br['colRow'][1] - 1);
-				$objWriter->writeElement('xdr:rowOff', PHPExcel_Shared_Drawing::pixelsToEMU($br['yOffset']));
+				$objWriter->writeElement('xdr:rowOff', \PhpOffice\PhpSpreadsheet\Shared\Drawing::pixelsToEMU($br['yOffset']));
 			$objWriter->endElement();
 
 			$objWriter->startElement('xdr:graphicFrame');
@@ -162,34 +162,34 @@ class PHPExcel_Writer_Excel2007_Drawing extends PHPExcel_Writer_Excel2007_Writer
 	}
 
 	/**
-	 * Write drawings to XML format
-	 *
-	 * @param 	PHPExcel_Shared_XMLWriter			$objWriter 		XML Writer
-	 * @param 	PHPExcel_Worksheet_BaseDrawing		$pDrawing
-	 * @param 	int									$pRelationId
-	 * @throws 	PHPExcel_Writer_Exception
-	 */
-	public function _writeDrawing(PHPExcel_Shared_XMLWriter $objWriter = null, PHPExcel_Worksheet_BaseDrawing $pDrawing = null, $pRelationId = -1)
+  * Write drawings to XML format
+  *
+  * @param \PhpOffice\PhpSpreadsheet\Shared\XMLWriter $objWriter XML Writer
+  * @param \PhpOffice\PhpSpreadsheet\Worksheet\BaseDrawing $pDrawing
+  * @param 	int									$pRelationId
+  * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+  */
+ public function _writeDrawing(\PhpOffice\PhpSpreadsheet\Shared\XMLWriter $objWriter = \null, \PhpOffice\PhpSpreadsheet\Worksheet\BaseDrawing $pDrawing = \null, $pRelationId = -1)
 	{
 		if ($pRelationId >= 0) {
 			// xdr:oneCellAnchor
 			$objWriter->startElement('xdr:oneCellAnchor');
 				// Image location
-				$aCoordinates 		= PHPExcel_Cell::coordinateFromString($pDrawing->getCoordinates());
-				$aCoordinates[0] 	= PHPExcel_Cell::columnIndexFromString($aCoordinates[0]);
+				$aCoordinates 		= \PhpOffice\PhpSpreadsheet\Cell\Coordinate::coordinateFromString($pDrawing->getCoordinates());
+				$aCoordinates[0] 	= \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString($aCoordinates[0]);
 
 				// xdr:from
 				$objWriter->startElement('xdr:from');
 					$objWriter->writeElement('xdr:col', $aCoordinates[0] - 1);
-					$objWriter->writeElement('xdr:colOff', PHPExcel_Shared_Drawing::pixelsToEMU($pDrawing->getOffsetX()));
+					$objWriter->writeElement('xdr:colOff', \PhpOffice\PhpSpreadsheet\Shared\Drawing::pixelsToEMU($pDrawing->getOffsetX()));
 					$objWriter->writeElement('xdr:row', $aCoordinates[1] - 1);
-					$objWriter->writeElement('xdr:rowOff', PHPExcel_Shared_Drawing::pixelsToEMU($pDrawing->getOffsetY()));
+					$objWriter->writeElement('xdr:rowOff', \PhpOffice\PhpSpreadsheet\Shared\Drawing::pixelsToEMU($pDrawing->getOffsetY()));
 				$objWriter->endElement();
 
 				// xdr:ext
 				$objWriter->startElement('xdr:ext');
-					$objWriter->writeAttribute('cx', PHPExcel_Shared_Drawing::pixelsToEMU($pDrawing->getWidth()));
-					$objWriter->writeAttribute('cy', PHPExcel_Shared_Drawing::pixelsToEMU($pDrawing->getHeight()));
+					$objWriter->writeAttribute('cx', \PhpOffice\PhpSpreadsheet\Shared\Drawing::pixelsToEMU($pDrawing->getWidth()));
+					$objWriter->writeAttribute('cy', \PhpOffice\PhpSpreadsheet\Shared\Drawing::pixelsToEMU($pDrawing->getHeight()));
 				$objWriter->endElement();
 
 				// xdr:pic
@@ -228,7 +228,7 @@ class PHPExcel_Writer_Excel2007_Drawing extends PHPExcel_Writer_Excel2007_Writer
 
 						// a:stretch
 						$objWriter->startElement('a:stretch');
-							$objWriter->writeElement('a:fillRect', null);
+							$objWriter->writeElement('a:fillRect', \null);
 						$objWriter->endElement();
 
 					$objWriter->endElement();
@@ -238,7 +238,7 @@ class PHPExcel_Writer_Excel2007_Drawing extends PHPExcel_Writer_Excel2007_Writer
 
 						// a:xfrm
 						$objWriter->startElement('a:xfrm');
-						$objWriter->writeAttribute('rot', PHPExcel_Shared_Drawing::degreesToAngle($pDrawing->getRotation()));
+						$objWriter->writeAttribute('rot', \PhpOffice\PhpSpreadsheet\Shared\Drawing::degreesToAngle($pDrawing->getRotation()));
 						$objWriter->endElement();
 
 						// a:prstGeom
@@ -246,7 +246,7 @@ class PHPExcel_Writer_Excel2007_Drawing extends PHPExcel_Writer_Excel2007_Writer
 						$objWriter->writeAttribute('prst', 'rect');
 
 							// a:avLst
-							$objWriter->writeElement('a:avLst', null);
+							$objWriter->writeElement('a:avLst', \null);
 
 						$objWriter->endElement();
 
@@ -297,9 +297,9 @@ class PHPExcel_Writer_Excel2007_Drawing extends PHPExcel_Writer_Excel2007_Writer
 
 								// a:outerShdw
 								$objWriter->startElement('a:outerShdw');
-								$objWriter->writeAttribute('blurRad', 		PHPExcel_Shared_Drawing::pixelsToEMU($pDrawing->getShadow()->getBlurRadius()));
-								$objWriter->writeAttribute('dist',			PHPExcel_Shared_Drawing::pixelsToEMU($pDrawing->getShadow()->getDistance()));
-								$objWriter->writeAttribute('dir',			PHPExcel_Shared_Drawing::degreesToAngle($pDrawing->getShadow()->getDirection()));
+								$objWriter->writeAttribute('blurRad', 		\PhpOffice\PhpSpreadsheet\Shared\Drawing::pixelsToEMU($pDrawing->getShadow()->getBlurRadius()));
+								$objWriter->writeAttribute('dist',			\PhpOffice\PhpSpreadsheet\Shared\Drawing::pixelsToEMU($pDrawing->getShadow()->getDistance()));
+								$objWriter->writeAttribute('dir',			\PhpOffice\PhpSpreadsheet\Shared\Drawing::degreesToAngle($pDrawing->getShadow()->getDirection()));
 								$objWriter->writeAttribute('algn',			$pDrawing->getShadow()->getAlignment());
 								$objWriter->writeAttribute('rotWithShape', 	'0');
 
@@ -371,29 +371,29 @@ class PHPExcel_Writer_Excel2007_Drawing extends PHPExcel_Writer_Excel2007_Writer
 				$objWriter->endElement();
 
 				// xdr:clientData
-				$objWriter->writeElement('xdr:clientData', null);
+				$objWriter->writeElement('xdr:clientData', \null);
 
 			$objWriter->endElement();
 		} else {
-			throw new PHPExcel_Writer_Exception("Invalid parameters passed.");
+			throw new \PhpOffice\PhpSpreadsheet\Writer\Exception("Invalid parameters passed.");
 		}
 	}
 
 	/**
-	 * Write VML header/footer images to XML format
-	 *
-	 * @param 	PHPExcel_Worksheet				$pWorksheet
-	 * @return 	string 								XML Output
-	 * @throws 	PHPExcel_Writer_Exception
-	 */
-	public function writeVMLHeaderFooterImages(PHPExcel_Worksheet $pWorksheet = null)
+  * Write VML header/footer images to XML format
+  *
+  * @param \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $pWorksheet
+  * @return 	string 								XML Output
+  * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+  */
+ public function writeVMLHeaderFooterImages(\PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $pWorksheet = \null)
 	{
 		// Create XML writer
-		$objWriter = null;
+		$objWriter = \null;
 		if ($this->getParentWriter()->getUseDiskCaching()) {
-			$objWriter = new PHPExcel_Shared_XMLWriter(PHPExcel_Shared_XMLWriter::STORAGE_DISK, $this->getParentWriter()->getDiskCachingDirectory());
+			$objWriter = new \PhpOffice\PhpSpreadsheet\Shared\XMLWriter(\PhpOffice\PhpSpreadsheet\Shared\XMLWriter::STORAGE_DISK, $this->getParentWriter()->getDiskCachingDirectory());
 		} else {
-			$objWriter = new PHPExcel_Shared_XMLWriter(PHPExcel_Shared_XMLWriter::STORAGE_MEMORY);
+			$objWriter = new \PhpOffice\PhpSpreadsheet\Shared\XMLWriter(\PhpOffice\PhpSpreadsheet\Shared\XMLWriter::STORAGE_MEMORY);
 		}
 
 		// XML header
@@ -527,18 +527,18 @@ class PHPExcel_Writer_Excel2007_Drawing extends PHPExcel_Writer_Excel2007_Writer
 	}
 
 	/**
-	 * Write VML comment to XML format
-	 *
-	 * @param 	PHPExcel_Shared_XMLWriter		$objWriter 			XML Writer
-	 * @param	string							$pReference			Reference
-	 * @param 	PHPExcel_Worksheet_HeaderFooterDrawing	$pImage		Image
-	 * @throws 	PHPExcel_Writer_Exception
-	 */
-	public function _writeVMLHeaderFooterImage(PHPExcel_Shared_XMLWriter $objWriter = null, $pReference = '', PHPExcel_Worksheet_HeaderFooterDrawing $pImage = null)
+  * Write VML comment to XML format
+  *
+  * @param \PhpOffice\PhpSpreadsheet\Shared\XMLWriter $objWriter XML Writer
+  * @param	string							$pReference			Reference
+  * @param \PhpOffice\PhpSpreadsheet\Worksheet\HeaderFooterDrawing $pImage Image
+  * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+  */
+ public function _writeVMLHeaderFooterImage(\PhpOffice\PhpSpreadsheet\Shared\XMLWriter $objWriter = \null, $pReference = '', \PhpOffice\PhpSpreadsheet\Worksheet\HeaderFooterDrawing $pImage = \null)
 	{
 		// Calculate object id
-		preg_match('{(\d+)}', md5($pReference), $m);
-		$id = 1500 + (substr($m[1], 0, 2) * 1);
+		\preg_match('{(\d+)}', \md5($pReference), $m);
+		$id = 1500 + (\substr($m[1], 0, 2) * 1);
 
 		// Calculate offset
 		$width = $pImage->getWidth();
@@ -570,13 +570,13 @@ class PHPExcel_Writer_Excel2007_Drawing extends PHPExcel_Writer_Excel2007_Writer
 
 
 	/**
-	 * Get an array of all drawings
-	 *
-	 * @param 	PHPExcel							$pPHPExcel
-	 * @return 	PHPExcel_Worksheet_Drawing[]		All drawings in PHPExcel
-	 * @throws 	PHPExcel_Writer_Exception
-	 */
-	public function allDrawings(PHPExcel $pPHPExcel = null)
+  * Get an array of all drawings
+  *
+  * @param \PhpOffice\PhpSpreadsheet\Spreadsheet $pPHPExcel
+  * @return \PhpOffice\PhpSpreadsheet\Worksheet\Drawing[] All drawings in PHPExcel
+  * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+  */
+ public function allDrawings(\PhpOffice\PhpSpreadsheet\Spreadsheet $pPHPExcel = \null)
 	{
 		// Get an array of all drawings
 		$aDrawings	= array();

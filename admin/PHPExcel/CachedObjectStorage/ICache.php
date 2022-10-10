@@ -36,40 +36,40 @@
 interface PHPExcel_CachedObjectStorage_ICache
 {
     /**
-     * Add or Update a cell in cache identified by coordinate address
-     *
-     * @param	string			$pCoord		Coordinate address of the cell to update
-     * @param	PHPExcel_Cell	$cell		Cell to update
-	 * @return	void
-     * @throws	PHPExcel_Exception
-     */
-	public function addCacheData($pCoord, PHPExcel_Cell $cell);
+  * Add or Update a cell in cache identified by coordinate address
+  *
+  * @param	string			$pCoord		Coordinate address of the cell to update
+  * @param \PhpOffice\PhpSpreadsheet\Cell\Cell $cell Cell to update
+  * @return	void
+  * @throws \PhpOffice\PhpSpreadsheet\Exception
+  */
+ public function addCacheData($pCoord, \PhpOffice\PhpSpreadsheet\Cell\Cell $cell);
 
     /**
-     * Add or Update a cell in cache
-     *
-     * @param	PHPExcel_Cell	$cell		Cell to update
-	 * @return	void
-     * @throws	PHPExcel_Exception
-     */
-	public function updateCacheData(PHPExcel_Cell $cell);
+  * Add or Update a cell in cache
+  *
+  * @param \PhpOffice\PhpSpreadsheet\Cell\Cell $cell Cell to update
+  * @return	void
+  * @throws \PhpOffice\PhpSpreadsheet\Exception
+  */
+ public function updateCacheData(\PhpOffice\PhpSpreadsheet\Cell\Cell $cell);
 
     /**
-     * Fetch a cell from cache identified by coordinate address
-     *
-     * @param	string			$pCoord		Coordinate address of the cell to retrieve
-     * @return PHPExcel_Cell 	Cell that was found, or null if not found
-     * @throws	PHPExcel_Exception
-     */
-	public function getCacheData($pCoord);
+  * Fetch a cell from cache identified by coordinate address
+  *
+  * @param	string			$pCoord		Coordinate address of the cell to retrieve
+  * @return \PhpOffice\PhpSpreadsheet\Cell\Cell Cell that was found, or null if not found
+  * @throws \PhpOffice\PhpSpreadsheet\Exception
+  */
+ public function getCacheData($pCoord);
 
     /**
-     * Delete a cell in cache identified by coordinate address
-     *
-     * @param	string			$pCoord		Coordinate address of the cell to delete
-     * @throws	PHPExcel_Exception
-     */
-	public function deleteCacheData($pCoord);
+  * Delete a cell in cache identified by coordinate address
+  *
+  * @param	string			$pCoord		Coordinate address of the cell to delete
+  * @throws \PhpOffice\PhpSpreadsheet\Exception
+  */
+ public function deleteCacheData($pCoord);
 
 	/**
 	 * Is a value set in the current PHPExcel_CachedObjectStorage_ICache for an indexed cell?
@@ -94,12 +94,12 @@ interface PHPExcel_CachedObjectStorage_ICache
 	public function getSortedCellList();
 
 	/**
-	 * Clone the cell collection
-	 *
-	 * @param	PHPExcel_Worksheet	$parent		The new worksheet
-	 * @return	void
-	 */
-	public function copyCellCollection(PHPExcel_Worksheet $parent);
+  * Clone the cell collection
+  *
+  * @param \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $parent The new worksheet
+  * @return	void
+  */
+ public function copyCellCollection(\PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $parent);
 
 	/**
 	 * Identify whether the caching method is currently available

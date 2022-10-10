@@ -108,21 +108,21 @@ class POP3
      * @type resource
      * @access private
      */
-    private $pop_conn;
+    private $pop_conn = 0;
 
     /**
      * Are we connected?
      * @type bool
      * @access private
      */
-    private $connected;
+    private $connected = false;
 
     /**
      * Error container.
      * @type array
      * @access private
      */
-    private $error;
+    private $error = null;
 
     /**
      * Line break constant
@@ -135,9 +135,6 @@ class POP3
      */
     public function __construct()
     {
-        $this->pop_conn = 0;
-        $this->connected = false;
-        $this->error = null;
     }
 
     /**

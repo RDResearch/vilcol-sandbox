@@ -1,4 +1,6 @@
 <?php
+namespace PhpOffice\PhpSpreadsheet\Writer\Xls;
+
 /**
  * PHPExcel
  *
@@ -24,7 +26,6 @@
  * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
  * @version    1.8.0, 2014-03-02
  */
-
 // Original file header of PEAR::Spreadsheet_Excel_Writer_Format (used as the base for this class):
 // -----------------------------------------------------------------------------------------
 // /*
@@ -59,8 +60,6 @@
 // *    License along with this library; if not, write to the Free Software
 // *    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 // */
-
-
 /**
  * PHPExcel_Writer_Excel5_Xf
  *
@@ -68,68 +67,68 @@
  * @package    PHPExcel_Writer_Excel5
  * @copyright  Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Writer_Excel5_Xf
+class Xf
 {
     /**
 	 * Style XF or a cell XF ?
 	 *
 	 * @var boolean
 	 */
-	private $_isStyleXf;
+	private $_isStyleXf = \false;
 
 	/**
 	 * Index to the FONT record. Index 4 does not exist
 	 * @var integer
 	 */
-	private $_fontIndex;
+	private $_fontIndex = 0;
 
 	/**
 	 * An index (2 bytes) to a FORMAT record (number format).
 	 * @var integer
 	 */
-	public $_numberFormatIndex;
+	public $_numberFormatIndex = 0;
 
 	/**
 	 * 1 bit, apparently not used.
 	 * @var integer
 	 */
-	public $_text_justlast;
+	public $_text_justlast = 0;
 
 	/**
 	 * The cell's foreground color.
 	 * @var integer
 	 */
-	public $_fg_color;
+	public $_fg_color = 0x40;
 
 	/**
 	 * The cell's background color.
 	 * @var integer
 	 */
-	public $_bg_color;
+	public $_bg_color = 0x41;
 
 	/**
 	 * Color of the bottom border of the cell.
 	 * @var integer
 	 */
-	public $_bottom_color;
+	public $_bottom_color = 0x40;
 
 	/**
 	 * Color of the top border of the cell.
 	 * @var integer
 	 */
-	public $_top_color;
+	public $_top_color = 0x40;
 
 	/**
 	* Color of the left border of the cell.
 	* @var integer
 	*/
-	public $_left_color;
+	public $_left_color = 0x40;
 
 	/**
 	 * Color of the right border of the cell.
 	 * @var integer
 	 */
-	public $_right_color;
+	public $_right_color = 0x40;
 
 	/**
 	 * Constructor
@@ -137,24 +136,9 @@ class PHPExcel_Writer_Excel5_Xf
 	 * @access public
 	 * @param PHPExcel_Style	The XF format
 	 */
-	public function __construct(PHPExcel_Style $style = null)
+	public function __construct(\PhpOffice\PhpSpreadsheet\Style\Style $style = \null)
 	{
-		$this->_isStyleXf =     false;
-		$this->_fontIndex      = 0;
-
-		$this->_numberFormatIndex     = 0;
-
-		$this->_text_justlast  = 0;
-
-		$this->_fg_color       = 0x40;
-		$this->_bg_color       = 0x41;
-
 		$this->_diag           = 0;
-
-		$this->_bottom_color   = 0x40;
-		$this->_top_color      = 0x40;
-		$this->_left_color     = 0x40;
-		$this->_right_color    = 0x40;
 		$this->_diag_color     = 0x40;
 		$this->_style = $style;
 
@@ -236,10 +220,10 @@ class PHPExcel_Writer_Excel5_Xf
 		$border1       |= $this->_right_color   << 23;
 
 		$diagonalDirection = $this->_style->getBorders()->getDiagonalDirection();
-		$diag_tl_to_rb = $diagonalDirection == PHPExcel_Style_Borders::DIAGONAL_BOTH
-							|| $diagonalDirection == PHPExcel_Style_Borders::DIAGONAL_DOWN;
-		$diag_tr_to_lb = $diagonalDirection == PHPExcel_Style_Borders::DIAGONAL_BOTH
-							|| $diagonalDirection == PHPExcel_Style_Borders::DIAGONAL_UP;
+		$diag_tl_to_rb = $diagonalDirection == \PhpOffice\PhpSpreadsheet\Style\Borders::DIAGONAL_BOTH
+							|| $diagonalDirection == \PhpOffice\PhpSpreadsheet\Style\Borders::DIAGONAL_DOWN;
+		$diag_tr_to_lb = $diagonalDirection == \PhpOffice\PhpSpreadsheet\Style\Borders::DIAGONAL_BOTH
+							|| $diagonalDirection == \PhpOffice\PhpSpreadsheet\Style\Borders::DIAGONAL_UP;
 		$border1       |= $diag_tl_to_rb        << 30;
 		$border1       |= $diag_tr_to_lb        << 31;
 
@@ -249,19 +233,19 @@ class PHPExcel_Writer_Excel5_Xf
 		$border2       |= self::_mapBorderStyle($this->_style->getBorders()->getDiagonal()->getBorderStyle())           << 21;
 		$border2       |= self::_mapFillType($this->_style->getFill()->getFillType())        << 26;
 
-		$header      = pack("vv",       $record, $length);
+		$header      = \pack("vv",       $record, $length);
 
 		//BIFF8 options: identation, shrinkToFit and  text direction
 		$biff8_options  = $this->_style->getAlignment()->getIndent();
 		$biff8_options |= (int) $this->_style->getAlignment()->getShrinkToFit() << 4;
 
-		$data  = pack("vvvC", $ifnt, $ifmt, $style, $align);
-		$data .= pack("CCC"
+		$data  = \pack("vvvC", $ifnt, $ifmt, $style, $align);
+		$data .= \pack("CCC"
 			, self::_mapTextRotation($this->_style->getAlignment()->getTextRotation())
 			, $biff8_options
 			, $used_attrib
 			);
-		$data .= pack("VVv", $border1, $border2, $icv);
+		$data .= \pack("VVv", $border1, $border2, $icv);
 
 		return($header . $data);
 	}
@@ -381,20 +365,20 @@ class PHPExcel_Writer_Excel5_Xf
 	 * @static	array of int
 	 *
 	 */
-	private static $_mapBorderStyle = array	( PHPExcel_Style_Border::BORDER_NONE				=> 0x00,
-											  PHPExcel_Style_Border::BORDER_THIN				=> 0x01,
-											  PHPExcel_Style_Border::BORDER_MEDIUM				=> 0x02,
-											  PHPExcel_Style_Border::BORDER_DASHED				=> 0x03,
-											  PHPExcel_Style_Border::BORDER_DOTTED				=> 0x04,
-											  PHPExcel_Style_Border::BORDER_THICK				=> 0x05,
-											  PHPExcel_Style_Border::BORDER_DOUBLE				=> 0x06,
-											  PHPExcel_Style_Border::BORDER_HAIR				=> 0x07,
-											  PHPExcel_Style_Border::BORDER_MEDIUMDASHED		=> 0x08,
-											  PHPExcel_Style_Border::BORDER_DASHDOT				=> 0x09,
-											  PHPExcel_Style_Border::BORDER_MEDIUMDASHDOT		=> 0x0A,
-											  PHPExcel_Style_Border::BORDER_DASHDOTDOT			=> 0x0B,
-											  PHPExcel_Style_Border::BORDER_MEDIUMDASHDOTDOT	=> 0x0C,
-											  PHPExcel_Style_Border::BORDER_SLANTDASHDOT		=> 0x0D,
+	private static $_mapBorderStyle = array	( \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_NONE				=> 0x00,
+											  \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN				=> 0x01,
+											  \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_MEDIUM				=> 0x02,
+											  \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_DASHED				=> 0x03,
+											  \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_DOTTED				=> 0x04,
+											  \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK				=> 0x05,
+											  \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_DOUBLE				=> 0x06,
+											  \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_HAIR				=> 0x07,
+											  \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_MEDIUMDASHED		=> 0x08,
+											  \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_DASHDOT				=> 0x09,
+											  \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_MEDIUMDASHDOT		=> 0x0A,
+											  \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_DASHDOTDOT			=> 0x0B,
+											  \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_MEDIUMDASHDOTDOT	=> 0x0C,
+											  \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_SLANTDASHDOT		=> 0x0D,
 											);
 
 	/**
@@ -414,27 +398,27 @@ class PHPExcel_Writer_Excel5_Xf
 	 * @static	array of int
 	 *
 	 */
-	private static $_mapFillType = array( PHPExcel_Style_Fill::FILL_NONE					=> 0x00,
-										  PHPExcel_Style_Fill::FILL_SOLID					=> 0x01,
-										  PHPExcel_Style_Fill::FILL_PATTERN_MEDIUMGRAY		=> 0x02,
-										  PHPExcel_Style_Fill::FILL_PATTERN_DARKGRAY		=> 0x03,
-										  PHPExcel_Style_Fill::FILL_PATTERN_LIGHTGRAY		=> 0x04,
-										  PHPExcel_Style_Fill::FILL_PATTERN_DARKHORIZONTAL	=> 0x05,
-										  PHPExcel_Style_Fill::FILL_PATTERN_DARKVERTICAL	=> 0x06,
-										  PHPExcel_Style_Fill::FILL_PATTERN_DARKDOWN		=> 0x07,
-										  PHPExcel_Style_Fill::FILL_PATTERN_DARKUP			=> 0x08,
-										  PHPExcel_Style_Fill::FILL_PATTERN_DARKGRID		=> 0x09,
-										  PHPExcel_Style_Fill::FILL_PATTERN_DARKTRELLIS		=> 0x0A,
-										  PHPExcel_Style_Fill::FILL_PATTERN_LIGHTHORIZONTAL	=> 0x0B,
-										  PHPExcel_Style_Fill::FILL_PATTERN_LIGHTVERTICAL	=> 0x0C,
-										  PHPExcel_Style_Fill::FILL_PATTERN_LIGHTDOWN		=> 0x0D,
-										  PHPExcel_Style_Fill::FILL_PATTERN_LIGHTUP			=> 0x0E,
-										  PHPExcel_Style_Fill::FILL_PATTERN_LIGHTGRID		=> 0x0F,
-										  PHPExcel_Style_Fill::FILL_PATTERN_LIGHTTRELLIS	=> 0x10,
-										  PHPExcel_Style_Fill::FILL_PATTERN_GRAY125			=> 0x11,
-										  PHPExcel_Style_Fill::FILL_PATTERN_GRAY0625		=> 0x12,
-										  PHPExcel_Style_Fill::FILL_GRADIENT_LINEAR			=> 0x00,	// does not exist in BIFF8
-										  PHPExcel_Style_Fill::FILL_GRADIENT_PATH			=> 0x00,	// does not exist in BIFF8
+	private static $_mapFillType = array( \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_NONE					=> 0x00,
+										  \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID					=> 0x01,
+										  \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_PATTERN_MEDIUMGRAY		=> 0x02,
+										  \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_PATTERN_DARKGRAY		=> 0x03,
+										  \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_PATTERN_LIGHTGRAY		=> 0x04,
+										  \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_PATTERN_DARKHORIZONTAL	=> 0x05,
+										  \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_PATTERN_DARKVERTICAL	=> 0x06,
+										  \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_PATTERN_DARKDOWN		=> 0x07,
+										  \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_PATTERN_DARKUP			=> 0x08,
+										  \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_PATTERN_DARKGRID		=> 0x09,
+										  \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_PATTERN_DARKTRELLIS		=> 0x0A,
+										  \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_PATTERN_LIGHTHORIZONTAL	=> 0x0B,
+										  \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_PATTERN_LIGHTVERTICAL	=> 0x0C,
+										  \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_PATTERN_LIGHTDOWN		=> 0x0D,
+										  \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_PATTERN_LIGHTUP			=> 0x0E,
+										  \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_PATTERN_LIGHTGRID		=> 0x0F,
+										  \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_PATTERN_LIGHTTRELLIS	=> 0x10,
+										  \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_PATTERN_GRAY125			=> 0x11,
+										  \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_PATTERN_GRAY0625		=> 0x12,
+										  \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_GRADIENT_LINEAR			=> 0x00,	// does not exist in BIFF8
+										  \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_GRADIENT_PATH			=> 0x00,	// does not exist in BIFF8
 										);
 	/**
 	 * Map fill type
@@ -453,13 +437,13 @@ class PHPExcel_Writer_Excel5_Xf
 	 * @static	array of int
 	 *
 	 */
-	private static $_mapHAlign = array( PHPExcel_Style_Alignment::HORIZONTAL_GENERAL			=> 0,
-										PHPExcel_Style_Alignment::HORIZONTAL_LEFT				=> 1,
-										PHPExcel_Style_Alignment::HORIZONTAL_CENTER				=> 2,
-										PHPExcel_Style_Alignment::HORIZONTAL_RIGHT				=> 3,
-										PHPExcel_Style_Alignment::HORIZONTAL_FILL				=> 4,
-										PHPExcel_Style_Alignment::HORIZONTAL_JUSTIFY			=> 5,
-										PHPExcel_Style_Alignment::HORIZONTAL_CENTER_CONTINUOUS	=> 6,
+	private static $_mapHAlign = array( \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_GENERAL			=> 0,
+										\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT				=> 1,
+										\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER				=> 2,
+										\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT				=> 3,
+										\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_FILL				=> 4,
+										\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_JUSTIFY			=> 5,
+										\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER_CONTINUOUS	=> 6,
 									  );
 	/**
 	 * Map to BIFF2-BIFF8 codes for horizontal alignment
@@ -479,10 +463,10 @@ class PHPExcel_Writer_Excel5_Xf
 	 * @static	array of int
 	 *
 	 */
-	private static $_mapVAlign = array( PHPExcel_Style_Alignment::VERTICAL_TOP		=> 0,
-										PHPExcel_Style_Alignment::VERTICAL_CENTER	=> 1,
-										PHPExcel_Style_Alignment::VERTICAL_BOTTOM	=> 2,
-										PHPExcel_Style_Alignment::VERTICAL_JUSTIFY	=> 3,
+	private static $_mapVAlign = array( \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_TOP		=> 0,
+										\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER	=> 1,
+										\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_BOTTOM	=> 2,
+										\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_JUSTIFY	=> 3,
 									  );
 	/**
 	 * Map to BIFF2-BIFF8 codes for vertical alignment
@@ -522,9 +506,9 @@ class PHPExcel_Writer_Excel5_Xf
 	 */
 	private static function _mapLocked($locked) {
 		switch ($locked) {
-			case PHPExcel_Style_Protection::PROTECTION_INHERIT:		return 1;
-			case PHPExcel_Style_Protection::PROTECTION_PROTECTED:	return 1;
-			case PHPExcel_Style_Protection::PROTECTION_UNPROTECTED:	return 0;
+			case \PhpOffice\PhpSpreadsheet\Style\Protection::PROTECTION_INHERIT:		return 1;
+			case \PhpOffice\PhpSpreadsheet\Style\Protection::PROTECTION_PROTECTED:	return 1;
+			case \PhpOffice\PhpSpreadsheet\Style\Protection::PROTECTION_UNPROTECTED:	return 0;
 			default:												return 1;
 		}
 	}
@@ -537,9 +521,9 @@ class PHPExcel_Writer_Excel5_Xf
 	 */
 	private static function _mapHidden($hidden) {
 		switch ($hidden) {
-			case PHPExcel_Style_Protection::PROTECTION_INHERIT:		return 0;
-			case PHPExcel_Style_Protection::PROTECTION_PROTECTED:	return 1;
-			case PHPExcel_Style_Protection::PROTECTION_UNPROTECTED:	return 0;
+			case \PhpOffice\PhpSpreadsheet\Style\Protection::PROTECTION_INHERIT:		return 0;
+			case \PhpOffice\PhpSpreadsheet\Style\Protection::PROTECTION_PROTECTED:	return 1;
+			case \PhpOffice\PhpSpreadsheet\Style\Protection::PROTECTION_UNPROTECTED:	return 0;
 			default:												return 0;
 		}
 	}

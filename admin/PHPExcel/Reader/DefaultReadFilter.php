@@ -35,6 +35,8 @@ if (!defined('PHPEXCEL_ROOT')) {
 	require(PHPEXCEL_ROOT . 'PHPExcel/Autoloader.php');
 }
 
+namespace PhpOffice\PhpSpreadsheet\Reader;
+
 /**
  * PHPExcel_Reader_DefaultReadFilter
  *
@@ -42,7 +44,7 @@ if (!defined('PHPEXCEL_ROOT')) {
  * @package    PHPExcel_Reader
  * @copyright  Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Reader_DefaultReadFilter implements PHPExcel_Reader_IReadFilter
+class DefaultReadFilter implements \PhpOffice\PhpSpreadsheet\Reader\IReadFilter
 {
 	/**
 	 * Should this cell be read?
@@ -53,6 +55,6 @@ class PHPExcel_Reader_DefaultReadFilter implements PHPExcel_Reader_IReadFilter
 	 * @return	boolean
 	 */
 	public function readCell($column, $row, $worksheetName = '') {
-		return true;
+		return \true;
 	}
 }

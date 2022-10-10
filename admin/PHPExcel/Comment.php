@@ -1,4 +1,6 @@
 <?php
+namespace PhpOffice\PhpSpreadsheet;
+
 /**
  * PHPExcel
  *
@@ -24,8 +26,6 @@
  * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt    LGPL
  * @version    1.8.0, 2014-03-02
  */
-
-
 /**
  * PHPExcel_Comment
  *
@@ -33,19 +33,19 @@
  * @package    PHPExcel
  * @copyright  Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Comment implements PHPExcel_IComparable
+class Comment implements \PhpOffice\PhpSpreadsheet\IComparable
 {
     /**
      * Author
      *
      * @var string
      */
-    private $_author;
+    private $_author = 'Author';
 
     /**
      * Rich text comment
      *
-     * @var PHPExcel_RichText
+     * @var \PhpOffice\PhpSpreadsheet\RichText\RichText
      */
     private $_text;
 
@@ -75,7 +75,7 @@ class PHPExcel_Comment implements PHPExcel_IComparable
      *
      * @var boolean
      */
-    private $_visible = false;
+    private $_visible = \false;
 
     /**
      * Comment height (CSS style, i.e. XXpx or YYpt)
@@ -87,7 +87,7 @@ class PHPExcel_Comment implements PHPExcel_IComparable
     /**
      * Comment fill color
      *
-     * @var PHPExcel_Style_Color
+     * @var \PhpOffice\PhpSpreadsheet\Style\Color
      */
     private $_fillColor;
 
@@ -96,20 +96,17 @@ class PHPExcel_Comment implements PHPExcel_IComparable
      *
      * @var string
      */
-    private $_alignment;
+    private $_alignment = \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_GENERAL;
 
     /**
      * Create a new PHPExcel_Comment
      *
-     * @throws PHPExcel_Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     public function __construct()
     {
-        // Initialise variables
-        $this->_author		= 'Author';
-        $this->_text		= new PHPExcel_RichText();
-        $this->_fillColor	= new PHPExcel_Style_Color('FFFFFFE1');
-        $this->_alignment	= PHPExcel_Style_Alignment::HORIZONTAL_GENERAL;
+        $this->_text		= new \PhpOffice\PhpSpreadsheet\RichText\RichText();
+        $this->_fillColor	= new \PhpOffice\PhpSpreadsheet\Style\Color('FFFFFFE1');
     }
 
     /**
@@ -125,7 +122,7 @@ class PHPExcel_Comment implements PHPExcel_IComparable
      * Set Author
      *
      * @param string $pValue
-     * @return PHPExcel_Comment
+     * @return \PhpOffice\PhpSpreadsheet\Comment
      */
     public function setAuthor($pValue = '') {
         $this->_author = $pValue;
@@ -135,7 +132,7 @@ class PHPExcel_Comment implements PHPExcel_IComparable
     /**
      * Get Rich text comment
      *
-     * @return PHPExcel_RichText
+     * @return \PhpOffice\PhpSpreadsheet\RichText\RichText
      */
     public function getText() {
         return $this->_text;
@@ -144,10 +141,10 @@ class PHPExcel_Comment implements PHPExcel_IComparable
     /**
      * Set Rich text comment
      *
-     * @param PHPExcel_RichText $pValue
-     * @return PHPExcel_Comment
+     * @param \PhpOffice\PhpSpreadsheet\RichText\RichText $pValue
+     * @return \PhpOffice\PhpSpreadsheet\Comment
      */
-    public function setText(PHPExcel_RichText $pValue) {
+    public function setText(\PhpOffice\PhpSpreadsheet\RichText\RichText $pValue) {
         $this->_text = $pValue;
         return $this;
     }
@@ -165,7 +162,7 @@ class PHPExcel_Comment implements PHPExcel_IComparable
      * Set comment width (CSS style, i.e. XXpx or YYpt)
      *
      * @param string $value
-     * @return PHPExcel_Comment
+     * @return \PhpOffice\PhpSpreadsheet\Comment
      */
     public function setWidth($value = '96pt') {
         $this->_width = $value;
@@ -185,7 +182,7 @@ class PHPExcel_Comment implements PHPExcel_IComparable
      * Set comment height (CSS style, i.e. XXpx or YYpt)
      *
      * @param string $value
-     * @return PHPExcel_Comment
+     * @return \PhpOffice\PhpSpreadsheet\Comment
      */
     public function setHeight($value = '55.5pt') {
         $this->_height = $value;
@@ -205,7 +202,7 @@ class PHPExcel_Comment implements PHPExcel_IComparable
      * Set left margin (CSS style, i.e. XXpx or YYpt)
      *
      * @param string $value
-     * @return PHPExcel_Comment
+     * @return \PhpOffice\PhpSpreadsheet\Comment
      */
     public function setMarginLeft($value = '59.25pt') {
         $this->_marginLeft = $value;
@@ -225,7 +222,7 @@ class PHPExcel_Comment implements PHPExcel_IComparable
      * Set top margin (CSS style, i.e. XXpx or YYpt)
      *
      * @param string $value
-     * @return PHPExcel_Comment
+     * @return \PhpOffice\PhpSpreadsheet\Comment
      */
     public function setMarginTop($value = '1.5pt') {
         $this->_marginTop = $value;
@@ -245,9 +242,9 @@ class PHPExcel_Comment implements PHPExcel_IComparable
      * Set comment default visibility
      *
      * @param boolean $value
-     * @return PHPExcel_Comment
+     * @return \PhpOffice\PhpSpreadsheet\Comment
      */
-    public function setVisible($value = false) {
+    public function setVisible($value = \false) {
         $this->_visible = $value;
         return $this;
     }
@@ -255,7 +252,7 @@ class PHPExcel_Comment implements PHPExcel_IComparable
     /**
      * Get fill color
      *
-     * @return PHPExcel_Style_Color
+     * @return \PhpOffice\PhpSpreadsheet\Style\Color
      */
     public function getFillColor() {
         return $this->_fillColor;
@@ -265,9 +262,9 @@ class PHPExcel_Comment implements PHPExcel_IComparable
      * Set Alignment
      *
      * @param string $pValue
-     * @return PHPExcel_Comment
+     * @return \PhpOffice\PhpSpreadsheet\Comment
      */
-    public function setAlignment($pValue = PHPExcel_Style_Alignment::HORIZONTAL_GENERAL) {
+    public function setAlignment($pValue = \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_GENERAL) {
         $this->_alignment = $pValue;
         return $this;
     }
@@ -287,7 +284,7 @@ class PHPExcel_Comment implements PHPExcel_IComparable
      * @return string    Hash code
      */
     public function getHashCode() {
-        return md5(
+        return \md5(
               $this->_author
             . $this->_text->getHashCode()
             . $this->_width
@@ -305,9 +302,9 @@ class PHPExcel_Comment implements PHPExcel_IComparable
      * Implement PHP __clone to create a deep clone, not just a shallow copy.
      */
     public function __clone() {
-        $vars = get_object_vars($this);
+        $vars = \get_object_vars($this);
         foreach ($vars as $key => $value) {
-            if (is_object($value)) {
+            if (\is_object($value)) {
                 $this->$key = clone $value;
             } else {
                 $this->$key = $value;

@@ -1,4 +1,6 @@
 <?php
+namespace PhpOffice\PhpSpreadsheet\Shared\Escher;
+
 /**
  * PHPExcel
  *
@@ -24,7 +26,6 @@
  * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
  * @version    1.8.0, 2014-03-02
  */
-
 /**
  * PHPExcel_Shared_Escher_DgContainer
  *
@@ -32,7 +33,7 @@
  * @package    PHPExcel_Shared_Escher
  * @copyright  Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Shared_Escher_DgContainer
+class DgContainer
 {
 	/**
 	 * Drawing index, 1-based.
@@ -48,7 +49,7 @@ class PHPExcel_Shared_Escher_DgContainer
 	 */
 	private $_lastSpId;
 
-	private $_spgrContainer = null;
+	private $_spgrContainer = \null;
 
 	public function getDgId()
 	{

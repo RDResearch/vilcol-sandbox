@@ -1,4 +1,6 @@
 <?php
+namespace PhpOffice\PhpSpreadsheet\RichText;
+
 /**
  * PHPExcel
  *
@@ -22,8 +24,6 @@
  * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
  * @version    1.8.0, 2014-03-02
  */
-
-
 /**
  * PHPExcel_RichText_Run
  *
@@ -31,14 +31,14 @@
  * @package    PHPExcel_RichText
  * @copyright  Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_RichText_Run extends PHPExcel_RichText_TextElement implements PHPExcel_RichText_ITextElement
+class Run extends \PhpOffice\PhpSpreadsheet\RichText\TextElement implements \PhpOffice\PhpSpreadsheet\RichText\ITextElement
 {
 	/**
-	 * Font
-	 *
-	 * @var PHPExcel_Style_Font
-	 */
-	private $_font;
+  * Font
+  *
+  * @var \PhpOffice\PhpSpreadsheet\Style\Font
+  */
+ private $_font;
 
     /**
      * Create a new PHPExcel_RichText_Run instance
@@ -49,26 +49,26 @@ class PHPExcel_RichText_Run extends PHPExcel_RichText_TextElement implements PHP
     {
     	// Initialise variables
     	$this->setText($pText);
-    	$this->_font = new PHPExcel_Style_Font();
+    	$this->_font = new \PhpOffice\PhpSpreadsheet\Style\Font();
     }
 
 	/**
-	 * Get font
-	 *
-	 * @return PHPExcel_Style_Font
-	 */
-	public function getFont() {
+  * Get font
+  *
+  * @return \PhpOffice\PhpSpreadsheet\Style\Font
+  */
+ public function getFont() {
 		return $this->_font;
 	}
 
 	/**
-	 * Set font
-	 *
-	 * @param	PHPExcel_Style_Font		$pFont		Font
-	 * @throws 	PHPExcel_Exception
-	 * @return PHPExcel_RichText_ITextElement
-	 */
-	public function setFont(PHPExcel_Style_Font $pFont = null) {
+  * Set font
+  *
+  * @param \PhpOffice\PhpSpreadsheet\Style\Font $pFont Font
+  * @throws \PhpOffice\PhpSpreadsheet\Exception
+  * @return \PhpOffice\PhpSpreadsheet\RichText\ITextElement
+  */
+ public function setFont(\PhpOffice\PhpSpreadsheet\Style\Font $pFont = \null) {
 		$this->_font = $pFont;
 		return $this;
 	}
@@ -79,7 +79,7 @@ class PHPExcel_RichText_Run extends PHPExcel_RichText_TextElement implements PHP
 	 * @return string	Hash code
 	 */
 	public function getHashCode() {
-    	return md5(
+    	return \md5(
     		  $this->getText()
     		. $this->_font->getHashCode()
     		. __CLASS__
@@ -90,9 +90,9 @@ class PHPExcel_RichText_Run extends PHPExcel_RichText_TextElement implements PHP
 	 * Implement PHP __clone to create a deep clone, not just a shallow copy.
 	 */
 	public function __clone() {
-		$vars = get_object_vars($this);
+		$vars = \get_object_vars($this);
 		foreach ($vars as $key => $value) {
-			if (is_object($value)) {
+			if (\is_object($value)) {
 				$this->$key = clone $value;
 			} else {
 				$this->$key = $value;

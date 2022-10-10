@@ -1,4 +1,6 @@
 <?php
+namespace PhpOffice\PhpSpreadsheet\Style;
+
 /**
  * PHPExcel
  *
@@ -24,8 +26,6 @@
  * @license	http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
  * @version	1.8.0, 2014-03-02
  */
-
-
 /**
  * PHPExcel_Style_NumberFormat
  *
@@ -33,7 +33,7 @@
  * @package	PHPExcel_Style
  * @copyright  Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Style_NumberFormat extends PHPExcel_Style_Supervisor implements PHPExcel_IComparable
+class NumberFormat extends \PhpOffice\PhpSpreadsheet\Style\Supervisor implements \PhpOffice\PhpSpreadsheet\IComparable
 {
 	/* Pre-defined formats */
 	const FORMAT_GENERAL					= 'General';
@@ -94,7 +94,7 @@ class PHPExcel_Style_NumberFormat extends PHPExcel_Style_Supervisor implements P
 	 *
 	 * @var string
 	 */
-	protected $_formatCode	=	PHPExcel_Style_NumberFormat::FORMAT_GENERAL;
+	protected $_formatCode	=	\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_GENERAL;
 
 	/**
 	 * Built-in format Code
@@ -113,23 +113,23 @@ class PHPExcel_Style_NumberFormat extends PHPExcel_Style_Supervisor implements P
 	 *									Leave this value at default unless you understand exactly what
 	 *										its ramifications are
 	 */
-	public function __construct($isSupervisor = FALSE, $isConditional = FALSE)
+	public function __construct($isSupervisor = \FALSE, $isConditional = \FALSE)
 	{
 		// Supervisor?
 		parent::__construct($isSupervisor);
 
 		if ($isConditional) {
-			$this->_formatCode = NULL;
+			$this->_formatCode = \NULL;
 		}
 	}
 
 	/**
-	 * Get the shared style component for the currently active cell in currently active sheet.
-	 * Only used for style supervisor
-	 *
-	 * @return PHPExcel_Style_NumberFormat
-	 */
-	public function getSharedComponent()
+  * Get the shared style component for the currently active cell in currently active sheet.
+  * Only used for style supervisor
+  *
+  * @return \PhpOffice\PhpSpreadsheet\Style\NumberFormat
+  */
+ public function getSharedComponent()
 	{
 		return $this->_parent->getSharedComponent()->getNumberFormat();
 	}
@@ -146,32 +146,32 @@ class PHPExcel_Style_NumberFormat extends PHPExcel_Style_Supervisor implements P
 	}
 
 	/**
-	 * Apply styles from array
-	 *
-	 * <code>
-	 * $objPHPExcel->getActiveSheet()->getStyle('B2')->getNumberFormat()->applyFromArray(
-	 *		array(
-	 *			'code' => PHPExcel_Style_NumberFormat::FORMAT_CURRENCY_EUR_SIMPLE
-	 *		)
-	 * );
-	 * </code>
-	 *
-	 * @param	array	$pStyles	Array containing style information
-	 * @throws	PHPExcel_Exception
-	 * @return PHPExcel_Style_NumberFormat
-	 */
-	public function applyFromArray($pStyles = null)
+  * Apply styles from array
+  *
+  * <code>
+  * $objPHPExcel->getActiveSheet()->getStyle('B2')->getNumberFormat()->applyFromArray(
+  *		array(
+  *			'code' => PHPExcel_Style_NumberFormat::FORMAT_CURRENCY_EUR_SIMPLE
+  *		)
+  * );
+  * </code>
+  *
+  * @param	array	$pStyles	Array containing style information
+  * @throws \PhpOffice\PhpSpreadsheet\Exception
+  * @return \PhpOffice\PhpSpreadsheet\Style\NumberFormat
+  */
+ public function applyFromArray($pStyles = \null)
 	{
-		if (is_array($pStyles)) {
+		if (\is_array($pStyles)) {
 			if ($this->_isSupervisor) {
-				$this->getActiveSheet()->getStyle($this->getSelectedCells())->applyFromArray($this->getStyleArray($pStyles));
+				$this->getActiveSheet()->getStyle($this->getSelectedCells())->applyFromArray($this->getStyleArray($pStyles), true);
 			} else {
-				if (array_key_exists('code', $pStyles)) {
+				if (\array_key_exists('code', $pStyles)) {
 					$this->setFormatCode($pStyles['code']);
 				}
 			}
 		} else {
-			throw new PHPExcel_Exception("Invalid style array passed.");
+			throw new \PhpOffice\PhpSpreadsheet\Exception("Invalid style array passed.");
 		}
 		return $this;
 	}
@@ -186,7 +186,7 @@ class PHPExcel_Style_NumberFormat extends PHPExcel_Style_Supervisor implements P
 		if ($this->_isSupervisor) {
 			return $this->getSharedComponent()->getFormatCode();
 		}
-		if ($this->_builtInFormatCode !== false)
+		if ($this->_builtInFormatCode !== \false)
 		{
 			return self::builtInFormatCode($this->_builtInFormatCode);
 		}
@@ -194,19 +194,19 @@ class PHPExcel_Style_NumberFormat extends PHPExcel_Style_Supervisor implements P
 	}
 
 	/**
-	 * Set Format Code
-	 *
-	 * @param string $pValue
-	 * @return PHPExcel_Style_NumberFormat
-	 */
-	public function setFormatCode($pValue = PHPExcel_Style_NumberFormat::FORMAT_GENERAL)
+  * Set Format Code
+  *
+  * @param string $pValue
+  * @return \PhpOffice\PhpSpreadsheet\Style\NumberFormat
+  */
+ public function setFormatCode($pValue = \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_GENERAL)
 	{
 		if ($pValue == '') {
-			$pValue = PHPExcel_Style_NumberFormat::FORMAT_GENERAL;
+			$pValue = \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_GENERAL;
 		}
 		if ($this->_isSupervisor) {
 			$styleArray = $this->getStyleArray(array('code' => $pValue));
-			$this->getActiveSheet()->getStyle($this->getSelectedCells())->applyFromArray($styleArray);
+			$this->getActiveSheet()->getStyle($this->getSelectedCells())->applyFromArray($styleArray, true);
 		} else {
 			$this->_formatCode = $pValue;
 			$this->_builtInFormatCode = self::builtInFormatCodeIndex($pValue);
@@ -228,17 +228,17 @@ class PHPExcel_Style_NumberFormat extends PHPExcel_Style_Supervisor implements P
 	}
 
 	/**
-	 * Set Built-In Format Code
-	 *
-	 * @param int $pValue
-	 * @return PHPExcel_Style_NumberFormat
-	 */
-	public function setBuiltInFormatCode($pValue = 0)
+  * Set Built-In Format Code
+  *
+  * @param int $pValue
+  * @return \PhpOffice\PhpSpreadsheet\Style\NumberFormat
+  */
+ public function setBuiltInFormatCode($pValue = 0)
 	{
 
 		if ($this->_isSupervisor) {
 			$styleArray = $this->getStyleArray(array('code' => self::builtInFormatCode($pValue)));
-			$this->getActiveSheet()->getStyle($this->getSelectedCells())->applyFromArray($styleArray);
+			$this->getActiveSheet()->getStyle($this->getSelectedCells())->applyFromArray($styleArray, true);
 		} else {
 			$this->_builtInFormatCode = $pValue;
 			$this->_formatCode = self::builtInFormatCode($pValue);
@@ -252,11 +252,11 @@ class PHPExcel_Style_NumberFormat extends PHPExcel_Style_Supervisor implements P
 	private static function fillBuiltInFormatCodes()
 	{
 		// Built-in format codes
-		if (is_null(self::$_builtInFormats)) {
+		if (\is_null(self::$_builtInFormats)) {
 			self::$_builtInFormats = array();
 
 			// General
-			self::$_builtInFormats[0] = PHPExcel_Style_NumberFormat::FORMAT_GENERAL;
+			self::$_builtInFormats[0] = \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_GENERAL;
 			self::$_builtInFormats[1] = '0';
 			self::$_builtInFormats[2] = '0.00';
 			self::$_builtInFormats[3] = '#,##0';
@@ -307,7 +307,7 @@ class PHPExcel_Style_NumberFormat extends PHPExcel_Style_Supervisor implements P
 			self::$_builtInFormats[70] = 't# ??/??';
 
 			// Flip array (for faster lookups)
-			self::$_flippedBuiltInFormats = array_flip(self::$_builtInFormats);
+			self::$_flippedBuiltInFormats = \array_flip(self::$_builtInFormats);
 		}
 	}
 
@@ -320,7 +320,7 @@ class PHPExcel_Style_NumberFormat extends PHPExcel_Style_Supervisor implements P
 	public static function builtInFormatCode($pIndex)
 	{
 		// Clean parameter
-		$pIndex = intval($pIndex);
+		$pIndex = \intval($pIndex);
 
 		// Ensure built-in format codes are available
 		self::fillBuiltInFormatCodes();
@@ -349,7 +349,7 @@ class PHPExcel_Style_NumberFormat extends PHPExcel_Style_Supervisor implements P
 			return self::$_flippedBuiltInFormats[$formatCode];
 		}
 
-		return false;
+		return \false;
 	}
 
 	/**
@@ -362,7 +362,7 @@ class PHPExcel_Style_NumberFormat extends PHPExcel_Style_Supervisor implements P
 		if ($this->_isSupervisor) {
 			return $this->getSharedComponent()->getHashCode();
 		}
-		return md5(
+		return \md5(
 			  $this->_formatCode
 			. $this->_builtInFormatCode
 			. __CLASS__
@@ -438,37 +438,37 @@ class PHPExcel_Style_NumberFormat extends PHPExcel_Style_Supervisor implements P
 		// strip off first part containing e.g. [$-F800] or [$USD-409]
 		// general syntax: [$<Currency string>-<language info>]
 		// language info is in hexadecimal
-		$format = preg_replace('/^(\[\$[A-Z]*-[0-9A-F]*\])/i', '', $format);
+		$format = \preg_replace('/^(\[\$[A-Z]*-[0-9A-F]*\])/i', '', $format);
 
 		// OpenOffice.org uses upper-case number formats, e.g. 'YYYY', convert to lower-case
-		$format = strtolower($format);
+		$format = \strtolower($format);
 
-		$format = strtr($format,self::$_dateFormatReplacements);
-		if (!strpos($format,'A')) {	// 24-hour time format
-			$format = strtr($format,self::$_dateFormatReplacements24);
+		$format = \strtr($format,self::$_dateFormatReplacements);
+		if (!\strpos($format,'A')) {	// 24-hour time format
+			$format = \strtr($format,self::$_dateFormatReplacements24);
 		} else {					// 12-hour time format
-			$format = strtr($format,self::$_dateFormatReplacements12);
+			$format = \strtr($format,self::$_dateFormatReplacements12);
 		}
 
-		$dateObj = PHPExcel_Shared_Date::ExcelToPHPObject($value);
+		$dateObj = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($value);
 		$value = $dateObj->format($format);
 	}
 
 	private static function _formatAsPercentage(&$value, &$format)
 	{
 		if ($format === self::FORMAT_PERCENTAGE) {
-			$value = round( (100 * $value), 0) . '%';
+			$value = \round( (100 * $value), 0) . '%';
 		} else {
-			if (preg_match('/\.[#0]+/i', $format, $m)) {
-				$s = substr($m[0], 0, 1) . (strlen($m[0]) - 1);
-				$format = str_replace($m[0], $s, $format);
+			if (\preg_match('/\.[#0]+/i', $format, $m)) {
+				$s = \substr($m[0], 0, 1) . (\strlen($m[0]) - 1);
+				$format = \str_replace($m[0], $s, $format);
 			}
-			if (preg_match('/^[#0]+/', $format, $m)) {
-				$format = str_replace($m[0], strlen($m[0]), $format);
+			if (\preg_match('/^[#0]+/', $format, $m)) {
+				$format = \str_replace($m[0], \strlen($m[0]), $format);
 			}
-			$format = '%' . str_replace('%', 'f%%', $format);
+			$format = '%' . \str_replace('%', 'f%%', $format);
 
-			$value = sprintf($format, 100 * $value);
+			$value = \sprintf($format, 100 * $value);
 		}
 	}
 
@@ -476,17 +476,17 @@ class PHPExcel_Style_NumberFormat extends PHPExcel_Style_Supervisor implements P
 	{
 		$sign = ($value < 0) ? '-' : '';
 
-		$integerPart = floor(abs($value));
-		$decimalPart = trim(fmod(abs($value),1),'0.');
-		$decimalLength = strlen($decimalPart);
-		$decimalDivisor = pow(10,$decimalLength);
+		$integerPart = \floor(\abs($value));
+		$decimalPart = \trim(\fmod(\abs($value),1),'0.');
+		$decimalLength = \strlen($decimalPart);
+		$decimalDivisor = \pow(10,$decimalLength);
 
-		$GCD = PHPExcel_Calculation_MathTrig::GCD($decimalPart,$decimalDivisor);
+		$GCD = \PhpOffice\PhpSpreadsheet\Calculation\MathTrig::GCD($decimalPart,$decimalDivisor);
 
 		$adjustedDecimalPart = $decimalPart/$GCD;
 		$adjustedDecimalDivisor = $decimalDivisor/$GCD;
 
-		if ((strpos($format,'0') !== false) || (strpos($format,'#') !== false) || (substr($format,0,3) == '? ?')) {
+		if ((\strpos($format,'0') !== \false) || (\strpos($format,'#') !== \false) || (\substr($format,0,3) == '? ?')) {
 			if ($integerPart == 0) {
 				$integerPart = '';
 			}
@@ -498,32 +498,32 @@ class PHPExcel_Style_NumberFormat extends PHPExcel_Style_Supervisor implements P
 	}
 
 	private static function _complexNumberFormatMask($number, $mask) {
-		if (strpos($mask,'.') !== false) {
-			$numbers = explode('.', $number . '.0');
-			$masks = explode('.', $mask . '.0');
+		if (\strpos($mask,'.') !== \false) {
+			$numbers = \explode('.', $number . '.0');
+			$masks = \explode('.', $mask . '.0');
 			$result1 = self::_complexNumberFormatMask($numbers[0], $masks[0]);
-			$result2 = strrev(self::_complexNumberFormatMask(strrev($numbers[1]), strrev($masks[1])));
+			$result2 = \strrev(self::_complexNumberFormatMask(\strrev($numbers[1]), \strrev($masks[1])));
 			return $result1 . '.' . $result2;
 		}
 
-		$r = preg_match_all('/0+/', $mask, $result, PREG_OFFSET_CAPTURE);
+		$r = \preg_match_all('/0+/', $mask, $result, \PREG_OFFSET_CAPTURE);
 		if ($r > 1) {
-			$result = array_reverse($result[0]);
+			$result = \array_reverse($result[0]);
 
 			foreach($result as $block) {
 				$divisor = 1 . $block[0];
-				$size = strlen($block[0]);
+				$size = \strlen($block[0]);
 				$offset = $block[1];
 
-				$blockValue = sprintf(
+				$blockValue = \sprintf(
 					'%0' . $size . 'd',
-					fmod($number, $divisor)
+					\fmod($number, $divisor)
 				);
-				$number = floor($number / $divisor);
-				$mask = substr_replace($mask,$blockValue, $offset, $size);
+				$number = \floor($number / $divisor);
+				$mask = \substr_replace($mask,$blockValue, $offset, $size);
 			}
 			if ($number > 0) {
-				$mask = substr_replace($mask, $number, $offset, 0);
+				$mask = \substr_replace($mask, $number, $offset, 0);
 			}
 			$result = $mask;
 		} else {
@@ -541,19 +541,19 @@ class PHPExcel_Style_NumberFormat extends PHPExcel_Style_Supervisor implements P
 	 * @param array		$callBack	Callback function for additional formatting of string
 	 * @return string	Formatted string
 	 */
-	public static function toFormattedString($value = '0', $format = PHPExcel_Style_NumberFormat::FORMAT_GENERAL, $callBack = null)
+	public static function toFormattedString($value = '0', $format = \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_GENERAL, $callBack = \null)
 	{
 		// For now we do not treat strings although section 4 of a format code affects strings
-		if (!is_numeric($value)) return $value;
+		if (!\is_numeric($value)) return $value;
 
 		// For 'General' format code, we just pass the value although this is not entirely the way Excel does it,
 		// it seems to round numbers to a total of 10 digits.
-		if (($format === PHPExcel_Style_NumberFormat::FORMAT_GENERAL) || ($format === PHPExcel_Style_NumberFormat::FORMAT_TEXT)) {
+		if (($format === \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_GENERAL) || ($format === \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_TEXT)) {
 			return $value;
 		}
 
 		// Get the sections, there can be up to four sections
-		$sections = explode(';', $format);
+		$sections = \explode(';', $format);
 
 		// Fetch the relevant section depending on whether number is positive, negative, or zero?
 		// Text not supported yet.
@@ -562,28 +562,28 @@ class PHPExcel_Style_NumberFormat extends PHPExcel_Style_Supervisor implements P
 		//   2 sections:  [POSITIVE/ZERO/TEXT] [NEGATIVE]
 		//   3 sections:  [POSITIVE/TEXT] [NEGATIVE] [ZERO]
 		//   4 sections:  [POSITIVE] [NEGATIVE] [ZERO] [TEXT]
-		switch (count($sections)) {
+		switch (\count($sections)) {
 			case 1:
 				$format = $sections[0];
 				break;
 
 			case 2:
 				$format = ($value >= 0) ? $sections[0] : $sections[1];
-				$value = abs($value); // Use the absolute value
+				$value = \abs($value); // Use the absolute value
 				break;
 
 			case 3:
 				$format = ($value > 0) ?
 					$sections[0] : ( ($value < 0) ?
 						$sections[1] : $sections[2]);
-				$value = abs($value); // Use the absolute value
+				$value = \abs($value); // Use the absolute value
 				break;
 
 			case 4:
 				$format = ($value > 0) ?
 					$sections[0] : ( ($value < 0) ?
 						$sections[1] : $sections[2]);
-				$value = abs($value); // Use the absolute value
+				$value = \abs($value); // Use the absolute value
 				break;
 
 			default:
@@ -597,33 +597,33 @@ class PHPExcel_Style_NumberFormat extends PHPExcel_Style_Supervisor implements P
 
 		// Strip color information
 		$color_regex = '/^\\[[a-zA-Z]+\\]/';
-		$format = preg_replace($color_regex, '', $format);
+		$format = \preg_replace($color_regex, '', $format);
 
 		// Let's begin inspecting the format and converting the value to a formatted string
-		if (preg_match('/^(\[\$[A-Z]*-[0-9A-F]*\])*[hmsdy]/i', $format)) { // datetime format
+		if (\preg_match('/^(\[\$[A-Z]*-[0-9A-F]*\])*[hmsdy]/i', $format)) { // datetime format
 			self::_formatAsDate($value, $format);
-		} else if (preg_match('/%$/', $format)) { // % number format
+		} else if (\preg_match('/%$/', $format)) { // % number format
 			self::_formatAsPercentage($value, $format);
 		} else {
 			if ($format === self::FORMAT_CURRENCY_EUR_SIMPLE) {
-				$value = 'EUR ' . sprintf('%1.2f', $value);
+				$value = 'EUR ' . \sprintf('%1.2f', $value);
 			} else {
 				// In Excel formats, "_" is used to add spacing, which we can't do in HTML
-				$format = preg_replace('/_./', '', $format);
+				$format = \preg_replace('/_./', '', $format);
 
 				// Some non-number characters are escaped with \, which we don't need
-				$format = preg_replace("/\\\\/", '', $format);
+				$format = \preg_replace("/\\\\/", '', $format);
 
 				// Some non-number strings are quoted, so we'll get rid of the quotes, likewise any positional * symbols
-				$format = str_replace(array('"','*'), '', $format);
+				$format = \str_replace(array('"','*'), '', $format);
 
 				// Find out if we need thousands separator
 				// This is indicated by a comma enclosed by a digit placeholder:
 				//		#,#   or   0,0
-				$useThousands = preg_match('/(#,#|0,0)/', $format);
+				$useThousands = \preg_match('/(#,#|0,0)/', $format);
 				if ($useThousands) {
-					$format = preg_replace('/0,0/', '00', $format);
-					$format = preg_replace('/#,#/', '##', $format);
+					$format = \preg_replace('/0,0/', '00', $format);
+					$format = \preg_replace('/#,#/', '##', $format);
 				}
 
 				// Scale thousands, millions,...
@@ -631,15 +631,15 @@ class PHPExcel_Style_NumberFormat extends PHPExcel_Style_Supervisor implements P
 				//		#,   or	0.0,,
 				$scale = 1; // same as no scale
 				$matches = array();
-				if (preg_match('/(#|0)(,+)/', $format, $matches)) {
-					$scale = pow(1000, strlen($matches[2]));
+				if (\preg_match('/(#|0)(,+)/', $format, $matches)) {
+					$scale = \pow(1000, \strlen($matches[2]));
 
 					// strip the commas
-					$format = preg_replace('/0,+/', '0', $format);
-					$format = preg_replace('/#,+/', '#', $format);
+					$format = \preg_replace('/0,+/', '0', $format);
+					$format = \preg_replace('/#,+/', '#', $format);
 				}
 
-				if (preg_match('/#?.*\?\/\?/', $format, $m)) {
+				if (\preg_match('/#?.*\?\/\?/', $format, $m)) {
 					//echo 'Format mask is fractional '.$format.' <br />';
 					if ($value != (int)$value) {
 						self::_formatAsFraction($value, $format);
@@ -652,55 +652,55 @@ class PHPExcel_Style_NumberFormat extends PHPExcel_Style_Supervisor implements P
 					$value = $value / $scale;
 
 					// Strip #
-					$format = preg_replace('/\\#/', '0', $format);
+					$format = \preg_replace('/\\#/', '0', $format);
 
 					$n = "/\[[^\]]+\]/";
-					$m = preg_replace($n, '', $format);
+					$m = \preg_replace($n, '', $format);
 					$number_regex = "/(0+)(\.?)(0*)/";
-					if (preg_match($number_regex, $m, $matches)) {
+					if (\preg_match($number_regex, $m, $matches)) {
 						$left = $matches[1];
 						$dec = $matches[2];
 						$right = $matches[3];
 
 						// minimun width of formatted number (including dot)
-						$minWidth = strlen($left) + strlen($dec) + strlen($right);
+						$minWidth = \strlen($left) + \strlen($dec) + \strlen($right);
 						if ($useThousands) {
-							$value = number_format(
+							$value = \number_format(
 										$value
-										, strlen($right)
-										, PHPExcel_Shared_String::getDecimalSeparator()
-										, PHPExcel_Shared_String::getThousandsSeparator()
+										, \strlen($right)
+										, \PhpOffice\PhpSpreadsheet\Shared\StringHelper::getDecimalSeparator()
+										, \PhpOffice\PhpSpreadsheet\Shared\StringHelper::getThousandsSeparator()
 									);
-							$value = preg_replace($number_regex, $value, $format);
+							$value = \preg_replace($number_regex, $value, $format);
 						} else {
-							if (preg_match('/[0#]E[+-]0/i', $format)) {
+							if (\preg_match('/[0#]E[+-]0/i', $format)) {
 								//	Scientific format
-								$value = sprintf('%5.2E', $value);
-							} elseif (preg_match('/0([^\d\.]+)0/', $format)) {
+								$value = \sprintf('%5.2E', $value);
+							} elseif (\preg_match('/0([^\d\.]+)0/', $format)) {
 								$value = self::_complexNumberFormatMask($value, $format);
 							} else {
-								$sprintf_pattern = "%0$minWidth." . strlen($right) . "f";
-								$value = sprintf($sprintf_pattern, $value);
-								$value = preg_replace($number_regex, $value, $format);
+								$sprintf_pattern = "%0$minWidth." . \strlen($right) . "f";
+								$value = \sprintf($sprintf_pattern, $value);
+								$value = \preg_replace($number_regex, $value, $format);
 							}
 						}
 					}
 				}
-				if (preg_match('/\[\$(.*)\]/u', $format, $m)) {
+				if (\preg_match('/\[\$(.*)\]/u', $format, $m)) {
 					//	Currency or Accounting
 					$currencyFormat = $m[0];
 					$currencyCode = $m[1];
-					list($currencyCode) = explode('-',$currencyCode);
+					list($currencyCode) = \explode('-',$currencyCode);
 					if ($currencyCode == '') {
-						$currencyCode = PHPExcel_Shared_String::getCurrencyCode();
+						$currencyCode = \PhpOffice\PhpSpreadsheet\Shared\StringHelper::getCurrencyCode();
 					}
-					$value = preg_replace('/\[\$([^\]]*)\]/u',$currencyCode,$value);
+					$value = \preg_replace('/\[\$([^\]]*)\]/u',$currencyCode,$value);
 				}
 			}
 		}
 
 		// Additional formatting provided by callback function
-		if ($callBack !== null) {
+		if ($callBack !== \null) {
 			list($writerInstance, $function) = $callBack;
 			$value = $writerInstance->$function($value, $formatColor);
 		}

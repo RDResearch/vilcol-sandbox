@@ -1,4 +1,6 @@
 <?php
+namespace PhpOffice\PhpSpreadsheet\Style;
+
 /**
  * PHPExcel
  *
@@ -24,8 +26,6 @@
  * @license	http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
  * @version	1.8.0, 2014-03-02
  */
-
-
 /**
  * PHPExcel_Style_Alignment
  *
@@ -33,7 +33,7 @@
  * @package	PHPExcel_Style
  * @copyright  Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Style_Alignment extends PHPExcel_Style_Supervisor implements PHPExcel_IComparable
+class Alignment extends \PhpOffice\PhpSpreadsheet\Style\Supervisor implements \PhpOffice\PhpSpreadsheet\IComparable
 {
 	/* Horizontal alignment styles */
 	const HORIZONTAL_GENERAL				= 'general';
@@ -57,14 +57,14 @@ class PHPExcel_Style_Alignment extends PHPExcel_Style_Supervisor implements PHPE
 	 *
 	 * @var string
 	 */
-	protected $_horizontal	= PHPExcel_Style_Alignment::HORIZONTAL_GENERAL;
+	protected $_horizontal	= \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_GENERAL;
 
 	/**
 	 * Vertical
 	 *
 	 * @var string
 	 */
-	protected $_vertical		= PHPExcel_Style_Alignment::VERTICAL_BOTTOM;
+	protected $_vertical		= \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_BOTTOM;
 
 	/**
 	 * Text rotation
@@ -78,14 +78,14 @@ class PHPExcel_Style_Alignment extends PHPExcel_Style_Supervisor implements PHPE
 	 *
 	 * @var boolean
 	 */
-	protected $_wrapText		= FALSE;
+	protected $_wrapText		= \FALSE;
 
 	/**
 	 * Shrink to fit
 	 *
 	 * @var boolean
 	 */
-	protected $_shrinkToFit	= FALSE;
+	protected $_shrinkToFit	= \FALSE;
 
 	/**
 	 * Indent - only possible with horizontal alignment left and right
@@ -104,25 +104,25 @@ class PHPExcel_Style_Alignment extends PHPExcel_Style_Supervisor implements PHPE
 	 *									Leave this value at default unless you understand exactly what
 	 *										its ramifications are
 	 */
-	public function __construct($isSupervisor = FALSE, $isConditional = FALSE)
+	public function __construct($isSupervisor = \FALSE, $isConditional = \FALSE)
 	{
 		// Supervisor?
 		parent::__construct($isSupervisor);
 
 		if ($isConditional) {
-			$this->_horizontal		= NULL;
-			$this->_vertical		= NULL;
-			$this->_textRotation	= NULL;
+			$this->_horizontal		= \NULL;
+			$this->_vertical		= \NULL;
+			$this->_textRotation	= \NULL;
 		}
 	}
 
 	/**
-	 * Get the shared style component for the currently active cell in currently active sheet.
-	 * Only used for style supervisor
-	 *
-	 * @return PHPExcel_Style_Alignment
-	 */
-	public function getSharedComponent()
+  * Get the shared style component for the currently active cell in currently active sheet.
+  * Only used for style supervisor
+  *
+  * @return \PhpOffice\PhpSpreadsheet\Style\Alignment
+  */
+ public function getSharedComponent()
 	{
 		return $this->_parent->getSharedComponent()->getAlignment();
 	}
@@ -139,28 +139,28 @@ class PHPExcel_Style_Alignment extends PHPExcel_Style_Supervisor implements PHPE
 	}
 
 	/**
-	 * Apply styles from array
-	 *
-	 * <code>
-	 * $objPHPExcel->getActiveSheet()->getStyle('B2')->getAlignment()->applyFromArray(
-	 *		array(
-	 *			'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-	 *			'vertical'   => PHPExcel_Style_Alignment::VERTICAL_CENTER,
-	 *			'rotation'   => 0,
-	 *			'wrap'			=> TRUE
-	 *		)
-	 * );
-	 * </code>
-	 *
-	 * @param	array	$pStyles	Array containing style information
-	 * @throws	PHPExcel_Exception
-	 * @return PHPExcel_Style_Alignment
-	 */
-	public function applyFromArray($pStyles = NULL) {
-		if (is_array($pStyles)) {
+  * Apply styles from array
+  *
+  * <code>
+  * $objPHPExcel->getActiveSheet()->getStyle('B2')->getAlignment()->applyFromArray(
+  *		array(
+  *			'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+  *			'vertical'   => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+  *			'rotation'   => 0,
+  *			'wrap'			=> TRUE
+  *		)
+  * );
+  * </code>
+  *
+  * @param	array	$pStyles	Array containing style information
+  * @throws \PhpOffice\PhpSpreadsheet\Exception
+  * @return \PhpOffice\PhpSpreadsheet\Style\Alignment
+  */
+ public function applyFromArray($pStyles = \NULL) {
+		if (\is_array($pStyles)) {
 			if ($this->_isSupervisor) {
 				$this->getActiveSheet()->getStyle($this->getSelectedCells())
-				    ->applyFromArray($this->getStyleArray($pStyles));
+				    ->applyFromArray($this->getStyleArray($pStyles), true);
 			} else {
 				if (isset($pStyles['horizontal'])) {
 					$this->setHorizontal($pStyles['horizontal']);
@@ -182,7 +182,7 @@ class PHPExcel_Style_Alignment extends PHPExcel_Style_Supervisor implements PHPE
 				}
 			}
 		} else {
-			throw new PHPExcel_Exception("Invalid style array passed.");
+			throw new \PhpOffice\PhpSpreadsheet\Exception("Invalid style array passed.");
 		}
 		return $this;
 	}
@@ -200,19 +200,19 @@ class PHPExcel_Style_Alignment extends PHPExcel_Style_Supervisor implements PHPE
 	}
 
 	/**
-	 * Set Horizontal
-	 *
-	 * @param string $pValue
-	 * @return PHPExcel_Style_Alignment
-	 */
-	public function setHorizontal($pValue = PHPExcel_Style_Alignment::HORIZONTAL_GENERAL) {
+  * Set Horizontal
+  *
+  * @param string $pValue
+  * @return \PhpOffice\PhpSpreadsheet\Style\Alignment
+  */
+ public function setHorizontal($pValue = \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_GENERAL) {
 		if ($pValue == '') {
-			$pValue = PHPExcel_Style_Alignment::HORIZONTAL_GENERAL;
+			$pValue = \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_GENERAL;
 		}
 
 		if ($this->_isSupervisor) {
 			$styleArray = $this->getStyleArray(array('horizontal' => $pValue));
-			$this->getActiveSheet()->getStyle($this->getSelectedCells())->applyFromArray($styleArray);
+			$this->getActiveSheet()->getStyle($this->getSelectedCells())->applyFromArray($styleArray, true);
 		}
 		else {
 			$this->_horizontal = $pValue;
@@ -233,19 +233,19 @@ class PHPExcel_Style_Alignment extends PHPExcel_Style_Supervisor implements PHPE
 	}
 
 	/**
-	 * Set Vertical
-	 *
-	 * @param string $pValue
-	 * @return PHPExcel_Style_Alignment
-	 */
-	public function setVertical($pValue = PHPExcel_Style_Alignment::VERTICAL_BOTTOM) {
+  * Set Vertical
+  *
+  * @param string $pValue
+  * @return \PhpOffice\PhpSpreadsheet\Style\Alignment
+  */
+ public function setVertical($pValue = \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_BOTTOM) {
 		if ($pValue == '') {
-			$pValue = PHPExcel_Style_Alignment::VERTICAL_BOTTOM;
+			$pValue = \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_BOTTOM;
 		}
 
 		if ($this->_isSupervisor) {
 			$styleArray = $this->getStyleArray(array('vertical' => $pValue));
-			$this->getActiveSheet()->getStyle($this->getSelectedCells())->applyFromArray($styleArray);
+			$this->getActiveSheet()->getStyle($this->getSelectedCells())->applyFromArray($styleArray, true);
 		} else {
 			$this->_vertical = $pValue;
 		}
@@ -265,13 +265,13 @@ class PHPExcel_Style_Alignment extends PHPExcel_Style_Supervisor implements PHPE
 	}
 
 	/**
-	 * Set TextRotation
-	 *
-	 * @param int $pValue
-	 * @throws PHPExcel_Exception
-	 * @return PHPExcel_Style_Alignment
-	 */
-	public function setTextRotation($pValue = 0) {
+  * Set TextRotation
+  *
+  * @param int $pValue
+  * @throws \PhpOffice\PhpSpreadsheet\Exception
+  * @return \PhpOffice\PhpSpreadsheet\Style\Alignment
+  */
+ public function setTextRotation($pValue = 0) {
 		// Excel2007 value 255 => PHPExcel value -165
 		if ($pValue == 255) {
 			$pValue = -165;
@@ -281,12 +281,12 @@ class PHPExcel_Style_Alignment extends PHPExcel_Style_Supervisor implements PHPE
 		if ( ($pValue >= -90 && $pValue <= 90) || $pValue == -165 ) {
 			if ($this->_isSupervisor) {
 				$styleArray = $this->getStyleArray(array('rotation' => $pValue));
-				$this->getActiveSheet()->getStyle($this->getSelectedCells())->applyFromArray($styleArray);
+				$this->getActiveSheet()->getStyle($this->getSelectedCells())->applyFromArray($styleArray, true);
 			} else {
 				$this->_textRotation = $pValue;
 			}
 		} else {
-			throw new PHPExcel_Exception("Text rotation should be a value between -90 and 90.");
+			throw new \PhpOffice\PhpSpreadsheet\Exception("Text rotation should be a value between -90 and 90.");
 		}
 
 		return $this;
@@ -305,18 +305,18 @@ class PHPExcel_Style_Alignment extends PHPExcel_Style_Supervisor implements PHPE
 	}
 
 	/**
-	 * Set Wrap Text
-	 *
-	 * @param boolean $pValue
-	 * @return PHPExcel_Style_Alignment
-	 */
-	public function setWrapText($pValue = FALSE) {
+  * Set Wrap Text
+  *
+  * @param boolean $pValue
+  * @return \PhpOffice\PhpSpreadsheet\Style\Alignment
+  */
+ public function setWrapText($pValue = \FALSE) {
 		if ($pValue == '') {
-			$pValue = FALSE;
+			$pValue = \FALSE;
 		}
 		if ($this->_isSupervisor) {
 			$styleArray = $this->getStyleArray(array('wrap' => $pValue));
-			$this->getActiveSheet()->getStyle($this->getSelectedCells())->applyFromArray($styleArray);
+			$this->getActiveSheet()->getStyle($this->getSelectedCells())->applyFromArray($styleArray, true);
 		} else {
 			$this->_wrapText = $pValue;
 		}
@@ -336,18 +336,18 @@ class PHPExcel_Style_Alignment extends PHPExcel_Style_Supervisor implements PHPE
 	}
 
 	/**
-	 * Set Shrink to fit
-	 *
-	 * @param boolean $pValue
-	 * @return PHPExcel_Style_Alignment
-	 */
-	public function setShrinkToFit($pValue = FALSE) {
+  * Set Shrink to fit
+  *
+  * @param boolean $pValue
+  * @return \PhpOffice\PhpSpreadsheet\Style\Alignment
+  */
+ public function setShrinkToFit($pValue = \FALSE) {
 		if ($pValue == '') {
-			$pValue = FALSE;
+			$pValue = \FALSE;
 		}
 		if ($this->_isSupervisor) {
 			$styleArray = $this->getStyleArray(array('shrinkToFit' => $pValue));
-			$this->getActiveSheet()->getStyle($this->getSelectedCells())->applyFromArray($styleArray);
+			$this->getActiveSheet()->getStyle($this->getSelectedCells())->applyFromArray($styleArray, true);
 		} else {
 			$this->_shrinkToFit = $pValue;
 		}
@@ -367,12 +367,12 @@ class PHPExcel_Style_Alignment extends PHPExcel_Style_Supervisor implements PHPE
 	}
 
 	/**
-	 * Set indent
-	 *
-	 * @param int $pValue
-	 * @return PHPExcel_Style_Alignment
-	 */
-	public function setIndent($pValue = 0) {
+  * Set indent
+  *
+  * @param int $pValue
+  * @return \PhpOffice\PhpSpreadsheet\Style\Alignment
+  */
+ public function setIndent($pValue = 0) {
 		if ($pValue > 0) {
 			if ($this->getHorizontal() != self::HORIZONTAL_GENERAL &&
 				$this->getHorizontal() != self::HORIZONTAL_LEFT &&
@@ -382,7 +382,7 @@ class PHPExcel_Style_Alignment extends PHPExcel_Style_Supervisor implements PHPE
 		}
 		if ($this->_isSupervisor) {
 			$styleArray = $this->getStyleArray(array('indent' => $pValue));
-			$this->getActiveSheet()->getStyle($this->getSelectedCells())->applyFromArray($styleArray);
+			$this->getActiveSheet()->getStyle($this->getSelectedCells())->applyFromArray($styleArray, true);
 		} else {
 			$this->_indent = $pValue;
 		}
@@ -398,7 +398,7 @@ class PHPExcel_Style_Alignment extends PHPExcel_Style_Supervisor implements PHPE
 		if ($this->_isSupervisor) {
 			return $this->getSharedComponent()->getHashCode();
 		}
-		return md5(
+		return \md5(
 			  $this->_horizontal
 			. $this->_vertical
 			. $this->_textRotation

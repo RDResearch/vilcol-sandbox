@@ -19,8 +19,8 @@ use Dompdf\FrameDecorator\Block as BlockFrameDecorator;
 class TableCell extends BlockFrameDecorator
 {
 
-    protected $_resolved_borders;
-    protected $_content_height;
+    protected $_resolved_borders = [];
+    protected $_content_height = 0;
 
     //........................................................................
 
@@ -32,8 +32,6 @@ class TableCell extends BlockFrameDecorator
     function __construct(Frame $frame, Dompdf $dompdf)
     {
         parent::__construct($frame, $dompdf);
-        $this->_resolved_borders = [];
-        $this->_content_height = 0;
     }
 
     //........................................................................

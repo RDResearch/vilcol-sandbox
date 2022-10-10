@@ -1,4 +1,6 @@
 <?php
+namespace PhpOffice\PhpSpreadsheet\Cell;
+
 /**
  * PHPExcel
  *
@@ -24,8 +26,6 @@
  * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt    LGPL
  * @version    1.8.0, 2014-03-02
  */
-
-
 /**
  * PHPExcel_Cell_IValueBinder
  *
@@ -33,14 +33,14 @@
  * @package    PHPExcel_Cell
  * @copyright  Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-interface PHPExcel_Cell_IValueBinder
+interface IValueBinder
 {
     /**
      * Bind value to a cell
      *
-     * @param  PHPExcel_Cell $cell    Cell to bind value to
+     * @param \PhpOffice\PhpSpreadsheet\Cell\Cell $cell Cell to bind value to
      * @param  mixed $value           Value to bind in cell
      * @return boolean
      */
-    public function bindValue(PHPExcel_Cell $cell, $value = NULL);
+    public function bindValue(\PhpOffice\PhpSpreadsheet\Cell\Cell $cell, $value = \NULL);
 }

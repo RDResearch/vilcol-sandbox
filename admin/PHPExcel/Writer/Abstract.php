@@ -1,4 +1,6 @@
 <?php
+namespace PhpOffice\PhpSpreadsheet\Writer;
+
 /**
  * PHPExcel
  *
@@ -24,8 +26,6 @@
  * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
  * @version    1.8.0, 2014-03-02
  */
-
-
 /**
  * PHPExcel_Writer_Abstract
  *
@@ -33,7 +33,7 @@
  * @package    PHPExcel_Writer
  * @copyright  Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-abstract class PHPExcel_Writer_Abstract implements PHPExcel_Writer_IWriter
+abstract class BaseWriter implements \PhpOffice\PhpSpreadsheet\Writer\IWriter
 {
 	/**
 	 * Write charts that are defined in the workbook?
@@ -41,7 +41,7 @@ abstract class PHPExcel_Writer_Abstract implements PHPExcel_Writer_IWriter
 	 *
 	 * @var	boolean
 	 */
-	protected $_includeCharts = FALSE;
+	protected $_includeCharts = \FALSE;
 
 	/**
 	 * Pre-calculate formulas
@@ -50,14 +50,14 @@ abstract class PHPExcel_Writer_Abstract implements PHPExcel_Writer_IWriter
 	 *
 	 * @var boolean
 	 */
-	protected $_preCalculateFormulas = TRUE;
+	protected $_preCalculateFormulas = \TRUE;
 
 	/**
 	 * Use disk caching where possible?
 	 *
 	 * @var boolean
 	 */
-	protected $_useDiskCaching = FALSE;
+	protected $_useDiskCaching = \FALSE;
 
 	/**
 	 * Disk caching directory
@@ -78,14 +78,14 @@ abstract class PHPExcel_Writer_Abstract implements PHPExcel_Writer_IWriter
 	}
 
 	/**
-	 * Set write charts in workbook
-	 *		Set to true, to advise the Writer to include any charts that exist in the PHPExcel object.
-	 *		Set to false (the default) to ignore charts.
-	 *
-	 * @param	boolean	$pValue
-	 * @return	PHPExcel_Writer_IWriter
-	 */
-	public function setIncludeCharts($pValue = FALSE) {
+  * Set write charts in workbook
+  *		Set to true, to advise the Writer to include any charts that exist in the PHPExcel object.
+  *		Set to false (the default) to ignore charts.
+  *
+  * @param	boolean	$pValue
+  * @return \PhpOffice\PhpSpreadsheet\Writer\IWriter
+  */
+ public function setIncludeCharts($pValue = \FALSE) {
 		$this->_includeCharts = (boolean) $pValue;
 		return $this;
 	}
@@ -106,13 +106,13 @@ abstract class PHPExcel_Writer_Abstract implements PHPExcel_Writer_IWriter
 
     /**
      * Set Pre-Calculate Formulas
-	 *		Set to true (the default) to advise the Writer to calculate all formulae on save
-	 *		Set to false to prevent precalculation of formulae on save.
+     *		Set to true (the default) to advise the Writer to calculate all formulae on save
+     *		Set to false to prevent precalculation of formulae on save.
      *
      * @param boolean $pValue	Pre-Calculate Formulas?
-	 * @return	PHPExcel_Writer_IWriter
+     * @return \PhpOffice\PhpSpreadsheet\Writer\IWriter
      */
-    public function setPreCalculateFormulas($pValue = TRUE) {
+    public function setPreCalculateFormulas($pValue = \TRUE) {
     	$this->_preCalculateFormulas = (boolean) $pValue;
 		return $this;
     }
@@ -127,21 +127,21 @@ abstract class PHPExcel_Writer_Abstract implements PHPExcel_Writer_IWriter
 	}
 
 	/**
-	 * Set use disk caching where possible?
-	 *
-	 * @param 	boolean 	$pValue
-	 * @param	string		$pDirectory		Disk caching directory
-	 * @throws	PHPExcel_Writer_Exception	when directory does not exist
-	 * @return PHPExcel_Writer_Excel2007
-	 */
-	public function setUseDiskCaching($pValue = FALSE, $pDirectory = NULL) {
+  * Set use disk caching where possible?
+  *
+  * @param 	boolean 	$pValue
+  * @param	string		$pDirectory		Disk caching directory
+  * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception when directory does not exist
+  * @return \PhpOffice\PhpSpreadsheet\Writer\Xlsx
+  */
+ public function setUseDiskCaching($pValue = \FALSE, $pDirectory = \NULL) {
 		$this->_useDiskCaching = $pValue;
 
-		if ($pDirectory !== NULL) {
-    		if (is_dir($pDirectory)) {
+		if ($pDirectory !== \NULL) {
+    		if (\is_dir($pDirectory)) {
     			$this->_diskCachingDirectory = $pDirectory;
     		} else {
-    			throw new PHPExcel_Writer_Exception("Directory does not exist: $pDirectory");
+    			throw new \PhpOffice\PhpSpreadsheet\Writer\Exception("Directory does not exist: $pDirectory");
     		}
 		}
 		return $this;

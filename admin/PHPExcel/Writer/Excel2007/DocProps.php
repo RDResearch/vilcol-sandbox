@@ -1,4 +1,6 @@
 <?php
+namespace PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 /**
  * PHPExcel
  *
@@ -24,8 +26,6 @@
  * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
  * @version    1.8.0, 2014-03-02
  */
-
-
 /**
  * PHPExcel_Writer_Excel2007_DocProps
  *
@@ -33,23 +33,23 @@
  * @package    PHPExcel_Writer_Excel2007
  * @copyright  Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Writer_Excel2007_DocProps extends PHPExcel_Writer_Excel2007_WriterPart
+class DocProps extends \PhpOffice\PhpSpreadsheet\Writer\Xlsx\WriterPart
 {
 /**
-	 * Write docProps/app.xml to XML format
-	 *
-	 * @param 	PHPExcel	$pPHPExcel
-	 * @return 	string 		XML Output
-	 * @throws 	PHPExcel_Writer_Exception
-	 */
-	public function writeDocPropsApp(PHPExcel $pPHPExcel = null)
+  * Write docProps/app.xml to XML format
+  *
+  * @param \PhpOffice\PhpSpreadsheet\Spreadsheet $pPHPExcel
+  * @return 	string 		XML Output
+  * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+  */
+ public function writeDocPropsApp(\PhpOffice\PhpSpreadsheet\Spreadsheet $pPHPExcel = \null)
 	{
 		// Create XML writer
-		$objWriter = null;
+		$objWriter = \null;
 		if ($this->getParentWriter()->getUseDiskCaching()) {
-			$objWriter = new PHPExcel_Shared_XMLWriter(PHPExcel_Shared_XMLWriter::STORAGE_DISK, $this->getParentWriter()->getDiskCachingDirectory());
+			$objWriter = new \PhpOffice\PhpSpreadsheet\Shared\XMLWriter(\PhpOffice\PhpSpreadsheet\Shared\XMLWriter::STORAGE_DISK, $this->getParentWriter()->getDiskCachingDirectory());
 		} else {
-			$objWriter = new PHPExcel_Shared_XMLWriter(PHPExcel_Shared_XMLWriter::STORAGE_MEMORY);
+			$objWriter = new \PhpOffice\PhpSpreadsheet\Shared\XMLWriter(\PhpOffice\PhpSpreadsheet\Shared\XMLWriter::STORAGE_MEMORY);
 		}
 
 		// XML header
@@ -133,20 +133,20 @@ class PHPExcel_Writer_Excel2007_DocProps extends PHPExcel_Writer_Excel2007_Write
 	}
 
 	/**
-	 * Write docProps/core.xml to XML format
-	 *
-	 * @param 	PHPExcel	$pPHPExcel
-	 * @return 	string 		XML Output
-	 * @throws 	PHPExcel_Writer_Exception
-	 */
-	public function writeDocPropsCore(PHPExcel $pPHPExcel = null)
+  * Write docProps/core.xml to XML format
+  *
+  * @param \PhpOffice\PhpSpreadsheet\Spreadsheet $pPHPExcel
+  * @return 	string 		XML Output
+  * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+  */
+ public function writeDocPropsCore(\PhpOffice\PhpSpreadsheet\Spreadsheet $pPHPExcel = \null)
 	{
 		// Create XML writer
-		$objWriter = null;
+		$objWriter = \null;
 		if ($this->getParentWriter()->getUseDiskCaching()) {
-			$objWriter = new PHPExcel_Shared_XMLWriter(PHPExcel_Shared_XMLWriter::STORAGE_DISK, $this->getParentWriter()->getDiskCachingDirectory());
+			$objWriter = new \PhpOffice\PhpSpreadsheet\Shared\XMLWriter(\PhpOffice\PhpSpreadsheet\Shared\XMLWriter::STORAGE_DISK, $this->getParentWriter()->getDiskCachingDirectory());
 		} else {
-			$objWriter = new PHPExcel_Shared_XMLWriter(PHPExcel_Shared_XMLWriter::STORAGE_MEMORY);
+			$objWriter = new \PhpOffice\PhpSpreadsheet\Shared\XMLWriter(\PhpOffice\PhpSpreadsheet\Shared\XMLWriter::STORAGE_MEMORY);
 		}
 
 		// XML header
@@ -169,13 +169,13 @@ class PHPExcel_Writer_Excel2007_DocProps extends PHPExcel_Writer_Excel2007_Write
 			// dcterms:created
 			$objWriter->startElement('dcterms:created');
 				$objWriter->writeAttribute('xsi:type', 'dcterms:W3CDTF');
-				$objWriter->writeRawData(date(DATE_W3C, 	$pPHPExcel->getProperties()->getCreated()));
+				$objWriter->writeRawData(\date(\DATE_W3C, 	$pPHPExcel->getProperties()->getCreated()));
 			$objWriter->endElement();
 
 			// dcterms:modified
 			$objWriter->startElement('dcterms:modified');
 				$objWriter->writeAttribute('xsi:type', 'dcterms:W3CDTF');
-				$objWriter->writeRawData(date(DATE_W3C, 	$pPHPExcel->getProperties()->getModified()));
+				$objWriter->writeRawData(\date(\DATE_W3C, 	$pPHPExcel->getProperties()->getModified()));
 			$objWriter->endElement();
 
 			// dc:title
@@ -200,13 +200,13 @@ class PHPExcel_Writer_Excel2007_DocProps extends PHPExcel_Writer_Excel2007_Write
 	}
 
 	/**
-	 * Write docProps/custom.xml to XML format
-	 *
-	 * @param 	PHPExcel	$pPHPExcel
-	 * @return 	string 		XML Output
-	 * @throws 	PHPExcel_Writer_Exception
-	 */
-	public function writeDocPropsCustom(PHPExcel $pPHPExcel = null)
+  * Write docProps/custom.xml to XML format
+  *
+  * @param \PhpOffice\PhpSpreadsheet\Spreadsheet $pPHPExcel
+  * @return 	string 		XML Output
+  * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+  */
+ public function writeDocPropsCustom(\PhpOffice\PhpSpreadsheet\Spreadsheet $pPHPExcel = \null)
 	{
 		$customPropertyList = $pPHPExcel->getProperties()->getCustomProperties();
 		if (empty($customPropertyList)) {
@@ -214,11 +214,11 @@ class PHPExcel_Writer_Excel2007_DocProps extends PHPExcel_Writer_Excel2007_Write
 		}
 
 		// Create XML writer
-		$objWriter = null;
+		$objWriter = \null;
 		if ($this->getParentWriter()->getUseDiskCaching()) {
-			$objWriter = new PHPExcel_Shared_XMLWriter(PHPExcel_Shared_XMLWriter::STORAGE_DISK, $this->getParentWriter()->getDiskCachingDirectory());
+			$objWriter = new \PhpOffice\PhpSpreadsheet\Shared\XMLWriter(\PhpOffice\PhpSpreadsheet\Shared\XMLWriter::STORAGE_DISK, $this->getParentWriter()->getDiskCachingDirectory());
 		} else {
-			$objWriter = new PHPExcel_Shared_XMLWriter(PHPExcel_Shared_XMLWriter::STORAGE_MEMORY);
+			$objWriter = new \PhpOffice\PhpSpreadsheet\Shared\XMLWriter(\PhpOffice\PhpSpreadsheet\Shared\XMLWriter::STORAGE_MEMORY);
 		}
 
 		// XML header
@@ -251,7 +251,7 @@ class PHPExcel_Writer_Excel2007_DocProps extends PHPExcel_Writer_Excel2007_Write
 							break;
 						case 'd' :
 							$objWriter->startElement('vt:filetime');
-								$objWriter->writeRawData(date(DATE_W3C, $propertyValue));
+								$objWriter->writeRawData(\date(\DATE_W3C, $propertyValue));
 							$objWriter->endElement();
 							break;
 						default :

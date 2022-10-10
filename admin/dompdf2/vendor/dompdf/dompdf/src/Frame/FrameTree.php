@@ -62,7 +62,7 @@ class FrameTree implements IteratorAggregate
      *
      * @var Frame
      */
-    protected $_root;
+    protected $_root = null;
 
     /**
      * Subtrees of absolutely positioned elements
@@ -76,7 +76,7 @@ class FrameTree implements IteratorAggregate
      *
      * @var array
      */
-    protected $_registry;
+    protected $_registry = [];
 
     /**
      * Class constructor
@@ -86,8 +86,6 @@ class FrameTree implements IteratorAggregate
     public function __construct(DomDocument $dom)
     {
         $this->_dom = $dom;
-        $this->_root = null;
-        $this->_registry = [];
     }
 
     /**

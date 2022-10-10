@@ -1,4 +1,6 @@
 <?php
+namespace PhpOffice\PhpSpreadsheet\Style;
+
 /**
  * PHPExcel
  *
@@ -24,8 +26,6 @@
  * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
  * @version    1.8.0, 2014-03-02
  */
-
-
 /**
  * PHPExcel_Style_Conditional
  *
@@ -33,7 +33,7 @@
  * @package    PHPExcel_Style
  * @copyright  Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Style_Conditional implements PHPExcel_IComparable
+class Conditional implements \PhpOffice\PhpSpreadsheet\IComparable
 {
 	/* Condition types */
 	const CONDITION_NONE					= 'none';
@@ -60,21 +60,21 @@ class PHPExcel_Style_Conditional implements PHPExcel_IComparable
 	 *
 	 * @var int
 	 */
-	private $_conditionType;
+	private $_conditionType = \PhpOffice\PhpSpreadsheet\Style\Conditional::CONDITION_NONE;
 
 	/**
 	 * Operator type
 	 *
 	 * @var int
 	 */
-	private $_operatorType;
+	private $_operatorType = \PhpOffice\PhpSpreadsheet\Style\Conditional::OPERATOR_NONE;
 
 	/**
 	 * Text
 	 *
 	 * @var string
 	 */
-	private $_text;
+	private $_text = \null;
 
 	/**
 	 * Condition
@@ -84,23 +84,18 @@ class PHPExcel_Style_Conditional implements PHPExcel_IComparable
 	private $_condition = array();
 
 	/**
-	 * Style
-	 *
-	 * @var PHPExcel_Style
-	 */
-	private $_style;
+  * Style
+  *
+  * @var \PhpOffice\PhpSpreadsheet\Style\Style
+  */
+ private $_style;
 
     /**
      * Create a new PHPExcel_Style_Conditional
      */
     public function __construct()
     {
-    	// Initialise values
-    	$this->_conditionType		= PHPExcel_Style_Conditional::CONDITION_NONE;
-    	$this->_operatorType		= PHPExcel_Style_Conditional::OPERATOR_NONE;
-    	$this->_text    			= null;
-    	$this->_condition			= array();
-    	$this->_style				= new PHPExcel_Style(FALSE, TRUE);
+    	$this->_style				= new \PhpOffice\PhpSpreadsheet\Style\Style(\FALSE, \TRUE);
     }
 
     /**
@@ -116,9 +111,9 @@ class PHPExcel_Style_Conditional implements PHPExcel_IComparable
      * Set Condition type
      *
      * @param string $pValue	PHPExcel_Style_Conditional condition type
-     * @return PHPExcel_Style_Conditional
+     * @return \PhpOffice\PhpSpreadsheet\Style\Conditional
      */
-    public function setConditionType($pValue = PHPExcel_Style_Conditional::CONDITION_NONE) {
+    public function setConditionType($pValue = \PhpOffice\PhpSpreadsheet\Style\Conditional::CONDITION_NONE) {
     	$this->_conditionType = $pValue;
     	return $this;
     }
@@ -136,9 +131,9 @@ class PHPExcel_Style_Conditional implements PHPExcel_IComparable
      * Set Operator type
      *
      * @param string $pValue	PHPExcel_Style_Conditional operator type
-     * @return PHPExcel_Style_Conditional
+     * @return \PhpOffice\PhpSpreadsheet\Style\Conditional
      */
-    public function setOperatorType($pValue = PHPExcel_Style_Conditional::OPERATOR_NONE) {
+    public function setOperatorType($pValue = \PhpOffice\PhpSpreadsheet\Style\Conditional::OPERATOR_NONE) {
     	$this->_operatorType = $pValue;
     	return $this;
     }
@@ -156,9 +151,9 @@ class PHPExcel_Style_Conditional implements PHPExcel_IComparable
      * Set text
      *
      * @param string $value
-     * @return PHPExcel_Style_Conditional
+     * @return \PhpOffice\PhpSpreadsheet\Style\Conditional
      */
-    public function setText($value = null) {
+    public function setText($value = \null) {
            $this->_text = $value;
            return $this;
     }
@@ -182,10 +177,10 @@ class PHPExcel_Style_Conditional implements PHPExcel_IComparable
      *
      * @deprecated Deprecated, use setConditions instead
      * @param string $pValue	Condition
-     * @return PHPExcel_Style_Conditional
+     * @return \PhpOffice\PhpSpreadsheet\Style\Conditional
      */
     public function setCondition($pValue = '') {
-    	if (!is_array($pValue))
+    	if (!\is_array($pValue))
     		$pValue = array($pValue);
 
     	return $this->setConditions($pValue);
@@ -204,10 +199,10 @@ class PHPExcel_Style_Conditional implements PHPExcel_IComparable
      * Set Conditions
      *
      * @param string[] $pValue	Condition
-     * @return PHPExcel_Style_Conditional
+     * @return \PhpOffice\PhpSpreadsheet\Style\Conditional
      */
     public function setConditions($pValue) {
-    	if (!is_array($pValue))
+    	if (!\is_array($pValue))
     		$pValue = array($pValue);
 
     	$this->_condition = $pValue;
@@ -218,7 +213,7 @@ class PHPExcel_Style_Conditional implements PHPExcel_IComparable
      * Add Condition
      *
      * @param string $pValue	Condition
-     * @return PHPExcel_Style_Conditional
+     * @return \PhpOffice\PhpSpreadsheet\Style\Conditional
      */
     public function addCondition($pValue = '') {
     	$this->_condition[] = $pValue;
@@ -228,7 +223,7 @@ class PHPExcel_Style_Conditional implements PHPExcel_IComparable
     /**
      * Get Style
      *
-     * @return PHPExcel_Style
+     * @return \PhpOffice\PhpSpreadsheet\Style\Style
      */
     public function getStyle() {
     	return $this->_style;
@@ -237,11 +232,11 @@ class PHPExcel_Style_Conditional implements PHPExcel_IComparable
     /**
      * Set Style
      *
-     * @param 	PHPExcel_Style $pValue
-     * @throws 	PHPExcel_Exception
-     * @return PHPExcel_Style_Conditional
+     * @param \PhpOffice\PhpSpreadsheet\Style\Style $pValue
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @return \PhpOffice\PhpSpreadsheet\Style\Conditional
      */
-    public function setStyle(PHPExcel_Style $pValue = null) {
+    public function setStyle(\PhpOffice\PhpSpreadsheet\Style\Style $pValue = \null) {
    		$this->_style = $pValue;
    		return $this;
     }
@@ -252,10 +247,10 @@ class PHPExcel_Style_Conditional implements PHPExcel_IComparable
 	 * @return string	Hash code
 	 */
 	public function getHashCode() {
-    	return md5(
+    	return \md5(
     		  $this->_conditionType
     		. $this->_operatorType
-    		. implode(';', $this->_condition)
+    		. \implode(';', $this->_condition)
     		. $this->_style->getHashCode()
     		. __CLASS__
     	);
@@ -265,9 +260,9 @@ class PHPExcel_Style_Conditional implements PHPExcel_IComparable
 	 * Implement PHP __clone to create a deep clone, not just a shallow copy.
 	 */
 	public function __clone() {
-		$vars = get_object_vars($this);
+		$vars = \get_object_vars($this);
 		foreach ($vars as $key => $value) {
-			if (is_object($value)) {
+			if (\is_object($value)) {
 				$this->$key = clone $value;
 			} else {
 				$this->$key = $value;

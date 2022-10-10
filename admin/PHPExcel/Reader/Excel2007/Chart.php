@@ -1,4 +1,6 @@
 <?php
+namespace PhpOffice\PhpSpreadsheet\Reader\Xlsx;
+
 /**
  * PHPExcel
  *
@@ -24,7 +26,6 @@
  * @license		http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
  * @version		1.8.0, 2014-03-02
  */
-
 /**
  * PHPExcel_Reader_Excel2007_Chart
  *
@@ -32,7 +33,7 @@
  * @package		PHPExcel_Reader_Excel2007
  * @copyright	Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Reader_Excel2007_Chart
+class Chart
 {
 	private static function _getAttribute($component, $name, $format) {
 		$attributes = $component->attributes();
@@ -42,30 +43,30 @@ class PHPExcel_Reader_Excel2007_Chart
 			} elseif ($format == 'integer') {
 				return (integer) $attributes[$name];
 			} elseif ($format == 'boolean') {
-				return (boolean) ($attributes[$name] === '0' || $attributes[$name] !== 'true') ? false : true;
+				return (boolean) ($attributes[$name] === '0' || $attributes[$name] !== 'true') ? \false : \true;
 			} else {
 				return (float) $attributes[$name];
 			}
 		}
-		return null;
+		return \null;
 	}	//	function _getAttribute()
 
 
-	private static function _readColor($color,$background=false) {
+	private static function _readColor($color,$background=\false) {
 		if (isset($color["rgb"])) {
 			return (string)$color["rgb"];
 		} else if (isset($color["indexed"])) {
-			return PHPExcel_Style_Color::indexedColor($color["indexed"]-7,$background)->getARGB();
+			return \PhpOffice\PhpSpreadsheet\Style\Color::indexedColor($color["indexed"]-7,$background)->getARGB();
 		}
 	}
 
 
 	public static function readChart($chartElements,$chartName) {
-		$namespacesChartMeta = $chartElements->getNamespaces(true);
+		$namespacesChartMeta = $chartElements->getNamespaces(\true);
 		$chartElementsC = $chartElements->children($namespacesChartMeta['c']);
 
-		$XaxisLabel = $YaxisLabel = $legend = $title = NULL;
-		$dispBlanksAs = $plotVisOnly = NULL;
+		$XaxisLabel = $YaxisLabel = $legend = $title = \NULL;
+		$dispBlanksAs = $plotVisOnly = \NULL;
 
 		foreach($chartElementsC as $chartElementKey => $chartElement) {
 			switch ($chartElementKey) {
@@ -74,12 +75,12 @@ class PHPExcel_Reader_Excel2007_Chart
 						$chartDetailsC = $chartDetails->children($namespacesChartMeta['c']);
 						switch ($chartDetailsKey) {
 							case "plotArea":
-									$plotAreaLayout = $XaxisLable = $YaxisLable = null;
+									$plotAreaLayout = $XaxisLable = $YaxisLable = \null;
 									$plotSeries = $plotAttributes = array();
 									foreach($chartDetails as $chartDetailKey => $chartDetail) {
 										switch ($chartDetailKey) {
 											case "layout":
-												$plotAreaLayout = self::_chartLayoutDetails($chartDetail,$namespacesChartMeta,'plotArea');
+												$plotAreaLayout = self::_chartLayoutDetails($chartDetail,$namespacesChartMeta);
 												break;
 											case "catAx":
 												if (isset($chartDetail->title)) {
@@ -158,10 +159,10 @@ class PHPExcel_Reader_Excel2007_Chart
 												break;
 										}
 									}
-									if ($plotAreaLayout == NULL) {
-										$plotAreaLayout = new PHPExcel_Chart_Layout();
+									if ($plotAreaLayout == \NULL) {
+										$plotAreaLayout = new \PhpOffice\PhpSpreadsheet\Chart\Layout();
 									}
-									$plotArea = new PHPExcel_Chart_PlotArea($plotAreaLayout,$plotSeries);
+									$plotArea = new \PhpOffice\PhpSpreadsheet\Chart\PlotArea($plotAreaLayout,$plotSeries);
 									self::_setChartAttributes($plotAreaLayout,$plotAttributes);
 									break;
 							case "plotVisOnly":
@@ -175,8 +176,8 @@ class PHPExcel_Reader_Excel2007_Chart
 									break;
 							case "legend":
 									$legendPos = 'r';
-									$legendLayout = null;
-									$legendOverlay = false;
+									$legendLayout = \null;
+									$legendOverlay = \false;
 									foreach($chartDetails as $chartDetailKey => $chartDetail) {
 										switch ($chartDetailKey) {
 											case "legendPos":
@@ -186,17 +187,17 @@ class PHPExcel_Reader_Excel2007_Chart
 												$legendOverlay = self::_getAttribute($chartDetail, 'val', 'boolean');
 												break;
 											case "layout":
-												$legendLayout = self::_chartLayoutDetails($chartDetail,$namespacesChartMeta,'legend');
+												$legendLayout = self::_chartLayoutDetails($chartDetail,$namespacesChartMeta);
 												break;
 										}
 									}
-									$legend = new PHPExcel_Chart_Legend($legendPos, $legendLayout, $legendOverlay);
+									$legend = new \PhpOffice\PhpSpreadsheet\Chart\Legend($legendPos, $legendLayout, $legendOverlay);
 									break;
 						}
 					}
 			}
 		}
-		$chart = new PHPExcel_Chart($chartName,$title,$legend,$plotArea,$plotVisOnly,$dispBlanksAs,$XaxisLabel,$YaxisLabel);
+		$chart = new \PhpOffice\PhpSpreadsheet\Chart\Chart($chartName,$title,$legend,$plotArea,$plotVisOnly,$dispBlanksAs,$XaxisLabel,$YaxisLabel);
 
 		return $chart;
 	}	//	function readChart()
@@ -204,7 +205,7 @@ class PHPExcel_Reader_Excel2007_Chart
 
 	private static function _chartTitle($titleDetails,$namespacesChartMeta,$type) {
 		$caption = array();
-		$titleLayout = null;
+		$titleLayout = \null;
 		foreach($titleDetails as $titleDetailKey => $chartDetail) {
 			switch ($titleDetailKey) {
 				case "tx":
@@ -223,30 +224,30 @@ class PHPExcel_Reader_Excel2007_Chart
 			}
 		}
 
-		return new PHPExcel_Chart_Title($caption, $titleLayout);
+		return new \PhpOffice\PhpSpreadsheet\Chart\Title($caption, $titleLayout);
 	}	//	function _chartTitle()
 
 
 	private static function _chartLayoutDetails($chartDetail,$namespacesChartMeta) {
 		if (!isset($chartDetail->manualLayout)) {
-			return null;
+			return \null;
 		}
 		$details = $chartDetail->manualLayout->children($namespacesChartMeta['c']);
-		if (is_null($details)) {
-			return null;
+		if (\is_null($details)) {
+			return \null;
 		}
 		$layout = array();
 		foreach($details as $detailKey => $detail) {
 //			echo $detailKey,' => ',self::_getAttribute($detail, 'val', 'string'),PHP_EOL;
 			$layout[$detailKey] = self::_getAttribute($detail, 'val', 'string');
 		}
-		return new PHPExcel_Chart_Layout($layout);
+		return new \PhpOffice\PhpSpreadsheet\Chart\Layout($layout);
 	}	//	function _chartLayoutDetails()
 
 
 	private static function _chartDataSeries($chartDetail,$namespacesChartMeta,$plotType) {
-		$multiSeriesType = NULL;
-		$smoothLine = false;
+		$multiSeriesType = \NULL;
+		$smoothLine = \false;
 		$seriesLabel = $seriesCategory = $seriesValues = $plotOrder = array();
 
 		$seriesDetailSet = $chartDetail->children($namespacesChartMeta['c']);
@@ -256,7 +257,7 @@ class PHPExcel_Reader_Excel2007_Chart
 					$multiSeriesType = self::_getAttribute($chartDetail->grouping, 'val', 'string');
 					break;
 				case "ser":
-					$marker = NULL;
+					$marker = \NULL;
 					foreach($seriesDetails as $seriesKey => $seriesDetail) {
 						switch ($seriesKey) {
 							case "idx":
@@ -291,35 +292,35 @@ class PHPExcel_Reader_Excel2007_Chart
 					}
 			}
 		}
-		return new PHPExcel_Chart_DataSeries($plotType,$multiSeriesType,$plotOrder,$seriesLabel,$seriesCategory,$seriesValues,$smoothLine);
+		return new \PhpOffice\PhpSpreadsheet\Chart\DataSeries($plotType,$multiSeriesType,$plotOrder,$seriesLabel,$seriesCategory,$seriesValues,$smoothLine);
 	}	//	function _chartDataSeries()
 
 
-	private static function _chartDataSeriesValueSet($seriesDetail, $namespacesChartMeta, $marker = null, $smoothLine = false) {
+	private static function _chartDataSeriesValueSet($seriesDetail, $namespacesChartMeta, $marker = \null, $smoothLine = \false) {
 		if (isset($seriesDetail->strRef)) {
 			$seriesSource = (string) $seriesDetail->strRef->f;
 			$seriesData = self::_chartDataSeriesValues($seriesDetail->strRef->strCache->children($namespacesChartMeta['c']),'s');
 
-			return new PHPExcel_Chart_DataSeriesValues('String',$seriesSource,$seriesData['formatCode'],$seriesData['pointCount'],$seriesData['dataValues'],$marker,$smoothLine);
+			return new \PhpOffice\PhpSpreadsheet\Chart\DataSeriesValues('String',$seriesSource,$seriesData['formatCode'],$seriesData['pointCount'],$seriesData['dataValues'],$marker,$smoothLine);
 		} elseif (isset($seriesDetail->numRef)) {
 			$seriesSource = (string) $seriesDetail->numRef->f;
 			$seriesData = self::_chartDataSeriesValues($seriesDetail->numRef->numCache->children($namespacesChartMeta['c']));
 
-			return new PHPExcel_Chart_DataSeriesValues('Number',$seriesSource,$seriesData['formatCode'],$seriesData['pointCount'],$seriesData['dataValues'],$marker,$smoothLine);
+			return new \PhpOffice\PhpSpreadsheet\Chart\DataSeriesValues('Number',$seriesSource,$seriesData['formatCode'],$seriesData['pointCount'],$seriesData['dataValues'],$marker,$smoothLine);
 		} elseif (isset($seriesDetail->multiLvlStrRef)) {
 			$seriesSource = (string) $seriesDetail->multiLvlStrRef->f;
 			$seriesData = self::_chartDataSeriesValuesMultiLevel($seriesDetail->multiLvlStrRef->multiLvlStrCache->children($namespacesChartMeta['c']),'s');
-			$seriesData['pointCount'] = count($seriesData['dataValues']);
+			$seriesData['pointCount'] = \count($seriesData['dataValues']);
 
-			return new PHPExcel_Chart_DataSeriesValues('String',$seriesSource,$seriesData['formatCode'],$seriesData['pointCount'],$seriesData['dataValues'],$marker,$smoothLine);
+			return new \PhpOffice\PhpSpreadsheet\Chart\DataSeriesValues('String',$seriesSource,$seriesData['formatCode'],$seriesData['pointCount'],$seriesData['dataValues'],$marker,$smoothLine);
 		} elseif (isset($seriesDetail->multiLvlNumRef)) {
 			$seriesSource = (string) $seriesDetail->multiLvlNumRef->f;
 			$seriesData = self::_chartDataSeriesValuesMultiLevel($seriesDetail->multiLvlNumRef->multiLvlNumCache->children($namespacesChartMeta['c']),'s');
-			$seriesData['pointCount'] = count($seriesData['dataValues']);
+			$seriesData['pointCount'] = \count($seriesData['dataValues']);
 
-			return new PHPExcel_Chart_DataSeriesValues('String',$seriesSource,$seriesData['formatCode'],$seriesData['pointCount'],$seriesData['dataValues'],$marker,$smoothLine);
+			return new \PhpOffice\PhpSpreadsheet\Chart\DataSeriesValues('String',$seriesSource,$seriesData['formatCode'],$seriesData['pointCount'],$seriesData['dataValues'],$marker,$smoothLine);
 		}
-		return null;
+		return \null;
 	}	//	function _chartDataSeriesValueSet()
 
 
@@ -348,7 +349,7 @@ class PHPExcel_Reader_Excel2007_Chart
 		}
 
 		if (empty($seriesVal)) {
-			$seriesVal = NULL;
+			$seriesVal = \NULL;
 		}
 
 		return array( 'formatCode'	=> $formatCode,
@@ -390,8 +391,8 @@ class PHPExcel_Reader_Excel2007_Chart
 					);
 	}	//	function _chartDataSeriesValuesMultiLevel()
 
-	private static function _parseRichText($titleDetailPart = null) {
-		$value = new PHPExcel_RichText();
+	private static function _parseRichText($titleDetailPart = \null) {
+		$value = new \PhpOffice\PhpSpreadsheet\RichText\RichText();
 
 		foreach($titleDetailPart as $titleDetailElementKey => $titleDetailElement) {
 			if (isset($titleDetailElement->t)) {
@@ -403,51 +404,51 @@ class PHPExcel_Reader_Excel2007_Chart
 				}
 
 				$fontSize = (self::_getAttribute($titleDetailElement->rPr, 'sz', 'integer'));
-				if (!is_null($fontSize)) {
-					$objText->getFont()->setSize(floor($fontSize / 100));
+				if (!\is_null($fontSize)) {
+					$objText->getFont()->setSize(\floor($fontSize / 100));
 				}
 
 				$fontColor = (self::_getAttribute($titleDetailElement->rPr, 'color', 'string'));
-				if (!is_null($fontColor)) {
-					$objText->getFont()->setColor( new PHPExcel_Style_Color( self::_readColor($fontColor) ) );
+				if (!\is_null($fontColor)) {
+					$objText->getFont()->setColor( new \PhpOffice\PhpSpreadsheet\Style\Color( self::_readColor($fontColor) ) );
 				}
 
 				$bold = self::_getAttribute($titleDetailElement->rPr, 'b', 'boolean');
-				if (!is_null($bold)) {
+				if (!\is_null($bold)) {
 					$objText->getFont()->setBold($bold);
 				}
 
 				$italic = self::_getAttribute($titleDetailElement->rPr, 'i', 'boolean');
-				if (!is_null($italic)) {
+				if (!\is_null($italic)) {
 					$objText->getFont()->setItalic($italic);
 				}
 
 				$baseline = self::_getAttribute($titleDetailElement->rPr, 'baseline', 'integer');
-				if (!is_null($baseline)) {
+				if (!\is_null($baseline)) {
 					if ($baseline > 0) {
-						$objText->getFont()->setSuperScript(true);
+						$objText->getFont()->setSuperScript(\true);
 					} elseif($baseline < 0) {
-						$objText->getFont()->setSubScript(true);
+						$objText->getFont()->setSubScript(\true);
 					}
 				}
 
 				$underscore = (self::_getAttribute($titleDetailElement->rPr, 'u', 'string'));
-				if (!is_null($underscore)) {
+				if (!\is_null($underscore)) {
 					if ($underscore == 'sng') {
-						$objText->getFont()->setUnderline(PHPExcel_Style_Font::UNDERLINE_SINGLE);
+						$objText->getFont()->setUnderline(\PhpOffice\PhpSpreadsheet\Style\Font::UNDERLINE_SINGLE);
 					} elseif($underscore == 'dbl') {
-						$objText->getFont()->setUnderline(PHPExcel_Style_Font::UNDERLINE_DOUBLE);
+						$objText->getFont()->setUnderline(\PhpOffice\PhpSpreadsheet\Style\Font::UNDERLINE_DOUBLE);
 					} else {
-						$objText->getFont()->setUnderline(PHPExcel_Style_Font::UNDERLINE_NONE);
+						$objText->getFont()->setUnderline(\PhpOffice\PhpSpreadsheet\Style\Font::UNDERLINE_NONE);
 					}
 				}
 
 				$strikethrough = (self::_getAttribute($titleDetailElement->rPr, 's', 'string'));
-				if (!is_null($strikethrough)) {
+				if (!\is_null($strikethrough)) {
 					if ($strikethrough == 'noStrike') {
-						$objText->getFont()->setStrikethrough(false);
+						$objText->getFont()->setStrikethrough(\false);
 					} else {
-						$objText->getFont()->setStrikethrough(true);
+						$objText->getFont()->setStrikethrough(\true);
 					}
 				}
 			}

@@ -1,4 +1,6 @@
 <?php
+namespace PhpOffice\PhpSpreadsheet\Document;
+
 /**
  * PHPExcel
  *
@@ -24,8 +26,6 @@
  * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
  * @version    1.8.0, 2014-03-02
  */
-
-
 /**
  * PHPExcel_DocumentSecurity
  *
@@ -33,54 +33,48 @@
  * @package    PHPExcel
  * @copyright  Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_DocumentSecurity
+class Security
 {
 	/**
 	 * LockRevision
 	 *
 	 * @var boolean
 	 */
-	private $_lockRevision;
+	private $_lockRevision = \false;
 
 	/**
 	 * LockStructure
 	 *
 	 * @var boolean
 	 */
-	private $_lockStructure;
+	private $_lockStructure = \false;
 
 	/**
 	 * LockWindows
 	 *
 	 * @var boolean
 	 */
-	private $_lockWindows;
+	private $_lockWindows = \false;
 
 	/**
 	 * RevisionsPassword
 	 *
 	 * @var string
 	 */
-	private $_revisionsPassword;
+	private $_revisionsPassword = '';
 
 	/**
 	 * WorkbookPassword
 	 *
 	 * @var string
 	 */
-	private $_workbookPassword;
+	private $_workbookPassword = '';
 
     /**
      * Create a new PHPExcel_DocumentSecurity
      */
     public function __construct()
     {
-    	// Initialise values
-    	$this->_lockRevision		= false;
-    	$this->_lockStructure		= false;
-    	$this->_lockWindows			= false;
-    	$this->_revisionsPassword	= '';
-    	$this->_workbookPassword	= '';
     }
 
     /**
@@ -107,9 +101,9 @@ class PHPExcel_DocumentSecurity
      * Set LockRevision
      *
      * @param boolean $pValue
-     * @return PHPExcel_DocumentSecurity
+     * @return \PhpOffice\PhpSpreadsheet\Document\Security
      */
-    function setLockRevision($pValue = false) {
+    function setLockRevision($pValue = \false) {
     	$this->_lockRevision = $pValue;
     	return $this;
     }
@@ -127,9 +121,9 @@ class PHPExcel_DocumentSecurity
      * Set LockStructure
      *
      * @param boolean $pValue
-     * @return PHPExcel_DocumentSecurity
+     * @return \PhpOffice\PhpSpreadsheet\Document\Security
      */
-    function setLockStructure($pValue = false) {
+    function setLockStructure($pValue = \false) {
 		$this->_lockStructure = $pValue;
 		return $this;
     }
@@ -147,9 +141,9 @@ class PHPExcel_DocumentSecurity
      * Set LockWindows
      *
      * @param boolean $pValue
-     * @return PHPExcel_DocumentSecurity
+     * @return \PhpOffice\PhpSpreadsheet\Document\Security
      */
-    function setLockWindows($pValue = false) {
+    function setLockWindows($pValue = \false) {
     	$this->_lockWindows = $pValue;
     	return $this;
     }
@@ -168,11 +162,11 @@ class PHPExcel_DocumentSecurity
      *
      * @param string 	$pValue
      * @param boolean 	$pAlreadyHashed If the password has already been hashed, set this to true
-     * @return PHPExcel_DocumentSecurity
+     * @return \PhpOffice\PhpSpreadsheet\Document\Security
      */
-    function setRevisionsPassword($pValue = '', $pAlreadyHashed = false) {
+    function setRevisionsPassword($pValue = '', $pAlreadyHashed = \false) {
     	if (!$pAlreadyHashed) {
-    		$pValue = PHPExcel_Shared_PasswordHasher::hashPassword($pValue);
+    		$pValue = \PhpOffice\PhpSpreadsheet\Shared\PasswordHasher::hashPassword($pValue);
     	}
     	$this->_revisionsPassword = $pValue;
     	return $this;
@@ -192,11 +186,11 @@ class PHPExcel_DocumentSecurity
      *
      * @param string 	$pValue
      * @param boolean 	$pAlreadyHashed If the password has already been hashed, set this to true
-     * @return PHPExcel_DocumentSecurity
+     * @return \PhpOffice\PhpSpreadsheet\Document\Security
      */
-    function setWorkbookPassword($pValue = '', $pAlreadyHashed = false) {
+    function setWorkbookPassword($pValue = '', $pAlreadyHashed = \false) {
     	if (!$pAlreadyHashed) {
-    		$pValue = PHPExcel_Shared_PasswordHasher::hashPassword($pValue);
+    		$pValue = \PhpOffice\PhpSpreadsheet\Shared\PasswordHasher::hashPassword($pValue);
     	}
 		$this->_workbookPassword = $pValue;
 		return $this;
@@ -206,9 +200,9 @@ class PHPExcel_DocumentSecurity
 	 * Implement PHP __clone to create a deep clone, not just a shallow copy.
 	 */
 	public function __clone() {
-		$vars = get_object_vars($this);
+		$vars = \get_object_vars($this);
 		foreach ($vars as $key => $value) {
-			if (is_object($value)) {
+			if (\is_object($value)) {
 				$this->$key = clone $value;
 			} else {
 				$this->$key = $value;

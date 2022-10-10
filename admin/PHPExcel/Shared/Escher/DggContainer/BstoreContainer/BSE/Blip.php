@@ -1,4 +1,6 @@
 <?php
+namespace PhpOffice\PhpSpreadsheet\Shared\Escher\DggContainer\BstoreContainer\BSE;
+
 /**
  * PHPExcel
  *
@@ -24,7 +26,6 @@
  * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
  * @version    1.8.0, 2014-03-02
  */
-
 /**
  * PHPExcel_Shared_Escher_DggContainer_BstoreContainer_BSE_Blip
  *
@@ -32,14 +33,14 @@
  * @package    PHPExcel_Shared_Escher
  * @copyright  Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Shared_Escher_DggContainer_BstoreContainer_BSE_Blip
+class Blip
 {
 	/**
-	 * The parent BSE
-	 *
-	 * @var PHPExcel_Shared_Escher_DggContainer_BstoreContainer_BSE
-	 */
-	private $_parent;
+  * The parent BSE
+  *
+  * @var \PhpOffice\PhpSpreadsheet\Shared\Escher\DggContainer\BstoreContainer\BSE
+  */
+ private $_parent;
 
 	/**
 	 * Raw image data
@@ -69,21 +70,21 @@ class PHPExcel_Shared_Escher_DggContainer_BstoreContainer_BSE_Blip
 	}
 
 	/**
-	 * Set parent BSE
-	 *
-	 * @param PHPExcel_Shared_Escher_DggContainer_BstoreContainer_BSE $parent
-	 */
-	public function setParent($parent)
+  * Set parent BSE
+  *
+  * @param \PhpOffice\PhpSpreadsheet\Shared\Escher\DggContainer\BstoreContainer\BSE $parent
+  */
+ public function setParent($parent)
 	{
 		$this->_parent = $parent;
 	}
 
 	/**
-	 * Get parent BSE
-	 *
-	 * @return PHPExcel_Shared_Escher_DggContainer_BstoreContainer_BSE $parent
-	 */
-	public function getParent()
+  * Get parent BSE
+  *
+  * @return \PhpOffice\PhpSpreadsheet\Shared\Escher\DggContainer\BstoreContainer\BSE $parent
+  */
+ public function getParent()
 	{
 		return $this->_parent;
 	}

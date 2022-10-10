@@ -1,4 +1,6 @@
 <?php
+namespace PhpOffice\PhpSpreadsheet\Worksheet;
+
 /**
  * PHPExcel
  *
@@ -24,8 +26,6 @@
  * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
  * @version    1.8.0, 2014-03-02
  */
-
-
 /**
  * PHPExcel_Worksheet_MemoryDrawing
  *
@@ -33,7 +33,7 @@
  * @package    PHPExcel_Worksheet
  * @copyright  Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Worksheet_MemoryDrawing extends PHPExcel_Worksheet_BaseDrawing implements PHPExcel_IComparable
+class MemoryDrawing extends \PhpOffice\PhpSpreadsheet\Worksheet\BaseDrawing implements \PhpOffice\PhpSpreadsheet\IComparable
 {
 	/* Rendering functions */
 	const RENDERING_DEFAULT					= 'imagepng';
@@ -52,21 +52,21 @@ class PHPExcel_Worksheet_MemoryDrawing extends PHPExcel_Worksheet_BaseDrawing im
 	 *
 	 * @var resource
 	 */
-	private $_imageResource;
+	private $_imageResource = \null;
 
 	/**
 	 * Rendering function
 	 *
 	 * @var string
 	 */
-	private $_renderingFunction;
+	private $_renderingFunction = self::RENDERING_DEFAULT;
 
 	/**
 	 * Mime type
 	 *
 	 * @var string
 	 */
-	private $_mimeType;
+	private $_mimeType = self::MIMETYPE_DEFAULT;
 
 	/**
 	 * Unique name
@@ -80,11 +80,7 @@ class PHPExcel_Worksheet_MemoryDrawing extends PHPExcel_Worksheet_BaseDrawing im
      */
     public function __construct()
     {
-    	// Initialise values
-    	$this->_imageResource		= null;
-    	$this->_renderingFunction 	= self::RENDERING_DEFAULT;
-    	$this->_mimeType			= self::MIMETYPE_DEFAULT;
-    	$this->_uniqueName			= md5(rand(0, 9999). time() . rand(0, 9999));
+    	$this->_uniqueName			= \md5(\rand(0, 9999). \time() . \rand(0, 9999));
 
     	// Initialize parent
     	parent::__construct();
@@ -103,15 +99,15 @@ class PHPExcel_Worksheet_MemoryDrawing extends PHPExcel_Worksheet_BaseDrawing im
      * Set image resource
      *
      * @param	$value resource
-     * @return PHPExcel_Worksheet_MemoryDrawing
+     * @return \PhpOffice\PhpSpreadsheet\Worksheet\MemoryDrawing
      */
-    public function setImageResource($value = null) {
+    public function setImageResource($value = \null) {
     	$this->_imageResource = $value;
 
-    	if (!is_null($this->_imageResource)) {
+    	if (!\is_null($this->_imageResource)) {
 	    	// Get width/height
-	    	$this->_width	= imagesx($this->_imageResource);
-	    	$this->_height	= imagesy($this->_imageResource);
+	    	$this->_width	= \imagesx($this->_imageResource);
+	    	$this->_height	= \imagesy($this->_imageResource);
     	}
     	return $this;
     }
@@ -129,9 +125,9 @@ class PHPExcel_Worksheet_MemoryDrawing extends PHPExcel_Worksheet_BaseDrawing im
      * Set rendering function
      *
      * @param string $value
-     * @return PHPExcel_Worksheet_MemoryDrawing
+     * @return \PhpOffice\PhpSpreadsheet\Worksheet\MemoryDrawing
      */
-    public function setRenderingFunction($value = PHPExcel_Worksheet_MemoryDrawing::RENDERING_DEFAULT) {
+    public function setRenderingFunction($value = \PhpOffice\PhpSpreadsheet\Worksheet\MemoryDrawing::RENDERING_DEFAULT) {
     	$this->_renderingFunction = $value;
     	return $this;
     }
@@ -149,9 +145,9 @@ class PHPExcel_Worksheet_MemoryDrawing extends PHPExcel_Worksheet_BaseDrawing im
      * Set mime type
      *
      * @param string $value
-     * @return PHPExcel_Worksheet_MemoryDrawing
+     * @return \PhpOffice\PhpSpreadsheet\Worksheet\MemoryDrawing
      */
-    public function setMimeType($value = PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT) {
+    public function setMimeType($value = \PhpOffice\PhpSpreadsheet\Worksheet\MemoryDrawing::MIMETYPE_DEFAULT) {
     	$this->_mimeType = $value;
     	return $this;
     }
@@ -162,8 +158,8 @@ class PHPExcel_Worksheet_MemoryDrawing extends PHPExcel_Worksheet_BaseDrawing im
      * @return string
      */
     public function getIndexedFilename() {
-		$extension 	= strtolower($this->getMimeType());
-		$extension 	= explode('/', $extension);
+		$extension 	= \strtolower($this->getMimeType());
+		$extension 	= \explode('/', $extension);
 		$extension 	= $extension[1];
 
     	return $this->_uniqueName . $this->getImageIndex() . '.' . $extension;
@@ -175,7 +171,7 @@ class PHPExcel_Worksheet_MemoryDrawing extends PHPExcel_Worksheet_BaseDrawing im
 	 * @return string	Hash code
 	 */
 	public function getHashCode() {
-    	return md5(
+    	return \md5(
     		  $this->_renderingFunction
     		. $this->_mimeType
     		. $this->_uniqueName
@@ -188,9 +184,9 @@ class PHPExcel_Worksheet_MemoryDrawing extends PHPExcel_Worksheet_BaseDrawing im
 	 * Implement PHP __clone to create a deep clone, not just a shallow copy.
 	 */
 	public function __clone() {
-		$vars = get_object_vars($this);
+		$vars = \get_object_vars($this);
 		foreach ($vars as $key => $value) {
-			if (is_object($value)) {
+			if (\is_object($value)) {
 				$this->$key = clone $value;
 			} else {
 				$this->$key = $value;

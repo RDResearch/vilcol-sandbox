@@ -20,10 +20,9 @@ class Table_Frame_Reflower extends Frame_Reflower {
    *
    * @var array
    */
-  protected $_state;
+  protected $_state = null;
 
   function __construct(Table_Frame_Decorator $frame) {
-    $this->_state = null;
     parent::__construct($frame);
   }
 

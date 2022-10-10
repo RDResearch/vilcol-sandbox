@@ -33,7 +33,7 @@
  * @package    PHPExcel_CachedObjectStorage
  * @copyright  Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_CachedObjectStorage_Memory extends PHPExcel_CachedObjectStorage_CacheBase implements PHPExcel_CachedObjectStorage_ICache {
+class PHPExcel_CachedObjectStorage_Memory extends \PhpOffice\PhpSpreadsheet\Collection\Cells implements PHPExcel_CachedObjectStorage_ICache {
 
     /**
      * Dummy method callable from CacheBase, but unused by Memory cache
@@ -42,16 +42,15 @@ class PHPExcel_CachedObjectStorage_Memory extends PHPExcel_CachedObjectStorage_C
      */
 	protected function _storeData() {
 	}	//	function _storeData()
-
-    /**
-     * Add or Update a cell in cache identified by coordinate address
-     *
-     * @param	string			$pCoord		Coordinate address of the cell to update
-     * @param	PHPExcel_Cell	$cell		Cell to update
-	 * @return	PHPExcel_Cell
-     * @throws	PHPExcel_Exception
-     */
-	public function addCacheData($pCoord, PHPExcel_Cell $cell) {
+ /**
+  * Add or Update a cell in cache identified by coordinate address
+  *
+  * @param	string			$pCoord		Coordinate address of the cell to update
+  * @param \PhpOffice\PhpSpreadsheet\Cell\Cell $cell Cell to update
+  * @return \PhpOffice\PhpSpreadsheet\Cell\Cell
+  * @throws \PhpOffice\PhpSpreadsheet\Exception
+  */
+ public function addCacheData($pCoord, \PhpOffice\PhpSpreadsheet\Cell\Cell $cell) {
 		$this->_cellCache[$pCoord] = $cell;
 
 		//	Set current entry to the new/updated entry
@@ -59,16 +58,14 @@ class PHPExcel_CachedObjectStorage_Memory extends PHPExcel_CachedObjectStorage_C
 
 		return $cell;
 	}	//	function addCacheData()
-
-
-    /**
-     * Get cell at a specific coordinate
-     *
-     * @param 	string 			$pCoord		Coordinate of the cell
-     * @throws 	PHPExcel_Exception
-     * @return 	PHPExcel_Cell 	Cell that was found, or null if not found
-     */
-	public function getCacheData($pCoord) {
+ /**
+  * Get cell at a specific coordinate
+  *
+  * @param 	string 			$pCoord		Coordinate of the cell
+  * @throws \PhpOffice\PhpSpreadsheet\Exception
+  * @return \PhpOffice\PhpSpreadsheet\Cell\Cell Cell that was found, or null if not found
+  */
+ public function getCacheData($pCoord) {
 		//	Check if the entry that has been requested actually exists
 		if (!isset($this->_cellCache[$pCoord])) {
 			$this->_currentObjectID = NULL;
@@ -82,15 +79,13 @@ class PHPExcel_CachedObjectStorage_Memory extends PHPExcel_CachedObjectStorage_C
 		//	Return requested entry
 		return $this->_cellCache[$pCoord];
 	}	//	function getCacheData()
-
-
-	/**
-	 * Clone the cell collection
-	 *
-	 * @param	PHPExcel_Worksheet	$parent		The new worksheet
-	 * @return	void
-	 */
-	public function copyCellCollection(PHPExcel_Worksheet $parent) {
+ /**
+  * Clone the cell collection
+  *
+  * @param \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $parent The new worksheet
+  * @return	void
+  */
+ public function copyCellCollection(\PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $parent) {
 		parent::copyCellCollection($parent);
 
 		$newCollection = array();

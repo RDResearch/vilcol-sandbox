@@ -1,4 +1,6 @@
 <?php
+namespace PhpOffice\PhpSpreadsheet\Chart;
+
 /**
  * PHPExcel
  *
@@ -24,8 +26,6 @@
  * @license		http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
  * @version		1.8.0, 2014-03-02
  */
-
-
 /**
  * PHPExcel_Chart_DataSeriesValues
  *
@@ -33,7 +33,7 @@
  * @package		PHPExcel_Chart
  * @copyright	Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Chart_DataSeriesValues
+class DataSeriesValues
 {
 
 	const DATASERIES_TYPE_STRING	= 'String';
@@ -49,28 +49,28 @@ class PHPExcel_Chart_DataSeriesValues
 	 *
 	 * @var	string
 	 */
-	private $_dataType = null;
+	private $_dataType = \null;
 
 	/**
 	 * Series Data Source
 	 *
 	 * @var	string
 	 */
-	private $_dataSource = null;
+	private $_dataSource = \null;
 
 	/**
 	 * Format Code
 	 *
 	 * @var	string
 	 */
-	private $_formatCode = null;
+	private $_formatCode = \null;
 
 	/**
 	 * Series Point Marker
 	 *
 	 * @var	string
 	 */
-	private $_marker = null;
+	private $_marker = \null;
 
 	/**
 	 * Point Count (The number of datapoints in the dataseries)
@@ -89,7 +89,7 @@ class PHPExcel_Chart_DataSeriesValues
 	/**
 	 * Create a new PHPExcel_Chart_DataSeriesValues object
 	 */
-	public function __construct($dataType = self::DATASERIES_TYPE_NUMBER, $dataSource = null, $formatCode = null, $pointCount = 0, $dataValues = array(), $marker = null)
+	public function __construct($dataType = self::DATASERIES_TYPE_NUMBER, $dataSource = \null, $formatCode = \null, $pointCount = 0, $dataValues = array(), $marker = \null)
 	{
 		$this->setDataType($dataType);
 		$this->_dataSource = $dataSource;
@@ -109,19 +109,19 @@ class PHPExcel_Chart_DataSeriesValues
 	}
 
 	/**
-	 * Set Series Data Type
-	 *
-	 * @param	string	$dataType	Datatype of this data series
-	 *								Typical values are:
-	 *									PHPExcel_Chart_DataSeriesValues::DATASERIES_TYPE_STRING
-	 *										Normally used for axis point values
-	 *									PHPExcel_Chart_DataSeriesValues::DATASERIES_TYPE_NUMBER
-	 *										Normally used for chart data values
-	 * @return	PHPExcel_Chart_DataSeriesValues
-	 */
-	public function setDataType($dataType = self::DATASERIES_TYPE_NUMBER) {
-		if (!in_array($dataType, self::$_dataTypeValues)) {
-    		throw new PHPExcel_Chart_Exception('Invalid datatype for chart data series values');
+  * Set Series Data Type
+  *
+  * @param	string	$dataType	Datatype of this data series
+  *								Typical values are:
+  *									PHPExcel_Chart_DataSeriesValues::DATASERIES_TYPE_STRING
+  *										Normally used for axis point values
+  *									PHPExcel_Chart_DataSeriesValues::DATASERIES_TYPE_NUMBER
+  *										Normally used for chart data values
+  * @return \PhpOffice\PhpSpreadsheet\Chart\DataSeriesValues
+  */
+ public function setDataType($dataType = self::DATASERIES_TYPE_NUMBER) {
+		if (!\in_array($dataType, self::$_dataTypeValues)) {
+    		throw new \PhpOffice\PhpSpreadsheet\Chart\Exception('Invalid datatype for chart data series values');
 		}
 		$this->_dataType = $dataType;
 
@@ -138,12 +138,12 @@ class PHPExcel_Chart_DataSeriesValues
 	}
 
 	/**
-	 * Set Series Data Source (formula)
-	 *
-	 * @param	string	$dataSource
-	 * @return	PHPExcel_Chart_DataSeriesValues
-	 */
-	public function setDataSource($dataSource = null, $refreshDataValues = true) {
+  * Set Series Data Source (formula)
+  *
+  * @param	string	$dataSource
+  * @return \PhpOffice\PhpSpreadsheet\Chart\DataSeriesValues
+  */
+ public function setDataSource($dataSource = \null, $refreshDataValues = \true) {
 		$this->_dataSource = $dataSource;
 
 		if ($refreshDataValues) {
@@ -163,12 +163,12 @@ class PHPExcel_Chart_DataSeriesValues
 	}
 
 	/**
-	 * Set Point Marker
-	 *
-	 * @param	string	$marker
-	 * @return	PHPExcel_Chart_DataSeriesValues
-	 */
-	public function setPointMarker($marker = null) {
+  * Set Point Marker
+  *
+  * @param	string	$marker
+  * @return \PhpOffice\PhpSpreadsheet\Chart\DataSeriesValues
+  */
+ public function setPointMarker($marker = \null) {
 		$this->_marker = $marker;
 
 		return $this;
@@ -184,12 +184,12 @@ class PHPExcel_Chart_DataSeriesValues
 	}
 
 	/**
-	 * Set Series Format Code
-	 *
-	 * @param	string	$formatCode
-	 * @return	PHPExcel_Chart_DataSeriesValues
-	 */
-	public function setFormatCode($formatCode = null) {
+  * Set Series Format Code
+  *
+  * @param	string	$formatCode
+  * @return \PhpOffice\PhpSpreadsheet\Chart\DataSeriesValues
+  */
+ public function setFormatCode($formatCode = \null) {
 		$this->_formatCode = $formatCode;
 
 		return $this;
@@ -210,10 +210,10 @@ class PHPExcel_Chart_DataSeriesValues
 	 * @return	boolean
 	 */
 	public function isMultiLevelSeries() {
-		if (count($this->_dataValues) > 0) {
-			return is_array($this->_dataValues[0]);
+		if (\count($this->_dataValues) > 0) {
+			return \is_array($this->_dataValues[0]);
 		}
-		return null;
+		return \null;
 	}
 
 	/**
@@ -224,7 +224,7 @@ class PHPExcel_Chart_DataSeriesValues
 	public function multiLevelCount() {
 		$levelCount = 0;
 		foreach($this->_dataValues as $dataValueSet) {
-			$levelCount = max($levelCount,count($dataValueSet));
+			$levelCount = \max($levelCount,\count($dataValueSet));
 		}
 		return $levelCount;
 	}
@@ -244,9 +244,9 @@ class PHPExcel_Chart_DataSeriesValues
 	 * @return	mixed
 	 */
 	public function getDataValue() {
-		$count = count($this->_dataValues);
+		$count = \count($this->_dataValues);
 		if ($count == 0) {
-			return null;
+			return \null;
 		} elseif ($count == 1) {
 			return $this->_dataValues[0];
 		}
@@ -254,17 +254,17 @@ class PHPExcel_Chart_DataSeriesValues
 	}
 
 	/**
-	 * Set Series Data Values
-	 *
-	 * @param	array	$dataValues
-	 * @param	boolean	$refreshDataSource
-	 *					TRUE - refresh the value of _dataSource based on the values of $dataValues
-	 *					FALSE - don't change the value of _dataSource
-	 * @return	PHPExcel_Chart_DataSeriesValues
-	 */
-	public function setDataValues($dataValues = array(), $refreshDataSource = TRUE) {
-		$this->_dataValues = PHPExcel_Calculation_Functions::flattenArray($dataValues);
-		$this->_pointCount = count($dataValues);
+  * Set Series Data Values
+  *
+  * @param	array	$dataValues
+  * @param	boolean	$refreshDataSource
+  *					TRUE - refresh the value of _dataSource based on the values of $dataValues
+  *					FALSE - don't change the value of _dataSource
+  * @return \PhpOffice\PhpSpreadsheet\Chart\DataSeriesValues
+  */
+ public function setDataValues($dataValues = array(), $refreshDataSource = \TRUE) {
+		$this->_dataValues = \PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenArray($dataValues);
+		$this->_pointCount = \count($dataValues);
 
 		if ($refreshDataSource) {
 			//	TO DO
@@ -274,21 +274,21 @@ class PHPExcel_Chart_DataSeriesValues
 	}
 
 	private function _stripNulls($var) {
-		return $var !== NULL;
+		return $var !== \NULL;
 	}
 
-	public function refresh(PHPExcel_Worksheet $worksheet, $flatten = TRUE) {
-        if ($this->_dataSource !== NULL) {
-        	$calcEngine = PHPExcel_Calculation::getInstance($worksheet->getParent());
-			$newDataValues = PHPExcel_Calculation::_unwrapResult(
+	public function refresh(\PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $worksheet, $flatten = \TRUE) {
+        if ($this->_dataSource !== \NULL) {
+        	$calcEngine = \PhpOffice\PhpSpreadsheet\Calculation\Calculation::getInstance($worksheet->getParent());
+			$newDataValues = \PhpOffice\PhpSpreadsheet\Calculation\Calculation::_unwrapResult(
 			    $calcEngine->_calculateFormulaValue(
 			        '='.$this->_dataSource,
-			        NULL,
+			        \NULL,
 			        $worksheet->getCell('A1')
 			    )
 			);
 			if ($flatten) {
-				$this->_dataValues = PHPExcel_Calculation_Functions::flattenArray($newDataValues);
+				$this->_dataValues = \PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenArray($newDataValues);
 				foreach($this->_dataValues as &$dataValue) {
 					if ((!empty($dataValue)) && ($dataValue[0] == '#')) {
 						$dataValue = 0.0;
@@ -296,16 +296,16 @@ class PHPExcel_Chart_DataSeriesValues
 				}
 				unset($dataValue);
 			} else {
-				$cellRange = explode('!',$this->_dataSource);
-				if (count($cellRange) > 1) {
+				$cellRange = \explode('!',$this->_dataSource);
+				if (\count($cellRange) > 1) {
 					list(,$cellRange) = $cellRange;
 				}
 
-				$dimensions = PHPExcel_Cell::rangeDimension(str_replace('$','',$cellRange));
+				$dimensions = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::rangeDimension(\str_replace('$','',$cellRange));
 				if (($dimensions[0] == 1) || ($dimensions[1] == 1)) {
-					$this->_dataValues = PHPExcel_Calculation_Functions::flattenArray($newDataValues);
+					$this->_dataValues = \PhpOffice\PhpSpreadsheet\Calculation\Functions::flattenArray($newDataValues);
 				} else {
-					$newArray = array_values(array_shift($newDataValues));
+					$newArray = \array_values(\array_shift($newDataValues));
 					foreach($newArray as $i => $newDataSet) {
 						$newArray[$i] = array($newDataSet);
 					}
@@ -313,13 +313,13 @@ class PHPExcel_Chart_DataSeriesValues
 					foreach($newDataValues as $newDataSet) {
 						$i = 0;
 						foreach($newDataSet as $newDataVal) {
-							array_unshift($newArray[$i++],$newDataVal);
+							\array_unshift($newArray[$i++],$newDataVal);
 						}
 					}
 					$this->_dataValues = $newArray;
 				}
 			}
-			$this->_pointCount = count($this->_dataValues);
+			$this->_pointCount = \count($this->_dataValues);
 		}
 
 	}

@@ -41,7 +41,7 @@ class Frame_Tree {
    *
    * @var Frame
    */
-  protected $_root;
+  protected $_root = null;
 
   /**
    * Subtrees of absolutely positioned elements
@@ -55,7 +55,7 @@ class Frame_Tree {
    *
    * @var array
    */
-  protected $_registry;
+  protected $_registry = array();
   
 
   /**
@@ -65,8 +65,6 @@ class Frame_Tree {
    */
   function __construct(DomDocument $dom) {
     $this->_dom = $dom;
-    $this->_root = null;
-    $this->_registry = array();
   }
   
   function __destruct() {

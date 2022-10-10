@@ -83,35 +83,35 @@ class DOMPDF {
    *
    * @var Canvas
    */
-  protected $_pdf;
+  protected $_pdf = null;
 
   /**
    * Desired paper size ('letter', 'legal', 'A4', etc.)
    *
    * @var string
    */
-  protected $_paper_size;
+  protected $_paper_size = "letter";
 
   /**
    * Paper orientation ('portrait' or 'landscape')
    *
    * @var string
    */
-  protected $_paper_orientation;
+  protected $_paper_orientation = "portrait";
 
   /**
    * Callbacks on new page and new element
    *
    * @var array
    */
-  protected $_callbacks;
+  protected $_callbacks = array();
 
   /**
    * Experimental caching capability
    *
    * @var string
    */
-  private $_cache_id;
+  private $_cache_id = null;
 
   /**
    * Base hostname
@@ -119,7 +119,7 @@ class DOMPDF {
    * Used for relative paths/urls
    * @var string
    */
-  protected $_base_host;
+  protected $_base_host = "";
 
   /**
    * Absolute base path
@@ -127,7 +127,7 @@ class DOMPDF {
    * Used for relative paths/urls
    * @var string
    */
-  protected $_base_path;
+  protected $_base_path = "";
 
   /**
    * Protcol used to request file (file://, http://, etc)
@@ -142,7 +142,7 @@ class DOMPDF {
    *
    * @var resource 
    */
-  protected $_http_context;
+  protected $_http_context = null;
   
   /**
    * Timestamp of the script start time
@@ -191,15 +191,7 @@ class DOMPDF {
     
     $this->_messages = array();
     $this->_css = new Stylesheet($this);
-    $this->_pdf = null;
-    $this->_paper_size = "letter";
-    $this->_paper_orientation = "portrait";
     $this->_base_protocol = "";
-    $this->_base_host = "";
-    $this->_base_path = "";
-    $this->_http_context = null;
-    $this->_callbacks = array();
-    $this->_cache_id = null;
     
     $this->restore_locale();
   }

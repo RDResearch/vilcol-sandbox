@@ -33,7 +33,7 @@
  * @package    PHPExcel_CachedObjectStorage
  * @copyright  Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_CachedObjectStorage_PHPTemp extends PHPExcel_CachedObjectStorage_CacheBase implements PHPExcel_CachedObjectStorage_ICache {
+class PHPExcel_CachedObjectStorage_PHPTemp extends \PhpOffice\PhpSpreadsheet\Collection\Cells implements PHPExcel_CachedObjectStorage_ICache {
 
 	/**
 	 * Name of the file for this cache
@@ -50,13 +50,13 @@ class PHPExcel_CachedObjectStorage_PHPTemp extends PHPExcel_CachedObjectStorage_
 	private $_memoryCacheSize = null;
 
     /**
-     * Store cell data in cache for the current cell object if it's "dirty",
-     *     and the 'nullify' the current cell object
-     *
-	 * @return	void
-     * @throws	PHPExcel_Exception
-     */
-	protected function _storeData() {
+  * Store cell data in cache for the current cell object if it's "dirty",
+  *     and the 'nullify' the current cell object
+  *
+  * @return	void
+  * @throws \PhpOffice\PhpSpreadsheet\Exception
+  */
+ protected function _storeData() {
 		if ($this->_currentCellIsDirty && !empty($this->_currentObjectID)) {
 			$this->_currentObject->detach();
 
@@ -70,17 +70,15 @@ class PHPExcel_CachedObjectStorage_PHPTemp extends PHPExcel_CachedObjectStorage_
 		}
 		$this->_currentObjectID = $this->_currentObject = null;
 	}	//	function _storeData()
-
-
-    /**
-     * Add or Update a cell in cache identified by coordinate address
-     *
-     * @param	string			$pCoord		Coordinate address of the cell to update
-     * @param	PHPExcel_Cell	$cell		Cell to update
-	 * @return	void
-     * @throws	PHPExcel_Exception
-     */
-	public function addCacheData($pCoord, PHPExcel_Cell $cell) {
+ /**
+  * Add or Update a cell in cache identified by coordinate address
+  *
+  * @param	string			$pCoord		Coordinate address of the cell to update
+  * @param \PhpOffice\PhpSpreadsheet\Cell\Cell $cell Cell to update
+  * @return	void
+  * @throws \PhpOffice\PhpSpreadsheet\Exception
+  */
+ public function addCacheData($pCoord, \PhpOffice\PhpSpreadsheet\Cell\Cell $cell) {
 		if (($pCoord !== $this->_currentObjectID) && ($this->_currentObjectID !== null)) {
 			$this->_storeData();
 		}
@@ -91,16 +89,14 @@ class PHPExcel_CachedObjectStorage_PHPTemp extends PHPExcel_CachedObjectStorage_
 
 		return $cell;
 	}	//	function addCacheData()
-
-
-    /**
-     * Get cell at a specific coordinate
-     *
-     * @param 	string 			$pCoord		Coordinate of the cell
-     * @throws 	PHPExcel_Exception
-     * @return 	PHPExcel_Cell 	Cell that was found, or null if not found
-     */
-	public function getCacheData($pCoord) {
+ /**
+  * Get cell at a specific coordinate
+  *
+  * @param 	string 			$pCoord		Coordinate of the cell
+  * @throws \PhpOffice\PhpSpreadsheet\Exception
+  * @return \PhpOffice\PhpSpreadsheet\Cell\Cell Cell that was found, or null if not found
+  */
+ public function getCacheData($pCoord) {
 		if ($pCoord === $this->_currentObjectID) {
 			return $this->_currentObject;
 		}
@@ -139,12 +135,12 @@ class PHPExcel_CachedObjectStorage_PHPTemp extends PHPExcel_CachedObjectStorage_
 
 
 	/**
-	 * Clone the cell collection
-	 *
-	 * @param	PHPExcel_Worksheet	$parent		The new worksheet
-	 * @return	void
-	 */
-	public function copyCellCollection(PHPExcel_Worksheet $parent) {
+  * Clone the cell collection
+  *
+  * @param \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $parent The new worksheet
+  * @return	void
+  */
+ public function copyCellCollection(\PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $parent) {
 		parent::copyCellCollection($parent);
 		//	Open a new stream for the cell cache data
 		$newFileHandle = fopen('php://temp/maxmemory:'.$this->_memoryCacheSize,'a+');
@@ -175,15 +171,13 @@ class PHPExcel_CachedObjectStorage_PHPTemp extends PHPExcel_CachedObjectStorage_
 		//	Close down the php://temp file
 		$this->__destruct();
 	}	//	function unsetWorksheetCells()
-
-
-	/**
-	 * Initialise this new cell collection
-	 *
-	 * @param	PHPExcel_Worksheet	$parent		The worksheet for this cell collection
-	 * @param	array of mixed		$arguments	Additional initialisation arguments
-	 */
-	public function __construct(PHPExcel_Worksheet $parent, $arguments) {
+ /**
+  * Initialise this new cell collection
+  *
+  * @param \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $parent The worksheet for this cell collection
+  * @param	array of mixed		$arguments	Additional initialisation arguments
+  */
+ public function __construct(\PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $parent, $arguments) {
 		$this->_memoryCacheSize	= (isset($arguments['memoryCacheSize']))	? $arguments['memoryCacheSize']	: '1MB';
 
 		parent::__construct($parent);

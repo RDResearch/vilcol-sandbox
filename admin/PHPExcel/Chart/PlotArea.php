@@ -1,4 +1,6 @@
 <?php
+namespace PhpOffice\PhpSpreadsheet\Chart;
+
 /**
  * PHPExcel
  *
@@ -24,8 +26,6 @@
  * @license		http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
  * @version		1.8.0, 2014-03-02
  */
-
-
 /**
  * PHPExcel_Chart_PlotArea
  *
@@ -33,14 +33,14 @@
  * @package		PHPExcel_Chart
  * @copyright	Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Chart_PlotArea
+class PlotArea
 {
 	/**
-	 * PlotArea Layout
-	 *
-	 * @var PHPExcel_Chart_Layout
-	 */
-	private $_layout = null;
+  * PlotArea Layout
+  *
+  * @var \PhpOffice\PhpSpreadsheet\Chart\Layout
+  */
+ private $_layout = \null;
 
 	/**
 	 * Plot Series
@@ -52,18 +52,18 @@ class PHPExcel_Chart_PlotArea
 	/**
 	 * Create a new PHPExcel_Chart_PlotArea
 	 */
-	public function __construct(PHPExcel_Chart_Layout $layout = null, $plotSeries = array())
+	public function __construct(\PhpOffice\PhpSpreadsheet\Chart\Layout $layout = \null, $plotSeries = array())
 	{
 		$this->_layout = $layout;
 		$this->_plotSeries = $plotSeries;
 	}
 
 	/**
-	 * Get Layout
-	 *
-	 * @return PHPExcel_Chart_Layout
-	 */
-	public function getLayout() {
+  * Get Layout
+  *
+  * @return \PhpOffice\PhpSpreadsheet\Chart\Layout
+  */
+ public function getLayout() {
 		return $this->_layout;
 	}
 
@@ -73,7 +73,7 @@ class PHPExcel_Chart_PlotArea
 	 * @return array of PHPExcel_Chart_DataSeries
 	 */
 	public function getPlotGroupCount() {
-		return count($this->_plotSeries);
+		return \count($this->_plotSeries);
 	}
 
 	/**
@@ -99,27 +99,27 @@ class PHPExcel_Chart_PlotArea
 	}
 
 	/**
-	 * Get Plot Series by Index
-	 *
-	 * @return PHPExcel_Chart_DataSeries
-	 */
-	public function getPlotGroupByIndex($index) {
+  * Get Plot Series by Index
+  *
+  * @return \PhpOffice\PhpSpreadsheet\Chart\DataSeries
+  */
+ public function getPlotGroupByIndex($index) {
 		return $this->_plotSeries[$index];
 	}
 
 	/**
-	 * Set Plot Series
-	 *
-	 * @param [PHPExcel_Chart_DataSeries]
-     * @return PHPExcel_Chart_PlotArea
-	 */
-	public function setPlotSeries($plotSeries = array()) {
+  * Set Plot Series
+  *
+  * @param [PHPExcel_Chart_DataSeries]
+  * @return \PhpOffice\PhpSpreadsheet\Chart\PlotArea
+  */
+ public function setPlotSeries($plotSeries = array()) {
 		$this->_plotSeries = $plotSeries;
         
         return $this;
 	}
 
-	public function refresh(PHPExcel_Worksheet $worksheet) {
+	public function refresh(\PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $worksheet) {
 	    foreach($this->_plotSeries as $plotSeries) {
 			$plotSeries->refresh($worksheet);
 		}

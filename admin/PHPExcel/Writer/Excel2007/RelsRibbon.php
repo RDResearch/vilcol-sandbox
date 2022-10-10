@@ -1,4 +1,6 @@
 <?php
+namespace PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 /**
  * PHPExcel
  *
@@ -24,8 +26,6 @@
  * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
  * @version     1.8.0, 2014-03-02
  */
-
-
 /**
  * PHPExcel_Writer_Excel2007_RelsRibbon
  *
@@ -33,22 +33,22 @@
  * @package    PHPExcel_Writer_Excel2007
  * @copyright  Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Writer_Excel2007_RelsRibbon extends PHPExcel_Writer_Excel2007_WriterPart
+class RelsRibbon extends \PhpOffice\PhpSpreadsheet\Writer\Xlsx\WriterPart
 {
 	/**
-	 * Write relationships for additional objects of custom UI (ribbon)
-	 *
-	 * @param 	PHPExcel	$pPHPExcel
-	 * @return 	string 		XML Output
-	 * @throws 	PHPExcel_Writer_Exception
-	 */
-	public function writeRibbonRelationships(PHPExcel $pPHPExcel = null){
+  * Write relationships for additional objects of custom UI (ribbon)
+  *
+  * @param \PhpOffice\PhpSpreadsheet\Spreadsheet $pPHPExcel
+  * @return 	string 		XML Output
+  * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+  */
+ public function writeRibbonRelationships(\PhpOffice\PhpSpreadsheet\Spreadsheet $pPHPExcel = \null){
 		// Create XML writer
-		$objWriter = null;
+		$objWriter = \null;
 		if ($this->getParentWriter()->getUseDiskCaching()) {
-			$objWriter = new PHPExcel_Shared_XMLWriter(PHPExcel_Shared_XMLWriter::STORAGE_DISK, $this->getParentWriter()->getDiskCachingDirectory());
+			$objWriter = new \PhpOffice\PhpSpreadsheet\Shared\XMLWriter(\PhpOffice\PhpSpreadsheet\Shared\XMLWriter::STORAGE_DISK, $this->getParentWriter()->getDiskCachingDirectory());
 		} else {
-			$objWriter = new PHPExcel_Shared_XMLWriter(PHPExcel_Shared_XMLWriter::STORAGE_MEMORY);
+			$objWriter = new \PhpOffice\PhpSpreadsheet\Shared\XMLWriter(\PhpOffice\PhpSpreadsheet\Shared\XMLWriter::STORAGE_MEMORY);
 		}
 
 		// XML header
@@ -58,7 +58,7 @@ class PHPExcel_Writer_Excel2007_RelsRibbon extends PHPExcel_Writer_Excel2007_Wri
 		$objWriter->startElement('Relationships');
 		$objWriter->writeAttribute('xmlns', 'http://schemas.openxmlformats.org/package/2006/relationships');
 		$localRels=$pPHPExcel->getRibbonBinObjects('names');
-		if(is_array($localRels)){
+		if(\is_array($localRels)){
 			foreach($localRels as $aId=>$aTarget){
 				$objWriter->startElement('Relationship');
 				$objWriter->writeAttribute('Id', $aId);

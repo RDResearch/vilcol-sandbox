@@ -27,7 +27,7 @@ class FrameTreeIterator implements Iterator
     /**
      * @var int
      */
-    protected $_num;
+    protected $_num = 0;
 
     /**
      * @param Frame $root
@@ -35,7 +35,6 @@ class FrameTreeIterator implements Iterator
     public function __construct(Frame $root)
     {
         $this->_stack[] = $this->_root = $root;
-        $this->_num = 0;
     }
 
     public function rewind(): void

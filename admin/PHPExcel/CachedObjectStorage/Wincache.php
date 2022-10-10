@@ -33,7 +33,7 @@
  * @package	PHPExcel_CachedObjectStorage
  * @copyright  Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_CachedObjectStorage_Wincache extends PHPExcel_CachedObjectStorage_CacheBase implements PHPExcel_CachedObjectStorage_ICache {
+class PHPExcel_CachedObjectStorage_Wincache extends \PhpOffice\PhpSpreadsheet\Collection\Cells implements PHPExcel_CachedObjectStorage_ICache {
 
 	/**
 	 * Prefix used to uniquely identify cache data for this worksheet
@@ -51,13 +51,13 @@ class PHPExcel_CachedObjectStorage_Wincache extends PHPExcel_CachedObjectStorage
 
 
     /**
-     * Store cell data in cache for the current cell object if it's "dirty",
-     *     and the 'nullify' the current cell object
-     *
-	 * @return	void
-     * @throws	PHPExcel_Exception
-     */
-	protected function _storeData() {
+  * Store cell data in cache for the current cell object if it's "dirty",
+  *     and the 'nullify' the current cell object
+  *
+  * @return	void
+  * @throws \PhpOffice\PhpSpreadsheet\Exception
+  */
+ protected function _storeData() {
 		if ($this->_currentCellIsDirty && !empty($this->_currentObjectID)) {
 			$this->_currentObject->detach();
 
@@ -65,12 +65,12 @@ class PHPExcel_CachedObjectStorage_Wincache extends PHPExcel_CachedObjectStorage
 			if (wincache_ucache_exists($this->_cachePrefix.$this->_currentObjectID.'.cache')) {
 				if (!wincache_ucache_set($this->_cachePrefix.$this->_currentObjectID.'.cache', $obj, $this->_cacheTime)) {
 					$this->__destruct();
-					throw new PHPExcel_Exception('Failed to store cell '.$this->_currentObjectID.' in WinCache');
+					throw new \PhpOffice\PhpSpreadsheet\Exception('Failed to store cell '.$this->_currentObjectID.' in WinCache');
 				}
 			} else {
 				if (!wincache_ucache_add($this->_cachePrefix.$this->_currentObjectID.'.cache', $obj, $this->_cacheTime)) {
 					$this->__destruct();
-					throw new PHPExcel_Exception('Failed to store cell '.$this->_currentObjectID.' in WinCache');
+					throw new \PhpOffice\PhpSpreadsheet\Exception('Failed to store cell '.$this->_currentObjectID.' in WinCache');
 				}
 			}
 			$this->_currentCellIsDirty = false;
@@ -78,17 +78,15 @@ class PHPExcel_CachedObjectStorage_Wincache extends PHPExcel_CachedObjectStorage
 
 		$this->_currentObjectID = $this->_currentObject = null;
 	}	//	function _storeData()
-
-
-	/**
-	 * Add or Update a cell in cache identified by coordinate address
-	 *
-	 * @param	string			$pCoord		Coordinate address of the cell to update
-	 * @param	PHPExcel_Cell	$cell		Cell to update
-	 * @return	void
-	 * @throws	PHPExcel_Exception
-	 */
-	public function addCacheData($pCoord, PHPExcel_Cell $cell) {
+ /**
+  * Add or Update a cell in cache identified by coordinate address
+  *
+  * @param	string			$pCoord		Coordinate address of the cell to update
+  * @param \PhpOffice\PhpSpreadsheet\Cell\Cell $cell Cell to update
+  * @return	void
+  * @throws \PhpOffice\PhpSpreadsheet\Exception
+  */
+ public function addCacheData($pCoord, \PhpOffice\PhpSpreadsheet\Cell\Cell $cell) {
 		if (($pCoord !== $this->_currentObjectID) && ($this->_currentObjectID !== null)) {
 			$this->_storeData();
 		}
@@ -119,22 +117,20 @@ class PHPExcel_CachedObjectStorage_Wincache extends PHPExcel_CachedObjectStorage
 			if ($success === false) {
 				//	Entry no longer exists in Wincache, so clear it from the cache array
 				parent::deleteCacheData($pCoord);
-				throw new PHPExcel_Exception('Cell entry '.$pCoord.' no longer exists in WinCache');
+				throw new \PhpOffice\PhpSpreadsheet\Exception('Cell entry '.$pCoord.' no longer exists in WinCache');
 			}
 			return true;
 		}
 		return false;
 	}	//	function isDataSet()
-
-
-	/**
-	 * Get cell at a specific coordinate
-	 *
-	 * @param	string			$pCoord		Coordinate of the cell
-	 * @throws	PHPExcel_Exception
-	 * @return	PHPExcel_Cell	Cell that was found, or null if not found
-	 */
-	public function getCacheData($pCoord) {
+ /**
+  * Get cell at a specific coordinate
+  *
+  * @param	string			$pCoord		Coordinate of the cell
+  * @throws \PhpOffice\PhpSpreadsheet\Exception
+  * @return \PhpOffice\PhpSpreadsheet\Cell\Cell Cell that was found, or null if not found
+  */
+ public function getCacheData($pCoord) {
 		if ($pCoord === $this->_currentObjectID) {
 			return $this->_currentObject;
 		}
@@ -148,7 +144,7 @@ class PHPExcel_CachedObjectStorage_Wincache extends PHPExcel_CachedObjectStorage
 			if ($success === false) {
 				//	Entry no longer exists in WinCache, so clear it from the cache array
 				parent::deleteCacheData($pCoord);
-				throw new PHPExcel_Exception('Cell entry '.$pCoord.' no longer exists in WinCache');
+				throw new \PhpOffice\PhpSpreadsheet\Exception('Cell entry '.$pCoord.' no longer exists in WinCache');
 			}
 		} else {
 			//	Return null if requested entry doesn't exist in cache
@@ -181,27 +177,25 @@ class PHPExcel_CachedObjectStorage_Wincache extends PHPExcel_CachedObjectStorage
 
 
 	/**
-	 * Delete a cell in cache identified by coordinate address
-	 *
-	 * @param	string			$pCoord		Coordinate address of the cell to delete
-	 * @throws	PHPExcel_Exception
-	 */
-	public function deleteCacheData($pCoord) {
+  * Delete a cell in cache identified by coordinate address
+  *
+  * @param	string			$pCoord		Coordinate address of the cell to delete
+  * @throws \PhpOffice\PhpSpreadsheet\Exception
+  */
+ public function deleteCacheData($pCoord) {
 		//	Delete the entry from Wincache
 		wincache_ucache_delete($this->_cachePrefix.$pCoord.'.cache');
 
 		//	Delete the entry from our cell address array
 		parent::deleteCacheData($pCoord);
 	}	//	function deleteCacheData()
-
-
-	/**
-	 * Clone the cell collection
-	 *
-	 * @param	PHPExcel_Worksheet	$parent		The new worksheet
-	 * @return	void
-	 */
-	public function copyCellCollection(PHPExcel_Worksheet $parent) {
+ /**
+  * Clone the cell collection
+  *
+  * @param \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $parent The new worksheet
+  * @return	void
+  */
+ public function copyCellCollection(\PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $parent) {
 		parent::copyCellCollection($parent);
 		//	Get a new id for the new file name
 		$baseUnique = $this->_getUniqueID();
@@ -214,11 +208,11 @@ class PHPExcel_CachedObjectStorage_Wincache extends PHPExcel_CachedObjectStorage
 				if ($success === false) {
 					//	Entry no longer exists in WinCache, so clear it from the cache array
 					parent::deleteCacheData($cellID);
-					throw new PHPExcel_Exception('Cell entry '.$cellID.' no longer exists in Wincache');
+					throw new \PhpOffice\PhpSpreadsheet\Exception('Cell entry '.$cellID.' no longer exists in Wincache');
 				}
 				if (!wincache_ucache_add($newCachePrefix.$cellID.'.cache', $obj, $this->_cacheTime)) {
 					$this->__destruct();
-					throw new PHPExcel_Exception('Failed to store cell '.$cellID.' in Wincache');
+					throw new \PhpOffice\PhpSpreadsheet\Exception('Failed to store cell '.$cellID.' in Wincache');
 				}
 			}
 		}
@@ -245,15 +239,13 @@ class PHPExcel_CachedObjectStorage_Wincache extends PHPExcel_CachedObjectStorage
 		//	detach ourself from the worksheet, so that it can then delete this object successfully
 		$this->_parent = null;
 	}	//	function unsetWorksheetCells()
-
-
-	/**
-	 * Initialise this new cell collection
-	 *
-	 * @param	PHPExcel_Worksheet	$parent		The worksheet for this cell collection
-	 * @param	array of mixed		$arguments	Additional initialisation arguments
-	 */
-	public function __construct(PHPExcel_Worksheet $parent, $arguments) {
+ /**
+  * Initialise this new cell collection
+  *
+  * @param \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $parent The worksheet for this cell collection
+  * @param	array of mixed		$arguments	Additional initialisation arguments
+  */
+ public function __construct(\PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $parent, $arguments) {
 		$cacheTime	= (isset($arguments['cacheTime']))	? $arguments['cacheTime']	: 600;
 
 		if (is_null($this->_cachePrefix)) {

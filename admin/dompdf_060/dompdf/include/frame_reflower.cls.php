@@ -30,11 +30,10 @@ abstract class Frame_Reflower {
    *
    * @var array
    */
-  protected $_min_max_cache;
+  protected $_min_max_cache = null;
   
   function __construct(Frame $frame) {
     $this->_frame = $frame;
-    $this->_min_max_cache = null;
   }
 
   function dispose() {

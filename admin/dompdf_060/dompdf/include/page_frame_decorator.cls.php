@@ -20,21 +20,21 @@ class Page_Frame_Decorator extends Frame_Decorator {
    *
    * @var float
    */
-  protected $_bottom_page_margin;
+  protected $_bottom_page_margin = null;
 
   /**
    * Flag indicating page is full.
    *
    * @var bool
    */
-  protected $_page_full;
+  protected $_page_full = false;
 
   /**
    * Number of tables currently being reflowed
    *
    * @var int
    */
-  protected $_in_table;
+  protected $_in_table = 0;
 
   /**
    * The pdf renderer
@@ -59,9 +59,6 @@ class Page_Frame_Decorator extends Frame_Decorator {
    */
   function __construct(Frame $frame, DOMPDF $dompdf) {
     parent::__construct($frame, $dompdf);
-    $this->_page_full = false;
-    $this->_in_table = 0;
-    $this->_bottom_page_margin = null;
   }
 
   /**
