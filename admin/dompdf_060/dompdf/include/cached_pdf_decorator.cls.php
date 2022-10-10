@@ -24,11 +24,12 @@ class Cached_PDF_Decorator extends CPDF_Adapter implements Canvas {
   protected $_pdf;
   protected $_cache_id;
   protected $_current_page_id;
-  protected $_fonts = array();  // fonts used in this document
+  protected $_fonts;  // fonts used in this document
   
   function __construct($cache_id, CPDF_Adapter $pdf) {
     $this->_pdf = $pdf;
     $this->_cache_id = $cache_id;
+    $this->_fonts = array();
     
     $this->_current_page_id = $this->_pdf->open_object();
   }

@@ -15,13 +15,15 @@
  */
 class Table_Cell_Frame_Decorator extends Block_Frame_Decorator {
   
-  protected $_resolved_borders = array();
-  protected $_content_height = 0;
+  protected $_resolved_borders;
+  protected $_content_height;
   
   //........................................................................
 
   function __construct(Frame $frame, DOMPDF $dompdf) {
-    parent::__construct($frame, $dompdf);    
+    parent::__construct($frame, $dompdf);
+    $this->_resolved_borders = array();
+    $this->_content_height = 0;    
   }
 
   //........................................................................

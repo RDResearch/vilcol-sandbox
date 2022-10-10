@@ -1062,7 +1062,7 @@ class QRcode {
 	 protected function makeMaskNo($maskNo, $width, $s, &$d, $maskGenOnly=false) {
 		$b = 0;
 		$bitMask = array();
-		$bitMask = $this->generateMaskNo($maskNo, $width, $s);
+		$bitMask = $this->generateMaskNo($maskNo, $width, $s, $d);
 		if ($maskGenOnly) {
 			return;
 		}
@@ -1460,7 +1460,7 @@ class QRcode {
 		$stringLen = strlen($this->dataStr);
 		$p = 0;
 		while ($p < $stringLen) {
-			$mode = $this->identifyMode(substr($this->dataStr, $p));
+			$mode = $this->identifyMode(substr($this->dataStr, $p), $this->hint);
 			if ($mode == QR_MODE_KJ) {
 				$p += 2;
 			} else {

@@ -40,14 +40,14 @@ class Table_Frame_Decorator extends Frame_Decorator {
    *
    * @var float
    */
-  protected $_min_width = null;
+  protected $_min_width;
 
   /**
    * The maximum width of the table, in pt
    *
    * @var float
    */
-  protected $_max_width = null;
+  protected $_max_width;
 
   /**
    * Table header rows.  Each table header is duplicated when a table
@@ -55,7 +55,7 @@ class Table_Frame_Decorator extends Frame_Decorator {
    *
    * @var array
    */
-  protected $_headers = array();
+  protected $_headers;
 
   /**
    * Table footer rows.  Each table footer is duplicated when a table
@@ -63,7 +63,7 @@ class Table_Frame_Decorator extends Frame_Decorator {
    *
    * @var array
    */
-  protected $_footers = array();
+  protected $_footers;
 
   /**
    * Class constructor
@@ -73,6 +73,10 @@ class Table_Frame_Decorator extends Frame_Decorator {
   function __construct(Frame $frame, DOMPDF $dompdf) {
     parent::__construct($frame, $dompdf);
     $this->_cellmap = new Cellmap($this);
+    $this->_min_width = null;
+    $this->_max_width = null;
+    $this->_headers = array();
+    $this->_footers = array();
   }
 
 

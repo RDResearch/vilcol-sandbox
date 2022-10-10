@@ -14,7 +14,7 @@
  * @package dompdf
  */
 class Block_Frame_Decorator extends Frame_Decorator {
-  protected $_cl = 0;    // current line index
+  protected $_cl;    // current line index
   
   /**
    * The block's line boxes
@@ -29,6 +29,7 @@ class Block_Frame_Decorator extends Frame_Decorator {
     parent::__construct($frame, $dompdf);
     
     $this->_line_boxes = array(new Line_Box($this));
+    $this->_cl = 0;
   }
 
   //........................................................................

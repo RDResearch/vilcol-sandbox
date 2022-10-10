@@ -128,10 +128,10 @@ class Style {
    *
    * @var array
    */
-  protected $_props = array();
+  protected $_props;
 
   /* var instead of protected would allow access outside of class */
-  protected $_important_props = array();
+  protected $_important_props;
 
   /**
    * Cached property values
@@ -146,7 +146,7 @@ class Style {
    *
    * @var float
    */
-  protected $_parent_font_size = null; // Font size of parent element
+  protected $_parent_font_size; // Font size of parent element
   
   /**
    * @var Frame
@@ -166,7 +166,7 @@ class Style {
    *
    * @var bool
    */
-  private $__font_size_calculated = false; // Cache flag
+  private $__font_size_calculated; // Cache flag
   
   /**
    * Class constructor
@@ -174,8 +174,12 @@ class Style {
    * @param Stylesheet $stylesheet the stylesheet this Style is associated with.
    */
   function __construct(Stylesheet $stylesheet, $origin = Stylesheet::ORIG_AUTHOR) {
+    $this->_props = array();
+    $this->_important_props = array();
     $this->_stylesheet = $stylesheet;
     $this->_origin = $origin;
+    $this->_parent_font_size = null;
+    $this->__font_size_calculated = false;
     
     if ( !isset(self::$_defaults) ) {
     

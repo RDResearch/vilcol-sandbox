@@ -67,7 +67,7 @@ class Stylesheet {
    * Array of currently defined styles
    * @var array
    */
-  private $_styles = array();
+  private $_styles;
 
   /**
    * Base protocol of the document being parsed
@@ -94,13 +94,13 @@ class Stylesheet {
    * The styles defined by @page rules
    * @var array<Style>
    */
-  private $_page_styles = array("base" => null);
+  private $_page_styles;
 
   /**
    * List of loaded files, used to prevent recursion
    * @var array
    */
-  private $_loaded_files = array();
+  private $_loaded_files;
   
   private $_current_origin = self::ORIG_UA;
 
@@ -128,7 +128,10 @@ class Stylesheet {
    */
   function __construct(DOMPDF $dompdf) {
     $this->_dompdf = $dompdf;
+    $this->_styles = array();
+    $this->_loaded_files = array();
     list($this->_protocol, $this->_base_host, $this->_base_path) = explode_url($_SERVER["SCRIPT_FILENAME"]);
+    $this->_page_styles = array("base" => null);
   }
   
   /**

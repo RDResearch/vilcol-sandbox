@@ -23,7 +23,7 @@ abstract class Frame_Decorator extends Frame {
    *
    * @var Frame
    */
-  protected $_root = null;
+  protected $_root;
 
   /**
    * The decorated frame
@@ -74,6 +74,7 @@ abstract class Frame_Decorator extends Frame {
    */
   function __construct(Frame $frame, DOMPDF $dompdf) {
     $this->_frame = $frame;
+    $this->_root = null;
     $this->_dompdf = $dompdf;
     $frame->set_decorator($this);
   }

@@ -6883,11 +6883,13 @@ function print_one_job_collect_letter($job, $editing, $open, $numcols, $div_h_x2
 			$onchange_letter_tck = (($editing && $open && $manager_c) ? "letter_approve(this);" : '');
 			$extra_letter_tck = (($editing && $open && $manager_c) ? '' : 'disabled');
 
+
+            // FIXME - MIGHT BE HERE
 			print "
 				<tr>
 					<td rowspan=\"2\">
 						\"{$job['LETTERS_PENDING'][0]['LETTER_NAME']}\"<br>
-						" . input_textarea('letter_preview', 15, $ta_cols, $letter['JL_TEXT'] . $letter['JL_TEXT_2'], $onchange_letter_txt) . "<br>
+						" . input_textarea('letter_preview', 15, $ta_cols, $letter['JL_TEXT'] . $letter['JL_TEXT_2'], $onchange_letter_txt) . "<br> 
 						" . input_hidden('letter_preview_id', $letter_id) . "
 						<span style=\"color:red\" id=\"letter_warning\"></span>
 						";

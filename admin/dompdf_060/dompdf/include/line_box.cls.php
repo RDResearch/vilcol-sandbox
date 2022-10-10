@@ -77,6 +77,7 @@ class Line_Box {
    */
   function __construct(Block_Frame_Decorator $frame, $y = 0) {
     $this->_block_frame = $frame;
+    $this->_frames = array();
     $this->y = $y;
     
     $this->get_float_offsets();
