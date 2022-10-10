@@ -106,7 +106,7 @@ font-weight: bold;
 font-size: 16px;
 color: $button_colour;'>Vilcol Database ");
 						if ($site_forge) {
-							printD("FORGE EDITION");
+							printD("FORGE EDITION - NEW SANDBOX");
 							}
 						printD("</span>
 							</td>
